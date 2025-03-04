@@ -1,0 +1,146 @@
+initialize() {
+
+initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
+//turning on pedigree tracking, as relatedness
+initializeSLiMOptions(keepPedigrees = T);
+initializeMutationRate(1e-5); //defining mutation rate
+initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
+initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
+initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
+initializeRecombinationRate(1e-7); // specifies recombination rate
+
+// define some variables
+
+//defineConstant("ms",management_strategy);			//Management-strategy  - would be nice to have it soft coded -> Do this in R i guess. 
+defineConstant("K_p2", 86) // define carrying capacity for the p2: 86 individuals -> Use later!
+}
+
+1 early() {
+	//defining population size at the beginning
+	sim.addSubpop("p1", 10000); //large starting population of 10'000 individuals
+}
+
+//bottleneck kicks in after 100 generations
+100 early() {
+	// Randomly select 16 survivors
+    remainingInds = sample(p1.individuals, 16);
+    
+    // Reset population p1 to these 16 individuals
+    p1.setIndividuals(remainingInds);
+    
+    cat("Population reduced to 16 individuals due to drift.\n");
+}
+
+// i think here i can add the pedigree data
+
+//Non-ranodom mating for 30 years due to breeding programs
+101:130 mateChoice(p1) {
+
+//mating according to the pedigree data...? -> Add later, first/now non-random mating selecting for low kinship
+
+//Here only one individual gets to mate --> Not good!!!
+//ind1 = subpop.sampleIndividuals(1); 
+    //mateOptions = subpop.individuals; //define options for mating -> All individuals in the subpop
+    // Prefer mates with LOWEST kinship
+    //bestMate = mateOptions.maxByValue(1.0 - ind1.relatedness(mateOptions)); //maxByValue chooses highest value - high values mean low kinship, since it is 1 minus the degree of relatedness
+    //return weights * (1.0 - ind1.relatedness(bestMate) + 0.01); //determining  which individuals are more likely to mate -> Adjusts mating probability by weighting  preference, higher preference for non related mates. 
+    // + 0.01 Ensures a small positive value so that even unrelated mates get some chance of selection
+
+
+
+//Every individual gets to mate in each generation. 
+// Step 1: Randomly shuffle individuals to prevent bias
+    shuffledInds = sample(p1.individuals, size(p1.individuals), replace = F);
+    
+    if (size(shuffledInds) % 2 == 1) { //if the size is odd, we have a problem -> one will not get to mate
+    // Remove the last individual from shuffledInds to make the size even
+    shuffledInds = shuffledInds[0:(size(shuffledInds)-1)]; //-1 since we want to get rid of one ind.
+    
+    // Step 2: Pair individuals in a loop
+    for (i in seq(0, size(shuffledInds)-2, by=2)) { 
+    //loop through individuals two at a time, ensuring that each gets exactly one mate. -2 to ensure that we don’t go out of bounds when selecting mates two at a time
+        ind1 = shuffledInds[i];  // First individual in the pair
+        
+        // Step 3: Get remaining individuals (who have not been paired yet)
+        possibleMates = shuffledInds[i+1:]; 
+        
+        // Step 4: Find the mate with the lowest relatedness to ind1
+        bestMate = possibleMates.maxByValue(1.0 - ind1.relatedness(possibleMates));
+        
+        // Step 5: Force this specific pair to mate
+        ind1.setMate(bestMate);
+    }
+}
+       
+}
+
+131 early() {
+    // Randomly select 9 individuals from p1
+    reintroducedInd = sample(p1.individuals, 9);
+
+    // Create the new subpopulation p2 using those individuals - carrying capacity of this population should be 43 breeding pairs, so 86 individuals. 
+    sim.addSubpop("p2", 0); // we start with an empty population, which will consist of the reintroduced individuals
+    
+    // Move the selected individuals from p1 to p2
+    p2.takeMigrants(reintroducedInd);
+    
+    cat("9 individuals have been reintroduced from p1 to form p2.\n");
+    
+    //here i could include a command which tells me if i have enough individuals in p1 to remove some....
+}
+
+
+// controlled breeding to minimize inbreeding
+131:231 mateChoice(p1) {
+
+//Every individual gets to mate in each generation, selection for lowest kinship in the p1
+// Step 1: Randomly shuffle individuals to prevent bias
+    shuffledInds = sample(p1.individuals, size(p1.individuals), replace = F);
+    
+    if (size(shuffledInds) % 2 == 1) { //if the size is odd, we have a problem -> one will not get to mate
+    // Remove the last individual from shuffledInds to make the size even
+    shuffledInds = shuffledInds[0:(size(shuffledInds)-1)]; //-1 since we want to get rid of one ind.
+    
+    // Step 2: Pair individuals in a loop
+    for (i in seq(0, size(shuffledInds)-2, by=2)) { 
+    //loop through individuals two at a time, ensuring that each gets exactly one mate. -2 to ensure that we don’t go out of bounds when selecting mates two at a time
+        ind1 = shuffledInds[i];  // First individual in the pair
+        
+        // Step 3: Get remaining individuals (who have not been paired yet)
+        possibleMates = shuffledInds[i+1:]; 
+        
+        // Step 4: Find the mate with the lowest relatedness to ind1
+        bestMate = possibleMates.maxByValue(1.0 - ind1.relatedness(possibleMates));
+        
+        // Step 5: Force this specific pair to mate
+        ind1.setMate(bestMate);
+    }
+}
+}
+
+131:231 mateChoice(p2) {
+
+//here i want random mating amongst all individuals in p2 -> Every individual gets to mate in each generation at random
+
+// Randomly shuffle individuals to prevent bias
+    shuffledInds = sample(p2.individuals, size(p2.individuals), replace = F);
+    if (size(shuffledInds) % 2 == 1) { //if the size is odd, we have a problem -> one will not get to mate
+    // Remove the last individual from shuffledInds to make the size even
+    shuffledInds = shuffledInds[0:(size(shuffledInds)-1)]; //-1 since we want to get rid of one ind.
+    
+        //Pair individuals randomly
+    for (i in seq(0, size(shuffledInds)-2, by=2)) { 
+        ind1 = shuffledInds[i];  
+        ind2 = shuffledInds[i+1]; // The next individual in the shuffled list
+
+        //Force this pair to mate
+        ind1.setMate(ind2);
+}
+
+
+231 late() {
+// Calculate and print mean heterozygosity across the population, after 100 generations 
+heterozygosity = calcHeterozygosity(p1.individuals.genomes);
+cat("heterozygosity = " + heterozygosity + "\n"); // add a loop i guess to see which animal has how much heterozygosity...
+}
+

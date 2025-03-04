@@ -1,0 +1,37 @@
+---
+title: "Inbreeding management model"
+author: "Emma Ochsner"
+output: html_notebook
+---
+
+# Introduction
+
+This is the R code for my Inbreeding management model. I used SLiM to generate data and R to then analyze it. 
+
+
+## Generating Data in SLiM with Parameters from R
+
+```{r eval=FALSE, include=FALSE}
+
+rm(list=ls(all=TRUE)) #clear R environment
+
+options(scipen = 999) #scientific notation penalty, with this R does not use scientific notation for numbers
+
+setwd("~/Documents/GitHub/BC thesis") #setting the working directory
+
+
+#Here i could soft code the variables of the model, maybe the different management strategies (maybe better in SLiM...?)
+#parameters will be hard coded in SLiM
+
+#ALso I have to add a codeblock - so it will send all informations needed to SLiM
+
+```
+
+
+
+```{r}
+
+
+```
+
+
