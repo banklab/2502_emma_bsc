@@ -17,7 +17,7 @@ rm(list=ls(all=TRUE)) #clear R environment
 
 options(scipen = 999) #scientific notation penalty, with this R does not use scientific notation for numbers
 
-setwd("~/Documents/GitHub/BC thesis") #setting the working directory
+setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 
 
 #Here i could soft code the variables of the model, maybe the different management strategies (maybe better in SLiM...?)

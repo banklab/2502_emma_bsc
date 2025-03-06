@@ -1,18 +1,19 @@
 initialize() {
+	initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
+	//turning on pedigree tracking, as relatedness
+	initializeSLiMOptions(keepPedigrees = T);
+	initializeMutationRate(1e-5); //defining mutation rate
+	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
+	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
+	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
+	initializeRecombinationRate(1e-7); // specifies recombination rate
 
-initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
-//turning on pedigree tracking, as relatedness
-initializeSLiMOptions(keepPedigrees = T);
-initializeMutationRate(1e-5); //defining mutation rate
-initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
-initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
-initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
-initializeRecombinationRate(1e-7); // specifies recombination rate
+	// define some variables
+	
+	//defineConstant("K_p1", 140);     // carrying capacity of captive pop
 
-// define some variables
-
-//defineConstant("ms",management_strategy);			//Management-strategy  - would be nice to have it soft coded -> Do this in R i guess. 
-defineConstant("K_p2", 86) // define carrying capacity for the p2: 86 individuals -> Use later!
+	//defineConstant("ms",management_strategy);			//Management-strategy  - would be nice to have it soft coded -> Do this in R i guess. 
+	//defineConstant("K_p2", 86); // define carrying capacity for the p2: 86 individuals -> Use later!
 }
 
 1 early() {
@@ -31,48 +32,48 @@ defineConstant("K_p2", 86) // define carrying capacity for the p2: 86 individual
     cat("Population reduced to 16 individuals due to drift.\n");
 }
 
-// i think here i can add the pedigree data
 
 //Non-ranodom mating for 30 years due to breeding programs
-101:130 mateChoice(p1) {
 
 //mating according to the pedigree data...? -> Add later, first/now non-random mating selecting for low kinship
 
-//Here only one individual gets to mate --> Not good!!!
-//ind1 = subpop.sampleIndividuals(1); 
-    //mateOptions = subpop.individuals; //define options for mating -> All individuals in the subpop
-    // Prefer mates with LOWEST kinship
-    //bestMate = mateOptions.maxByValue(1.0 - ind1.relatedness(mateOptions)); //maxByValue chooses highest value - high values mean low kinship, since it is 1 minus the degree of relatedness
-    //return weights * (1.0 - ind1.relatedness(bestMate) + 0.01); //determining  which individuals are more likely to mate -> Adjusts mating probability by weighting  preference, higher preference for non related mates. 
-    // + 0.01 Ensures a small positive value so that even unrelated mates get some chance of selection
 
-
-
-//Every individual gets to mate in each generation. 
-// Step 1: Randomly shuffle individuals to prevent bias
+101:130 mateChoice(p1) {
+    //Every individual gets to mate in each generation, selecting for low kinship... (p1 = captive population)
+	// Randomly shuffle individuals to prevent bias - this line creates a new list where every individual from p1 gets picked only once
     shuffledInds = sample(p1.individuals, size(p1.individuals), replace = F);
     
+    // Remove the last individual from shuffledInds if the number is odd to make the size even
     if (size(shuffledInds) % 2 == 1) { //if the size is odd, we have a problem -> one will not get to mate
-    // Remove the last individual from shuffledInds to make the size even
-    shuffledInds = shuffledInds[0:(size(shuffledInds)-1)]; //-1 since we want to get rid of one ind.
-    
-    // Step 2: Pair individuals in a loop
-    for (i in seq(0, size(shuffledInds)-2, by=2)) { 
-    //loop through individuals two at a time, ensuring that each gets exactly one mate. -2 to ensure that we don’t go out of bounds when selecting mates two at a time
-        ind1 = shuffledInds[i];  // First individual in the pair
-        
-        // Step 3: Get remaining individuals (who have not been paired yet)
-        possibleMates = shuffledInds[i+1:]; 
-        
-        // Step 4: Find the mate with the lowest relatedness to ind1
-        bestMate = possibleMates.maxByValue(1.0 - ind1.relatedness(possibleMates));
-        
-        // Step 5: Force this specific pair to mate
-        ind1.setMate(bestMate);
+        shuffledInds = shuffledInds[0:(size(shuffledInds)-1)]; //-1 since we want to get rid of one ind. -> last one from list will not mate (randomly)
     }
+
+    //Create an empty list to store pairs
+    paired = c();
+
+
+    //Find optimal pairings, until all individuals are paired (until shuffledIns = 0)
+    while (size(shuffledInds) > 0) {
+        ind1 = shuffledInds[0]; // Pick the first available individual
+        shuffledInds = shuffledInds[1:(size(shuffledInds)-1)]; // Remove it from the list, -1 to not go out of bound
+
+        // Find the least related mate from the remaining individuals
+        bestMate = shuffledInds.minByValue(ind1.relatedness(shuffledInds));
+
+        // Pair them
+        ind1.setMate(bestMate);
+        
+        // Remove bestMate from the available list
+        shuffledInds = shuffledInds - bestMate;
+
+        // Store the pairing
+        paired = c(paired, c(ind1, bestMate));
+    }
+
+    cat("Optimal mate pairings completed.\n");
+    //Here i could maybe print out more - maybe i could carry on the pedigree with these pairings...?
 }
-       
-}
+
 
 131 early() {
     // Randomly select 9 individuals from p1
@@ -86,37 +87,47 @@ defineConstant("K_p2", 86) // define carrying capacity for the p2: 86 individual
     
     cat("9 individuals have been reintroduced from p1 to form p2.\n");
     
+    // Maybe print which individuals have been selected and how they are related...
     //here i could include a command which tells me if i have enough individuals in p1 to remove some....
 }
-
 
 // controlled breeding to minimize inbreeding
 131:231 mateChoice(p1) {
 
-//Every individual gets to mate in each generation, selection for lowest kinship in the p1
-// Step 1: Randomly shuffle individuals to prevent bias
+	//Every individual gets to mate in each generation, selecting for low kinship... (p1 = captive population)
+	// Randomly shuffle individuals to prevent bias - this line creates a new list where every individual from p1 gets picked only once
     shuffledInds = sample(p1.individuals, size(p1.individuals), replace = F);
     
-    if (size(shuffledInds) % 2 == 1) { //if the size is odd, we have a problem -> one will not get to mate
-    // Remove the last individual from shuffledInds to make the size even
-    shuffledInds = shuffledInds[0:(size(shuffledInds)-1)]; //-1 since we want to get rid of one ind.
-    
-    // Step 2: Pair individuals in a loop
-    for (i in seq(0, size(shuffledInds)-2, by=2)) { 
-    //loop through individuals two at a time, ensuring that each gets exactly one mate. -2 to ensure that we don’t go out of bounds when selecting mates two at a time
-        ind1 = shuffledInds[i];  // First individual in the pair
-        
-        // Step 3: Get remaining individuals (who have not been paired yet)
-        possibleMates = shuffledInds[i+1:]; 
-        
-        // Step 4: Find the mate with the lowest relatedness to ind1
-        bestMate = possibleMates.maxByValue(1.0 - ind1.relatedness(possibleMates));
-        
-        // Step 5: Force this specific pair to mate
-        ind1.setMate(bestMate);
+    // Remove the last individual from shuffledInds if the number is odd to make the size even
+    if (size(shuffledInds) % 2 == 1) { //if the size is odd, SLiM will have a problem -> one will not get to mate
+        shuffledInds = shuffledInds[0:(size(shuffledInds)-1)]; //-1 since we want to get rid of one ind. -> last one from list will not mate (randomly)
     }
+
+    //Create an empty list to store pairs
+    paired = c();
+
+    //Find optimal pairings, until all individuals are paired (until shuffledIns = 0)
+    while (size(shuffledInds) > 0) {
+        ind1 = shuffledInds[0]; // Pick the first available individual
+       shuffledInds = shuffledInds[1:(size(shuffledInds)-1)]; // Remove it from the list
+
+        // Find the least related mate from the remaining individuals
+        bestMate = shuffledInds.minByValue(ind1.relatedness(shuffledInds));
+
+        // Pair them
+        ind1.setMate(bestMate);
+        
+        // Remove bestMate from the available list
+        shuffledInds = shuffledInds - bestMate;
+
+        // Store the pairing
+        paired = c(paired, c(ind1, bestMate));
+    }
+
+    cat("Optimal mate pairings completed.\n");
+    //Here i could maybe print out more - maybe i could carry on the pedigree with these pairings...?
 }
-}
+
 
 131:231 mateChoice(p2) {
 
@@ -135,12 +146,82 @@ defineConstant("K_p2", 86) // define carrying capacity for the p2: 86 individual
 
         //Force this pair to mate
         ind1.setMate(ind2);
+        }
+        }
 }
 
+
+// at time point 231
+231 late() {
+    // Extract all genomes from individuals in p1
+    genomes_p1 = p1.genomes;
+
+    // Calculate mean heterozygosity across the population
+    heterozygosity_p1 = calcHeterozygosity(genomes_p1);
+
+    // Print the result
+    cat("Mean heterozygosity p1= " + heterozygosity_p1 + "\n");
+
+    // Print heterozygosity for each individual
+    for (ind in p1.individuals) {
+        indHet = calcHeterozygosity(ind.genomes);
+        cat("Individual " + ind.id + " heterozygosity = " + indHet + "p1" + "\n");
+    }
+}
+
+//231 late() {
+    // Extract all genomes from individuals in p2
+   // genomes_p2 = p2.genomes;
+
+    // Calculate mean heterozygosity across the population
+    //heterozygosity_p2 = calcHeterozygosity(genomes_p2);
+
+    // Print the result
+    //cat("Mean heterozygosity p2= " + heterozygosity_p2 + "\n");
+
+    // Print heterozygosity for each individual
+    //for (ind in p2.individuals) {
+       // indHet = calcHeterozygosity(ind.genomes);
+        //cat("Individual " + ind.id + " heterozygosity = " + indHet + "p2" + "\n");
+        
+    //}
+//}
+//Here a command to create a file is missing...
 
 231 late() {
-// Calculate and print mean heterozygosity across the population, after 100 generations 
-heterozygosity = calcHeterozygosity(p1.individuals.genomes);
-cat("heterozygosity = " + heterozygosity + "\n"); // add a loop i guess to see which animal has how much heterozygosity...
+    // Open CSV file in append mode ("a"), set the path such that file will be safed at the right place
+    file = file("/Users/benutzerin/Documents/GitHub/2502_emma_bsc/Outputs/heterozygosity_output.csv", "a"); 
+	
+
+    // Write header (only if file is empty)
+    if (file.size == 0) {
+        file.writeLine("Generation,IndividualID,Population,IndividualHeterozygosity,MeanHeterozygosity_p1,MeanHeterozygosity_p2");
+    }
+
+    // Extract all genomes from individuals in p1 and p2
+    genomes_p1 = p1.genomes;
+    genomes_p2 = p2.genomes;
+
+    // Calculate mean heterozygosity
+    heterozygosity_p1 = calcHeterozygosity(genomes_p1);
+    heterozygosity_p2 = calcHeterozygosity(genomes_p2);
+
+    // Write individual heterozygosity for p1
+    for (ind in p1.individuals) {
+        indHet = calcHeterozygosity(ind.genomes);
+        file.writeLine(paste(231, ind.id, "p1", indHet, heterozygosity_p1, heterozygosity_p2, sep=","));
+    }
+
+    // Write individual heterozygosity for p2
+    for (ind in p2.individuals) {
+        indHet = calcHeterozygosity(ind.genomes);
+        file.writeLine(paste(231, ind.id, "p2", indHet, heterozygosity_p1, heterozygosity_p2, sep=","));
+    }
+
+    // Close the file
+    file.close();
+    
+    cat("Heterozygosity data saved to heterozygosity_output.csv\n");
 }
 
+//In the last section i have to change something -> Files are not created... :(
