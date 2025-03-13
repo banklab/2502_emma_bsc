@@ -10,8 +10,7 @@ initializeRecombinationRate(1e-7);
 
 mateChoice() {
 // Prefer relatives as mates
-return weights * (individual.relatedness(sourceSubpop.individuals) +
-0.01); // the +0.01 ensures that we do not multiply by 0
+return weights * (individual.relatedness(sourceSubpop.individuals) + 0.01); // the +0.01 ensures that we do not multiply by 0
 }
 
 1 early() {

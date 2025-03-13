@@ -14,6 +14,7 @@ initialize() {
 	defineConstant("K_p1", 140); //carrying capacity for p1
 }
 
+
 1 early() {
 	//defining population size at the beginning
 	sim.addSubpop("p1", 10000, 0.6); //large starting population of 10'000 individuals
@@ -25,21 +26,11 @@ initialize() {
 //100 early() {
 
 100 early() { p1.setSubpopulationSize(16);}
-	// Randomly select 16 survivors
- // Gradually increase population until 140 (K_p1) is reached
-//early() {
-//    currentSize = size(p1.individuals);  // Get current population size
-//
-//    if (currentSize < K_p1) {  // Stop once carrying capacity is reached
-//        newSize = min(currentSize + 10, 140);  // Increase by 10 each generation
-//        p1.setSubpopulationSize(newSize);
-//    }
-//}
-
+	// Randomly select 16 survivors --> Not sure if it really selects 16 individuals from p1
 
 //Non-ranodom mating for 30 years due to breeding programs
 
-//mating according to the pedigree data...? -> Add later, first/now non-random mating selecting for low kinship
+//mating according to the pedigree data...? -> Add later, first/now non-random mating selecting for low kinship -> not sure if possible
 
 
 101:130 mateChoice() {
@@ -47,35 +38,39 @@ initialize() {
 	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
 	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
 
+    if (individual.sex == F & size(males) > 0) {  // If female
+      // Compute relatedness for each male
+		relatedness = males.relatedness(individual);
+      // Choose the male with the minimum relatedness
+		bestMate = males[whichMin(relatedness)]; //searches for the best mate depending on relatedness
+		males = males[males != bestMate]; //removes bestMate from the list, so that all males only get to pair once
+		return bestMate;
+	}
+   
+		return NULL;  // No valid mate found
+	
+}
+
+101:130 early() {
+	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1 --> Does this happen by mating??
+	if (newSize >= K_p1) 
+	{
+		newSize = K_p1;
+	}	
+	p1.setSubpopulationSize(newSize);
+	cat("Population size =" + size(p1.individuals) +  "\n");
+
+}
+
+130 late() {
+	// Print mean heterozygosity across the population
+	heterozygosity = calcHeterozygosity(p1.genomes);
+	cat("Mean heterozygosity = " + heterozygosity + "\n");
+	females = p1.individuals[p1.individuals.sex == "F"]; //get all females
+	males = p1.individuals[p1.individuals.sex == "M"]; // get all males
 	cat("Number of females: " + size(females) + "\n");
 	cat("Number of males: " + size(males) + "\n");
-	for (ind in females) { 
-    //if (individual.sex == F) {  // If female
-        if (size(males) > 0) {
-            // Compute relatedness for each male
-            relatedness = males.relatedness(ind);
-            // Choose the male with the minimum relatedness
-            bestMate = males[whichMin(relatedness)]; //searches for the best mate depending on relatedness
-            males = males[males != bestMate]; //removes bestMate from the list, so that all males only get to pair once
-            return bestMate;
-            }
-            //cat("Number of individuals: " + size(p1.individuals) + "\n");
-            //cat("Best Mate found" + "\n");
-    
-    return NULL;  // No valid mate found
-    cat("Optimal mate pairings completed.\n");
 }
 
-	cat("Number of individuals: " + size(p1.individuals) + "\n");
-	cat("Best Mate found" + "\n");
-	
-}
-
-130 early() { 
-	p1.setSubpopulationSize(140); 
-	
-	}
-//}
-     
 
 
