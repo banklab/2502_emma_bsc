@@ -33,8 +33,8 @@ mateChoice() {
 
 1 early() {
 	sim.addSubpop("p1", 16);
-	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains all the values of the soft-coded variables. When I output results files I name them with the parameter values so that I always know what results are from what values
-	log = community.createLogFile("sim_log_nonrandom_notrelated_" + "reps_" + reps + ".csv", logInterval=10);
+	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
+	log = community.createLogFile("sim_log_nonrandom_notrelated_" + "reps_" + reps + simID  + ".csv", logInterval=10);
 //	log = community.createLogFile("sim_log_nonrandom_notrelated" + ".csv", logInterval=10);
 	log.addCycle();
 	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);");

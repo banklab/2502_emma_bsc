@@ -19,6 +19,17 @@ options(scipen = 999) #scientific notation penalty, with this R does not use sci
 
 setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 
+reps <- 10
+repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+
+for(r in 1:reps){
+  slim_code_block <- paste0("slim -d repetition=", r, " Basemodel_increasingpop.slim")
+  #slim_code_block 
+  system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
+}
+
+
 
 #Here i could soft code the variables of the model, maybe the different management strategies (maybe better in SLiM...?)
 #parameters will be hard coded in SLiM
@@ -29,9 +40,36 @@ setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 
 
 
+Analyzing the output files from SLiM
+
 ```{r}
+setwd("~/Documents/GitHub/2502_emma_bsc/Outputs/") #setting the working directory
+getwd()  # Prints the current working directory
+## all SLiM output files which shiw nonrandom mating with mate choice for least relatedness
+slim_out_files1 <- list.files(pattern = "_nonrandom_notrelated_")
+
+length(slim_out_files1)
+#install.packages("hierfstat")
+library("hierfstat")
+
+## make a dataframe to collect results
+## each row in the dataframe corresponds to the results from a single SLiM simulation run
+
+row_numbers <- seq(1, 491, by = 10)
+#row_names <- paste(row_numbers, "reps", "seed", sep = ";")
+
+results_df <- matrix(NA ,nrow = length(slim_out_files1), ncol = (length(row_numbers) + 2))
+colnames(results_df) <- c(row_numbers,"reps","seed")
+length(c(row_numbers,"reps","seed"))
+dim(results_df)
 
 
+for(i in 1:length(slim_out_files)){ 
+  
+  single_file <- slim_out_files[i] ## this is the name of a single SLiM result file
+  get_the_reps <- as.numeric(gsub(".*_reps_|.csv*", "", single_file)) ## use gsub() to get the value of 'reps' that we saved in the name of the results file
+  
+}
 ```
 
 
