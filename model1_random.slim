@@ -1,0 +1,48 @@
+initialize() {
+
+initializeSLiMOptions(keepPedigrees = T);
+initializeMutationRate(1e-5);
+initializeMutationType("m1", 0.5, "f", 0.0);
+initializeGenomicElementType("g1", m1, 1.0);
+initializeGenomicElement(g1, 0, 99999);
+initializeRecombinationRate(1e-7);
+initializeSex("A"); //creates males and females in the population
+
+defineConstant("reps", repetition);
+
+
+}
+
+//The mate Choice will be random this time, so i dont compute a mate choice here. Since i initialize different sexes, each individual will choose a mate of the opposite sex for reproduction...
+
+1 early() {
+	sim.addSubpop("p1", 16);
+	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
+	log = community.createLogFile("sim_log_random_" + "reps_" + reps + simID  + ".csv", logInterval=10);
+//	log = community.createLogFile("sim_log_random_" + ".csv", logInterval=10);
+	log.addCycle();
+	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);");
+}
+
+2:499 early() {
+	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1
+	if (newSize >= 500) 
+	{
+			newSize = 500;
+	}	
+	p1.setSubpopulationSize(newSize);
+	cat("Population size =" + size(p1.individuals) +  "\n");
+}
+
+500 late() {
+// Print mean heterozygosity across the population
+	heterozygosity = calcHeterozygosity(p1.genomes);
+	cat("Mean heterozygosity = " + heterozygosity + "\n");
+//	sim.output(sim.mutationsOfType(m1),"slim_output_" + "reps_" + reps +"_"+ simID  + ".csv");
+
+
+}
+
+
+
+
