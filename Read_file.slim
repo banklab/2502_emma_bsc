@@ -1,0 +1,84 @@
+initialize() {
+	initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
+	//turning on pedigree tracking, as relatedness
+	initializeSLiMOptions(keepPedigrees = T); // Track ancestry
+	initializeMutationRate(1e-5); //defining mutation rate
+	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
+	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
+	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
+	initializeRecombinationRate(1e-7); // specifies recombination rate
+	
+    initializeTreeSeq();
+
+	initializeSex("A"); //creates males and females in the population
+
+	defineConstant("K_p1", 140); //carrying capacity for p1
+}
+
+
+1 early() {
+	sim.readFromPopulationFile("first_output.trees");
+	// p1 now exists, restored from file
+   catn("Restored population size: " + size(p1.individuals));
+   p1.setSubpopulationSize(16);
+	// Randomly select 16 survivors
+	catn("population size: " + size(p1.individuals));
+}
+
+
+
+////bottleneck kicks in after 100 generations
+////100 early() {
+//
+////Increase here to 100'000 (10 n until equilibrium)
+//// MAybe soft code the generations
+//
+//100 early() { p1.setSubpopulationSize(16);}
+//	// Randomly select 16 survivors --> Not sure if it really selects 16 individuals from p1 (bottleneck)
+//	// If it takes too long, let it run once and use the data it generated in another file.
+//
+////Non-ranodom mating for 30 years due to breeding programs
+//
+////mating according to the pedigree data...? -> Add later, first/now non-random mating selecting for low kinship -> not sure if possible
+//
+
+1:30 mateChoice() {
+	
+	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
+	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
+
+    if (individual.sex == F & size(males) > 0) {  // If female
+      // Compute relatedness for each male
+		relatedness = males.relatedness(individual);
+      // Choose the male with the minimum relatedness
+		bestMate = males[whichMin(relatedness)]; //searches for the best mate depending on relatedness
+		males = males[males != bestMate]; //removes bestMate from the list, so that all males only get to pair once
+		return bestMate;
+	}
+   
+		return NULL;  // No valid mate found
+	
+}
+
+1:30 early() {
+	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1
+	if (newSize >= K_p1) 
+	{
+		newSize = K_p1;
+	}	
+	p1.setSubpopulationSize(newSize);
+	cat("Population size =" + size(p1.individuals) +  "\n");
+
+}
+
+30 late() {
+	// Print mean heterozygosity across the population
+	heterozygosity = calcHeterozygosity(p1.genomes);
+	cat("Mean heterozygosity = " + heterozygosity + "\n");
+	females = p1.individuals[p1.individuals.sex == "F"]; //get all females
+	males = p1.individuals[p1.individuals.sex == "M"]; // get all males
+	cat("Number of females: " + size(females) + "\n");
+	cat("Number of males: " + size(males) + "\n");
+}
+
+

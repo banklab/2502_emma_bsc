@@ -1,45 +1,44 @@
-//// This file will be the start of my simulation - I first have a big starting population which is in equilibrium
-////Then a bottleneck kicks in and sets the populations ize to 16 individuals. 
-//// I want to store those 16 individuals, such that i do not have to run this part over and over again. 
-//
-//// things to add, but not sure how: treeSeqRememberIndividuals() and also simplify = T 
-//
-//
-//initialize() {
-//	initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
-//	//turning on pedigree tracking, as relatedness
-//	initializeSLiMOptions(keepPedigrees = T); // Track ancestry
-//	initializeMutationRate(1e-5); //defining mutation rate
-//	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
-//	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
-//	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
-//	initializeRecombinationRate(1e-7); // specifies recombination rate
-//	
-//	initializeTreeSeq();
-//
-//	initializeSex("A"); //creates males and females in the population
-//
-//}
-//
-//
-//1 early() {
-//	//defining population size at the beginning
-//	sim.addSubpop("p1", 10000, 0.6); //large starting population of 10'000 individuals
-//}
-//
-//
-//
-////bottleneck kicks in after 100'000 generations (10*n until equilibrium is reached)
-//
-//
+// This file will be the start of my simulation - I first have a big starting population which is in equilibrium
+//Then a bottleneck kicks in and sets the populations ize to 16 individuals. 
+// I want to store those 16 individuals, such that i do not have to run this part over and over again. 
+
+// things to add, but not sure how: treeSeqRememberIndividuals() and also simplify = T 
+
+
+initialize() {
+	initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
+	//turning on pedigree tracking, as relatedness
+	initializeSLiMOptions(keepPedigrees = T); // Track ancestry
+	initializeMutationRate(1e-7); //defining mutation rate - based on data of the common kingfisher
+	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
+	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
+	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
+	initializeRecombinationRate(1e-7); // specifies recombination rate --> No idea how it would look in a real population....
+	
+	initializeTreeSeq(); // Required for .trees output and pedigree tracking
+
+	initializeSex("A"); //creates males and females in the population
+
+}
+
+
+1 early() {
+	//defining population size at the beginning
+	sim.addSubpop("p1", 10000, 0.6); //large starting population of 10'000 individuals
+}
+
+
+
+//bottleneck kicks in after 100'000 generations (10*n until equilibrium is reached)
+
+
 //100000 early() { p1.setSubpopulationSize(16);}
-//	// Randomly select 16 survivors --> Not sure if it really selects 16 individuals from p1 (bottleneck)
-//	// If it takes too long, let it run once and use the data it generated in another file.
-//
-//// output samples of 10 genomes periodically, all fixed mutations at end
-//100000 late() { p1.outputSample(10); 
-//	{
-//		sim.treeSeqOutput("./admix.trees");
-//		sim.simulationFinished();
-//	}
-//}
+	// Randomly select 16 survivors --> Not sure if it really selects 16 individuals from p1 (bottleneck)
+	// If it takes too long, let it run once and use the data it generated in another file.
+
+// output samples of 10 genomes periodically, all fixed mutations at end
+100000 late() {  
+		p1.setSubpopulationSize(16);
+		sim.treeSeqOutput("first_output.trees");
+		sim.simulationFinished();
+}
