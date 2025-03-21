@@ -44,7 +44,7 @@ Analyzing the output files from SLiM
 model 1 with non-random mating selecting for not related
 
 ```{r}
-setwd("~/Documents/GitHub/2502_emma_bsc/Outputs/") #setting the working directory
+#setwd("~/Documents/GitHub/2502_emma_bsc/Outputs/") #setting the working directory
 getwd()  # Prints the current working directory
 ## all SLiM output files which shiw nonrandom mating with mate choice for least relatedness
 slim_out_files <- list.files(pattern = "_nonrandom_notrelated_")
@@ -59,10 +59,10 @@ library("hierfstat")
 row_numbers <- seq(1, 491, by = 10)
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
-results_df <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
-colnames(results_df) <- c(row_numbers,"reps","seed")
+results_df_nrnr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
+colnames(results_df_nrnr) <- c(row_numbers,"reps","seed")
 length(c(row_numbers,"reps","seed"))
-dim(results_df)
+dim(results_df_nrnr)
 
 
 for(i in 1:length(slim_out_files)){ 
@@ -71,13 +71,13 @@ for(i in 1:length(slim_out_files)){
   get_the_reps <- as.numeric(gsub(".*_reps_([0-9]+)_.*", "\\1", single_file))  ## use gsub() to get the value of 'reps' that we saved in the name of the results file
   get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) ## and for the seed....
   
-  results_df[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
+  results_df_nrnr[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
   #.*_reps_ → Matches everything before _reps_
   #([0-9]+) → Captures one or more digits (the reps number)
   #_.* → Matches everything after the number (so it gets removed)
   #"\\1" → Extracts only the number inside ().
   
-  results_df[i,"seed"] <- get_the_seed ## record the seed for this particular results file
+  results_df_nrnr[i,"seed"] <- get_the_seed ## record the seed for this particular results file
   
   # Read the CSV file, ensure that it recognizes the header
   df <- read.csv(single_file, header = TRUE) 
@@ -86,30 +86,26 @@ for(i in 1:length(slim_out_files)){
   colnames(df) <- c("cycle", "Heterozygosity")  
 
   # Match cycle numbers to the matrix column names
-  matched_indices <- match(df$cycle, colnames(results_df))
+  matched_indices <- match(df$cycle, colnames(results_df_nrnr))
 
-  # Assign heterozygosity values to the correct positions in results_df
-  results_df[i, matched_indices] <- df$Heterozygosity  
+  # Assign heterozygosity values to the correct positions in results_df_nrnr
+  results_df_nrnr[i, matched_indices] <- df$Heterozygosity  
 
 }
 
 # Calculate column means (excluding the last two columns: "reps" and "seed")
-column_means <- colMeans(results_df[, 1:(ncol(results_df)-2)], na.rm = TRUE)
+column_means <- colMeans(results_df_nrnr[, 1:(ncol(results_df_nrnr)-2)], na.rm = TRUE)
 # Create a new row with NA for "reps" and "seed" columns
 mean_row <- c(column_means, NA, NA)
-# Bind the new row to the bottom of results_df
-results_df <- rbind(results_df, mean_row)
+# Bind the new row to the bottom of results_df_nrnr
+results_df_nrnr <- rbind(results_df_nrnr, mean_row)
 # Assign row names 
-rownames(results_df)[nrow(results_df)] <- "Mean"
+rownames(results_df_nrnr)[nrow(results_df_nrnr)] <- "Mean"
 
 # Print the final matrix with the mean row
-print(results_df)
+print(results_df_nrnr)
 
-
-
-print(results_df)
-
-write.csv(results_df, "Results_nonrandom_notrelated.csv", row.names = F) #write a file with my results
+write.csv(results_df_nrnr, "Results_nonrandom_notrelated.csv", row.names = F) #write a file with my results
 
 
 ```
@@ -120,18 +116,18 @@ Now i have my results stored in a matrix. This makes it easier to analyze the re
 
 # Extract the cycles (generations) from column names - i dont want the last two entries (seed and reps)
 #This will be helpful for the plot
-cycle_numbers <- as.numeric(colnames(results_df)[1:(ncol(results_df)-2)]) 
+cycle_numbers <- as.numeric(colnames(results_df_nrnr)[1:(ncol(results_df_nrnr)-2)]) 
 
 # Extract the heterozygosity values (excluding the last row "Mean" and last two columns "reps" & "seed")
-heterozygosity_values <- results_df[1:(nrow(results_df)-1), 1:(ncol(results_df)-2)]
+heterozygosity_values_nrnr <- results_df_nrnr[1:(nrow(results_df_nrnr)-1), 1:(ncol(results_df_nrnr)-2)]
 
 # Extract the mean heterozygosity values from the last row --> Last row, so we can use nrow
-mean_values <- results_df[nrow(results_df), 1:(ncol(results_df)-2)]
+mean_values_nrnr <- results_df_nrnr[nrow(results_df_nrnr), 1:(ncol(results_df_nrnr)-2)]
 
 # Create the plot
 matplot(
   cycle_numbers,  # X-axis: Generations
-  t(heterozygosity_values),  # Transpose to align data correctly
+  t(heterozygosity_values_nrnr),  # Transpose to align data correctly
   type = "p",  # "p" for points
   pch = 16,  # Use small dots for points
   col = rgb(0.4, 0.6, 1, 0.2),  # Blue with transparency --> rgb is kind of nice, (red, green, blue, alpha)
@@ -142,7 +138,7 @@ matplot(
 )
 
 # Add the mean line
-lines(cycle_numbers, mean_values, col = "orange", lwd = 2)  # Red solid line
+lines(cycle_numbers, mean_values_nrnr, col = "orange", lwd = 2)  # Red solid line
 
 
 
@@ -193,10 +189,10 @@ library("hierfstat")
 row_numbers <- seq(1, 491, by = 10) #this will help me create the columns i need in my matrix
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
-results_df <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
-colnames(results_df) <- c(row_numbers,"reps","seed")
+results_df_nrr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
+colnames(results_df_nrr) <- c(row_numbers,"reps","seed")
 length(c(row_numbers,"reps","seed"))
-dim(results_df)
+dim(results_df_nrr)
 
 
 for(i in 1:length(slim_out_files)){ 
@@ -205,13 +201,13 @@ for(i in 1:length(slim_out_files)){
   get_the_reps <- as.numeric(gsub(".*_reps_([0-9]+)_.*", "\\1", single_file))  ## use gsub() to get the value of 'reps' that we saved in the name of the results file
   get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) ## and for the seed....
   
-  results_df[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
+  results_df_nrr[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
   #.*_reps_ → Matches everything before _reps_
   #([0-9]+) → Captures one or more digits (the reps number)
   #_.* → Matches everything after the number (so it gets removed)
   #"\\1" → Extracts only the number inside ().
   
-  results_df[i,"seed"] <- get_the_seed ## record the seed for this particular results file
+  results_df_nrr[i,"seed"] <- get_the_seed ## record the seed for this particular results file
   
   # Read the CSV file, ensure that it recognizes the header
   df <- read.csv(single_file, header = TRUE) 
@@ -220,30 +216,26 @@ for(i in 1:length(slim_out_files)){
   colnames(df) <- c("cycle", "Heterozygosity")  
 
   # Match cycle numbers to the matrix column names
-  matched_indices <- match(df$cycle, colnames(results_df))
+  matched_indices <- match(df$cycle, colnames(results_df_nrr))
 
-  # Assign heterozygosity values to the correct positions in results_df
-  results_df[i, matched_indices] <- df$Heterozygosity  
+  # Assign heterozygosity values to the correct positions in results_df_nrr
+  results_df_nrr[i, matched_indices] <- df$Heterozygosity  
 
 }
 
 # Calculate column means (excluding the last two columns: "reps" and "seed")
-column_means <- colMeans(results_df[, 1:(ncol(results_df)-2)], na.rm = TRUE)
+column_means <- colMeans(results_df_nrr[, 1:(ncol(results_df_nrr)-2)], na.rm = TRUE)
 # Create a new row with NA for "reps" and "seed" columns
 mean_row <- c(column_means, NA, NA)
-# Bind the new row to the bottom of results_df
-results_df <- rbind(results_df, mean_row)
+# Bind the new row to the bottom of results_df_nrr
+results_df_nrr <- rbind(results_df_nrr, mean_row)
 # Assign row names 
-rownames(results_df)[nrow(results_df)] <- "Mean"
+rownames(results_df_nrr)[nrow(results_df_nrr)] <- "Mean"
 
 # Print the final matrix with the mean row
-print(results_df)
+print(results_df_nrr)
 
-
-
-print(results_df)
-
-write.csv(results_df, "Results_nonrandom_related.csv", row.names = F) #write a file with my results
+write.csv(results_df_nrr, "Results_nonrandom_related.csv", row.names = F) #write a file with my results
 
 
 ```
@@ -254,18 +246,18 @@ Now i have my results stored in a matrix. This makes it easier to analyze the re
 
 # Extract the cycles (generations) from column names - i dont want the last two entries (seed and reps)
 #This will be helpful for the plot
-cycle_numbers <- as.numeric(colnames(results_df)[1:(ncol(results_df)-2)]) 
+cycle_numbers <- as.numeric(colnames(results_df_nrr)[1:(ncol(results_df_nrr)-2)]) 
 
 # Extract the heterozygosity values (excluding the last row "Mean" and last two columns "reps" & "seed")
-heterozygosity_values <- results_df[1:(nrow(results_df)-1), 1:(ncol(results_df)-2)]
+heterozygosity_values_nrr <- results_df_nrr[1:(nrow(results_df_nrr)-1), 1:(ncol(results_df_nrr)-2)]
 
 # Extract the mean heterozygosity values from the last row --> Last row, so we can use nrow
-mean_values <- results_df[nrow(results_df), 1:(ncol(results_df)-2)]
+mean_values_nrr <- results_df_nrr[nrow(results_df_nrr), 1:(ncol(results_df_nrr)-2)]
 
 # Create the plot
 matplot(
   cycle_numbers,  # X-axis: Generations
-  t(heterozygosity_values),  # Transpose to align data correctly
+  t(heterozygosity_values_nrr),  # Transpose to align data correctly
   type = "p",  # "p" for points
   pch = 16,  # Use small dots for points
   col = rgb(0.4, 0.6, 1, 0.2),  # Blue with transparency --> rgb is kind of nice, (red, green, blue, alpha)
@@ -276,7 +268,7 @@ matplot(
 )
 
 # Add the mean line
-lines(cycle_numbers, mean_values, col = "orange", lwd = 2)  # Red solid line
+lines(cycle_numbers, mean_values_nrr, col = "orange", lwd = 2)  # Red solid line
 
 
 
@@ -330,10 +322,10 @@ library("hierfstat")
 row_numbers <- seq(1, 491, by = 10) #this will help me create the columns i need in my matrix
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
-results_df <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
-colnames(results_df) <- c(row_numbers,"reps","seed")
+results_df_r <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
+colnames(results_df_r) <- c(row_numbers,"reps","seed")
 length(c(row_numbers,"reps","seed"))
-dim(results_df)
+dim(results_df_r)
 
 
 for(i in 1:length(slim_out_files)){ 
@@ -342,13 +334,13 @@ for(i in 1:length(slim_out_files)){
   get_the_reps <- as.numeric(gsub(".*_reps_([0-9]+)_.*", "\\1", single_file))  ## use gsub() to get the value of 'reps' that we saved in the name of the results file
   get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) ## and for the seed....
   
-  results_df[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
+  results_df_r[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
   #.*_reps_ → Matches everything before _reps_
   #([0-9]+) → Captures one or more digits (the reps number)
   #_.* → Matches everything after the number (so it gets removed)
   #"\\1" → Extracts only the number inside ().
   
-  results_df[i,"seed"] <- get_the_seed ## record the seed for this particular results file
+  results_df_r[i,"seed"] <- get_the_seed ## record the seed for this particular results file
   
   # Read the CSV file, ensure that it recognizes the header
   df <- read.csv(single_file, header = TRUE) 
@@ -357,30 +349,26 @@ for(i in 1:length(slim_out_files)){
   colnames(df) <- c("cycle", "Heterozygosity")  
 
   # Match cycle numbers to the matrix column names
-  matched_indices <- match(df$cycle, colnames(results_df))
+  matched_indices <- match(df$cycle, colnames(results_df_r))
 
-  # Assign heterozygosity values to the correct positions in results_df
-  results_df[i, matched_indices] <- df$Heterozygosity  
+  # Assign heterozygosity values to the correct positions in results_df_r
+  results_df_r[i, matched_indices] <- df$Heterozygosity  
 
 }
 
 # Calculate column means (excluding the last two columns: "reps" and "seed")
-column_means <- colMeans(results_df[, 1:(ncol(results_df)-2)], na.rm = TRUE)
+column_means <- colMeans(results_df_r[, 1:(ncol(results_df_r)-2)], na.rm = TRUE)
 # Create a new row with NA for "reps" and "seed" columns
 mean_row <- c(column_means, NA, NA)
-# Bind the new row to the bottom of results_df
-results_df <- rbind(results_df, mean_row)
+# Bind the new row to the bottom of results_df_r
+results_df_r <- rbind(results_df_r, mean_row)
 # Assign row names 
-rownames(results_df)[nrow(results_df)] <- "Mean"
+rownames(results_df_r)[nrow(results_df_r)] <- "Mean"
 
 # Print the final matrix with the mean row
-print(results_df)
+print(results_df_r)
 
-
-
-print(results_df)
-
-write.csv(results_df, "Results_random.csv", row.names = F) #write a file with my results
+write.csv(results_df_r, "Results_random.csv", row.names = F) #write a file with my results
 
 
 ```
@@ -393,18 +381,18 @@ Now i have my results stored in a matrix. This makes it easier to analyze the re
 
 # Extract the cycles (generations) from column names - i dont want the last two entries (seed and reps)
 #This will be helpful for the plot
-cycle_numbers <- as.numeric(colnames(results_df)[1:(ncol(results_df)-2)]) 
+cycle_numbers <- as.numeric(colnames(results_df_r)[1:(ncol(results_df_r)-2)]) 
 
 # Extract the heterozygosity values (excluding the last row "Mean" and last two columns "reps" & "seed")
-heterozygosity_values <- results_df[1:(nrow(results_df)-1), 1:(ncol(results_df)-2)]
+heterozygosity_values_r <- results_df_r[1:(nrow(results_df_r)-1), 1:(ncol(results_df_r)-2)]
 
 # Extract the mean heterozygosity values from the last row --> Last row, so we can use nrow
-mean_values <- results_df[nrow(results_df), 1:(ncol(results_df)-2)]
+mean_values_r <- results_df_r[nrow(results_df_r), 1:(ncol(results_df_r)-2)]
 
 # Create the plot
 matplot(
   cycle_numbers,  # X-axis: Generations
-  t(heterozygosity_values),  # Transpose to align data correctly
+  t(heterozygosity_values_r),  # Transpose to align data correctly
   type = "p",  # "p" for points
   pch = 16,  # Use small dots for points
   col = rgb(0.4, 0.6, 1, 0.2),  # Blue with transparency --> rgb is kind of nice, (red, green, blue, alpha)
@@ -415,7 +403,7 @@ matplot(
 )
 
 # Add the mean line
-lines(cycle_numbers, mean_values, col = "orange", lwd = 2)  # Red solid line
+lines(cycle_numbers, mean_values_r, col = "orange", lwd = 2)  # Red solid line
 
 
 
@@ -426,6 +414,32 @@ now i want to combine all the three graphs i just generated into one. This helps
 
 ```{r}
 
+# Create the plot
+matplot(
+  cycle_numbers,  # X-axis: Generations
+  t(heterozygosity_values_r),  # Transpose to align data correctly
+  type = "p",  # "p" for points
+  pch = 16,  # Use small dots for points
+  col = rgb(0.4, 0.6, 1, 0.2),  # light Blue with transparency --> rgb is kind of nice, (red, green, blue, alpha)
+  xlab = "Generation (Cycle)",
+  ylab = "Heterozygosity",
+  main = "Heterozygosity Across Generations",
+  cex.main = 0.8  # Makes title smaller
+)
+
+# Add the mean line
+lines(cycle_numbers, mean_values_r, col = "blue", lwd = 2)  # Red solid line
+
+# Now add the other points and lines
+# Add non-random selecting for relatedness
+matpoints(cycle_numbers, t(heterozygosity_values_nrr), pch = 16, col = rgb(1, 0.5, 0.5, 0.2))
+lines(cycle_numbers, mean_values_nrr, col = "red", lwd = 2)
+
+# add non-rendom selecting for not related
+matpoints(cycle_numbers, t(heterozygosity_values_nrnr), pch = 16, col = rgb(0.4, 1, 0.4, 0.2))
+lines(cycle_numbers, mean_values_nrnr, col = "darkgreen", lwd = 2)
+
+legend("topleft", legend = c("Random mating", "Non-random mating selecting for relatedness", "Non-random mating selecting for non-relatedness"), col = c("blue", "red", "darkgreen"), lwd = 2, bty = "n", cex = 0.6)
 
 
 ```
