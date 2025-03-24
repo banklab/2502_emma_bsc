@@ -1,18 +1,24 @@
 
 initialize() {
 
-initializeSLiMOptions(keepPedigrees = T);
-initializeMutationRate(1e-5);
-initializeMutationType("m1", 0.5, "f", 0.0);
-initializeGenomicElementType("g1", m1, 1.0);
-initializeGenomicElement(g1, 0, 99999);
-initializeRecombinationRate(1e-7);
-initializeSex("A"); //creates males and females in the population
+	initializeSLiMOptions(keepPedigrees = T);
+	initializeMutationRate(1e-7);
+	initializeMutationType("m1", 0.5, "f", 0.0);
+	initializeGenomicElementType("g1", m1, 1.0);
+	initializeGenomicElement(g1, 0, 99999);
+	initializeRecombinationRate(1e-7);
+	initializeSex("A"); //creates males and females in the population
 
-defineConstant("reps", repetition);
+    initializeTreeSeq();
 
+
+	defineConstant("reps", repetition);
 
 }
+
+//maybe add n uneven sex ratio!! this is now not implemented...
+//Also not sure about the sexes at the beginning --> define this and also one par of siblings at the start!!!
+
 
 mateChoice() {
 // Prefer relatives as mates
@@ -31,8 +37,10 @@ mateChoice() {
 		return NULL;  // No valid mate found
 }
 
-1 early() {
-	sim.addSubpop("p1", 16);
+100001 early() {
+//	sim.addSubpop("p1", 16);
+	sim.readFromPopulationFile("final_output.trees"); // p1 now exists, restored from file
+   catn("Restored population size: " + size(p1.individuals)); //prints out the number of individuals I have...
 	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
 	log = community.createLogFile("sim_log_nonrandom_notrelated_" + "reps_" + reps + simID  + ".csv", logInterval=10);
 //	log = community.createLogFile("sim_log_nonrandom_notrelated" + ".csv", logInterval=10);
@@ -40,7 +48,7 @@ mateChoice() {
 	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);");
 }
 
-2:499 early() {
+100001:100499 early() {
 	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1
 	if (newSize >= 500) 
 	{
@@ -50,7 +58,7 @@ mateChoice() {
 	cat("Population size =" + size(p1.individuals) +  "\n");
 }
 
-500 late() {
+100500 late() {
 // Print mean heterozygosity across the population
 	heterozygosity = calcHeterozygosity(p1.genomes);
 	cat("Mean heterozygosity = " + heterozygosity + "\n");

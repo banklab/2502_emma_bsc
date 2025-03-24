@@ -56,7 +56,7 @@ library("hierfstat")
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(1, 491, by = 10)
+row_numbers <- seq(100001, 100491, by = 10)
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_nrnr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
@@ -86,7 +86,7 @@ for(i in 1:length(slim_out_files)){
   colnames(df) <- c("cycle", "Heterozygosity")  
 
   # Match cycle numbers to the matrix column names
-  matched_indices <- match(df$cycle, colnames(results_df_nrnr))
+  matched_indices <- match(as.character(df$cycle), colnames(results_df_nrnr))
 
   # Assign heterozygosity values to the correct positions in results_df_nrnr
   results_df_nrnr[i, matched_indices] <- df$Heterozygosity  
@@ -186,7 +186,7 @@ library("hierfstat")
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(1, 491, by = 10) #this will help me create the columns i need in my matrix
+row_numbers <- seq(100001, 100491, by = 10) #this will help me create the columns i need in my matrix
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_nrr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
@@ -319,7 +319,7 @@ library("hierfstat")
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(1, 491, by = 10) #this will help me create the columns i need in my matrix
+row_numbers <- seq(100001, 100491, by = 10) #this will help me create the columns i need in my matrix
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_r <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
@@ -439,7 +439,7 @@ lines(cycle_numbers, mean_values_nrr, col = "red", lwd = 2)
 matpoints(cycle_numbers, t(heterozygosity_values_nrnr), pch = 16, col = rgb(0.4, 1, 0.4, 0.2))
 lines(cycle_numbers, mean_values_nrnr, col = "darkgreen", lwd = 2)
 
-legend("topleft", legend = c("Random mating", "Non-random mating selecting for relatedness", "Non-random mating selecting for non-relatedness"), col = c("blue", "red", "darkgreen"), lwd = 2, bty = "n", cex = 0.6)
+legend("topright", legend = c("Random mating", "Non-random mating selecting for relatedness", "Non-random mating selecting for non-relatedness"), col = c("blue", "red", "darkgreen"), lwd = 2, bty = "n", cex = 0.6)
 
 
 ```

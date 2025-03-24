@@ -1,8 +1,8 @@
-// This file will be the start of my simulation - I first have a big starting population which is in equilibrium
-//Then a bottleneck kicks in and sets the populations ize to 16 individuals. 
+// This file will be the start of my simulation - I first have a big WF starting population (10'000 individuals)
+//Then a bottleneck kicks in after 100'000 generations and sets the populations ize to 16 individuals. --> I chose this, because after 100'000 the population will be at equilibrium (10*n)
 // I want to store those 16 individuals, such that i do not have to run this part over and over again. 
 
-// things to add, but not sure how: treeSeqRememberIndividuals() and also simplify = T 
+// things to add, but not sure how and if necessary: treeSeqRememberIndividuals() and also simplify = T 
 
 
 initialize() {
@@ -24,21 +24,28 @@ initialize() {
 
 1 early() {
 	//defining population size at the beginning
-	sim.addSubpop("p1", 10000, 0.6); //large starting population of 10'000 individuals
+	sim.addSubpop("p1", 10000); //large starting population of 10'000 individuals - sex ratio is even. 
 }
-
 
 
 //bottleneck kicks in after 100'000 generations (10*n until equilibrium is reached)
 
 
-//100000 early() { p1.setSubpopulationSize(16);}
-	// Randomly select 16 survivors --> Not sure if it really selects 16 individuals from p1 (bottleneck)
-	// If it takes too long, let it run once and use the data it generated in another file.
-
-// output samples of 10 genomes periodically, all fixed mutations at end
-100000 late() {  
+100000 early() {  
 		p1.setSubpopulationSize(16);
-		sim.treeSeqOutput("first_output.trees");
+}
+
+100001 late() {
+		sim.treeSeqOutput("final_output.trees");
 		sim.simulationFinished();
 }
+
+
+//10 early() {  
+//		p1.setSubpopulationSize(16);
+//		}
+//		
+//11 late(){
+//		sim.treeSeqOutput("test_output.trees");
+//		sim.simulationFinished();
+//		}
