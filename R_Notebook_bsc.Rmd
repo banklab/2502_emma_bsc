@@ -276,10 +276,10 @@ lines(cycle_numbers, mean_values_nrr, col = "orange", lwd = 2)  # Red solid line
 
 
 
-Now i do exactly the same, but without any mate choice command in slim. So the mating will be random...
+Now i do exactly the same, but (without any mate choice command in slim). So the mating will be random...
 
 
-## Generating Data in SLiM with Parameters from R - model 1 with non-random mating selecting for relatedness
+## Generating Data in SLiM with Parameters from R - model 1 with random mating
 
 ```{r eval=FALSE, include=FALSE}
 
@@ -304,7 +304,7 @@ for(r in 1:reps){
 
 
 Analyzing the output files from SLiM
-model 1 with non-random mating selecting for relatedness
+model 1 with random mating 
 
 ```{r}
 #setwd("~/Documents/GitHub/2502_emma_bsc/Outputs/") #setting the working directory

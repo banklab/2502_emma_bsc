@@ -17,6 +17,27 @@ initialize() {
 
 //maybe add n uneven sex ratio!! this is now not implemented...
 //Also not sure about the sexes at the beginning --> define this and also one par of siblings at the start!!!
+//Add a matechoice callback selecting random
+
+mateChoice() {
+// Prefer relatives as mates
+	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
+	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
+
+    if (individual.sex == F & size(males) > 0) {  // If female and if there are some males
+     	
+		// Randomly shuffle individuals to prevent bias - this line creates a new list where every male gets picked only once
+		shuffledInds = sample(males, size(males), replace = F);
+		//Take first individual from that list as mate
+		bestMate = shuffledInds[0];
+
+		males = males[males != bestMate]; //removes bestMate from the list, so that all males only get to pair once
+		return bestMate;
+	}
+   
+		return NULL;  // No valid mate found
+}
+
 
 
 100001 early() {

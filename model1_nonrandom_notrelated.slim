@@ -25,11 +25,17 @@ mateChoice() {
 	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
 	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
 
-    if (individual.sex == F & size(males) > 0) {  // If female
+    if (individual.sex == F & size(males) > 0) {  // If female and if there are some males
       // Compute relatedness for each male
 		relatedness = males.relatedness(individual);
-      // Choose the male with the minimum relatedness
-		bestMate = males[whichMin(relatedness)]; //searches for the best mate depending on relatedness
+		
+		bestIndex = which(relatedness == min(relatedness)); // gives out all males which have lowest relatedness value
+			
+		// Randomly shuffle individuals to prevent bias - this line creates a new list where every male with lowest relatedness gets picked only once
+		shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F);
+		//Take first individual from that list as mate
+		bestMate = shuffledInds[0];
+
 		males = males[males != bestMate]; //removes bestMate from the list, so that all males only get to pair once
 		return bestMate;
 	}
