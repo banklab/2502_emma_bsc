@@ -16,13 +16,15 @@ initialize() {
 }
 
 
-1 early() {
-	sim.readFromPopulationFile("first_output.trees");
+100001 early() {
+	sim.readFromPopulationFile("final_output.trees");
 	// p1 now exists, restored from file
    catn("Restored population size: " + size(p1.individuals));
-   p1.setSubpopulationSize(16);
+ //  p1.setSubpopulationSize(16);
 	// Randomly select 16 survivors
 	catn("population size: " + size(p1.individuals));
+	heterozygosity = calcHeterozygosity(p1.genomes);
+	cat("Mean heterozygosity = " + heterozygosity + "\n");
 }
 
 
@@ -42,25 +44,61 @@ initialize() {
 ////mating according to the pedigree data...? -> Add later, first/now non-random mating selecting for low kinship -> not sure if possible
 //
 
-1:30 mateChoice() {
-	
-	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
-	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
+// just uncomment it for original code
+//100001 : 100030 mateChoice() {
+//	
+//	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
+//	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
+//
+//    if (individual.sex == F & size(males) > 0) {  // If female
+//      // Compute relatedness for each male
+//		relatedness = males.relatedness(individual);
+//      // Choose the male with the minimum relatedness
+//		bestMate = males[whichMin(relatedness)]; //searches for the best mate depending on relatedness
+//		males = males[males != bestMate]; //removes bestMate from the list, so that all males only get to pair once
+//		return bestMate;
+//	}
+//   
+//		return NULL;  // No valid mate found
+//	
+//}
 
-    if (individual.sex == F & size(males) > 0) {  // If female
-      // Compute relatedness for each male
+//Trying something here to see if mateChoice is working as I want...
+
+100001 : 100030 mateChoice() {
+	females = subpop.individuals[subpop.individuals.sex == "F"]; // Get all females
+	males = subpop.individuals[subpop.individuals.sex == "M"]; // Get all males
+
+	if (individual.sex == "F" & size(males) > 0) {
+		// Compute relatedness to all males
 		relatedness = males.relatedness(individual);
-      // Choose the male with the minimum relatedness
-		bestMate = males[whichMin(relatedness)]; //searches for the best mate depending on relatedness
-		males = males[males != bestMate]; //removes bestMate from the list, so that all males only get to pair once
+		
+//		// Print relatedness values for debugging
+//		for (i in seqLen(size(males))) {
+//   	cat("Female " + individual.index + " - Male " + males[i].index + " relatedness: " + relatedness[i] + "\n");
+//	}
+
+	bestIndex = which(relatedness == min(relatedness)); // gives out all males which have lowest relatedness value
+	//cat("Best Index = " + bestIndex +  "\n");
+	// Randomly shuffle individuals to prevent bias - this line creates a new list where every individual from p1 gets picked only once
+    shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F);
+//    if (length(shuffledInds) > 0) {
+//    cat("shuffled individuals" + paste(shuffledInds)  + "\n");
+//    }
+    
+	bestMate = shuffledInds[0];
+//	cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " with relatedness " + relatedness[bestIndex] + "\n");
+		// Remove selected male from pool
+		males = males[males != bestMate];
 		return bestMate;
 	}
-   
-		return NULL;  // No valid mate found
-	
+
+	return NULL;
 }
 
-1:30 early() {
+
+
+100001 : 100030 early() {
 	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1
 	if (newSize >= K_p1) 
 	{
@@ -69,9 +107,10 @@ initialize() {
 	p1.setSubpopulationSize(newSize);
 	cat("Population size =" + size(p1.individuals) +  "\n");
 
+
 }
 
-30 late() {
+100030 late() {
 	// Print mean heterozygosity across the population
 	heterozygosity = calcHeterozygosity(p1.genomes);
 	cat("Mean heterozygosity = " + heterozygosity + "\n");

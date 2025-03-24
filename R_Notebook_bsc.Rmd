@@ -19,8 +19,8 @@ options(scipen = 999) #scientific notation penalty, with this R does not use sci
 
 setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 
-reps <- 10
-repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+reps <- 20
+repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
 
 
 for(r in 1:reps){
@@ -56,7 +56,7 @@ library("hierfstat")
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 100491, by = 10)
+row_numbers <- seq(100001, 100991, by = 20)
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_nrnr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
@@ -156,8 +156,8 @@ options(scipen = 999) #scientific notation penalty, with this R does not use sci
 
 setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 
-reps <- 10
-repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+reps <- 20
+repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
 
 
 for(r in 1:reps){
@@ -186,7 +186,7 @@ library("hierfstat")
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 100491, by = 10) #this will help me create the columns i need in my matrix
+row_numbers <- seq(100001, 100991, by = 20) #this will help me create the columns i need in my matrix
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_nrr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
@@ -289,8 +289,8 @@ options(scipen = 999) #scientific notation penalty, with this R does not use sci
 
 setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 
-reps <- 10
-repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+reps <- 20
+repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
 
 
 for(r in 1:reps){
@@ -319,7 +319,7 @@ library("hierfstat")
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 100491, by = 10) #this will help me create the columns i need in my matrix
+row_numbers <- seq(100001, 100991, by = 20) #this will help me create the columns i need in my matrix
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_r <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
