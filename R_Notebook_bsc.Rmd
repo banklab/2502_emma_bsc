@@ -437,9 +437,9 @@ lines(cycle_numbers, mean_values_nrr, col = "red", lwd = 2)
 
 # add non-rendom selecting for not related
 matpoints(cycle_numbers, t(heterozygosity_values_nrnr), pch = 16, col = rgb(0.4, 1, 0.4, 0.2))
-lines(cycle_numbers, mean_values_nrnr, col = "darkgreen", lwd = 2)
+lines(cycle_numbers, mean_values_nrnr, col = "forestgreen", lwd = 2)
 
-legend("topright", legend = c("Random mating", "Non-random mating selecting for relatedness", "Non-random mating selecting for non-relatedness"), col = c("blue", "red", "darkgreen"), lwd = 2, bty = "n", cex = 0.6)
+legend("topright", legend = c("Random mating", "Non-random mating selecting for relatedness", "Non-random mating selecting for non-relatedness"), col = c("blue", "red", "forestgreen"), lwd = 2, bty = "n", cex = 0.6)
 
 
 ```
