@@ -45,13 +45,13 @@ mateChoice() {
 	sim.readFromPopulationFile("final_output.trees"); // p1 now exists, restored from file
    catn("Restored population size: " + size(p1.individuals)); //prints out the number of individuals I have...
 	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
-	log = community.createLogFile("sim_log_random_" + "reps_" + reps + simID  + ".csv", logInterval=20);
+	log = community.createLogFile("sim_log_random_" + "reps_" + reps + simID  + ".csv", logInterval=2);
 //	log = community.createLogFile("sim_log_nonrandom_notrelated" + ".csv", logInterval=10);
 	log.addCycle();
 	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);");
 }
 
-100001:100999 early() {
+100001:100049 early() {
 	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1
 	if (newSize >= 1000) 
 	{
@@ -61,7 +61,7 @@ mateChoice() {
 	//cat("Population size =" + size(p1.individuals) +  "\n");
 }
 
-101000 late() {
+100050 late() {
 // Print mean heterozygosity across the population
 	heterozygosity = calcHeterozygosity(p1.genomes);
 	cat("Mean heterozygosity = " + heterozygosity + "\n");
@@ -72,3 +72,4 @@ mateChoice() {
 
 
 
+//Take care - i now changed generation time, as well as the amount of outputs!

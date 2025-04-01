@@ -1,0 +1,133 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This notebook helps looking at the rates of heterozygosity decline and increase in relatedness.
+
+```{r}
+
+rm(list=ls(all=TRUE)) #clear R environment
+setwd("~/Documents/GitHub/2502_emma_bsc")
+
+df <- read.table("relatedness_heterozygosity_nrnr_1000ind.txt", header=FALSE)
+colnames(df) <- c("generation", "mean_relatedness", "heterozygosity")
+
+par(mar = c(5, 4, 4, 6))  # Add space on the right
+
+plot(df$generation, df$mean_relatedness, type="l", col="blue", ylim=c(0,max(df$mean_relatedness)), xlab="generations", ylab="relatedness",)
+par(new=TRUE)
+plot(df$generation, df$heterozygosity, type="l", col="red", axes=FALSE, ylim=c(0, max(df$heterozygosity)), xlab="", ylab="")  # ⬅ suppress default axes and labels))
+axis(side=4)
+mtext("Heterozygosity", side=4, line=3)
+legend("bottomright", legend=c("Relatedness", "Heterozygosity"), col=c("blue", "red"), lty=1)
+
+
+
+
+```
+
+Now I do exactly the same for non-random but selecting for relatedness...
+
+
+
+```{r}
+
+rm(list=ls(all=TRUE)) #clear R environment
+setwd("~/Documents/GitHub/2502_emma_bsc")
+
+
+df <- read.table("relatedness_heterozygosity_nrr_1000ind.txt", header=FALSE)
+colnames(df) <- c("generation", "mean_relatedness", "heterozygosity")
+
+par(mar = c(5, 4, 4, 6))  # Add space on the right
+
+plot(df$generation, df$mean_relatedness, type="l", col="blue", ylim=c(0,max(df$mean_relatedness)), xlab="generations", ylab="relatedness",)
+par(new=TRUE)
+plot(df$generation, df$heterozygosity, type="l", col="red", axes=FALSE, ylim=c(0, max(df$heterozygosity)), xlab="", ylab="")  # ⬅ suppress default axes and labels))
+axis(side=4)
+mtext("Heterozygosity", side=4, line=3)
+legend("topright", legend=c("Relatedness", "Heterozygosity"), col=c("blue", "red"), lty=1)
+
+
+
+
+```
+
+
+```{r}
+
+rm(list=ls(all=TRUE)) #clear R environment
+setwd("~/Documents/GitHub/2502_emma_bsc")
+
+
+df <- read.table("relatedness_heterozygosity_r_1000ind.txt", header=FALSE)
+colnames(df) <- c("generation", "mean_relatedness", "heterozygosity")
+
+par(mar = c(5, 4, 4, 6))  # Add space on the right
+
+plot(df$generation, df$mean_relatedness, type="l", col="blue", ylim=c(0,max(df$mean_relatedness)), xlab="generations", ylab="relatedness",)
+par(new=TRUE)
+plot(df$generation, df$heterozygosity, type="l", col="red", axes=FALSE, ylim=c(0, max(df$heterozygosity)), xlab="", ylab="")  # ⬅ suppress default axes and labels))
+axis(side=4)
+mtext("Heterozygosity", side=4, line=3)
+legend("topright", legend=c("Relatedness", "Heterozygosity"), col=c("blue", "red"), lty=1)
+
+
+
+
+```
+
+
+
+
+
+
+```{r}
+
+rm(list=ls(all=TRUE)) #clear R environment
+setwd("~/Documents/GitHub/2502_emma_bsc")
+
+df_nrnr <- read.table("relatedness_heterozygosity_nrnr_1000ind.txt", header=FALSE)
+df_nrr <- read.table("relatedness_heterozygosity_nrr_1000ind.txt", header=FALSE)
+df_r <- read.table("relatedness_heterozygosity_r_1000ind.txt", header=FALSE)
+
+
+colnames(df_nrnr) <- c("generation", "mean_relatedness", "heterozygosity")
+colnames(df_nrr)  <- c("generation", "mean_relatedness", "heterozygosity")
+colnames(df_r)  <- c("generation", "mean_relatedness", "heterozygosity")
+
+
+par(mar = c(5, 4, 4, 6))  # Add space on the right
+
+# Get y-limits across both datasets
+max_rel <- max(df_nrnr$mean_relatedness, df_nrr$mean_relatedness, df_r$mean_relatedness)
+max_het <- max(df_nrnr$heterozygosity, df_nrr$heterozygosity, df_r$heterozygosity)
+
+# --- Plot relatedness (left y-axis)
+plot(df_nrnr$generation, df_nrnr$mean_relatedness, type="l", col="green",
+     ylim=c(0, max_rel), xlab="Generation", ylab="Relatedness")
+
+par(new=TRUE) #this is to preserve the old plot -> I can now draw over with new data
+lines(df_nrr$generation, df_nrr$mean_relatedness, col="blue")
+lines(df_r$generation, df_r$mean_relatedness, col = "darkgreen")
+
+# --- Plot heterozygosity (right y-axis)
+par(new=TRUE)
+plot(df_nrnr$generation, df_nrnr$heterozygosity, type="l", col="deeppink",
+     axes=FALSE, xlab="", ylab="", ylim=c(0, max_het))
+
+par(new=TRUE)
+lines(df_nrr$generation, df_nrr$heterozygosity, col="pink")
+lines(df_r$generation, df_r$heterozygosity, col="purple")
+
+
+axis(side=4)
+mtext("Heterozygosity", side=4, line=3)
+
+legend("bottomright",
+       legend=c("Relatedness nrnr", "Relatedness nrr", "Relatedness r", "Heterozygosity nrnr", "Heterozygosity nrr", "Heterozygosity r"),
+       col=c("green", "blue", "darkgreen", "deeppink", "pink", "purple"), lty=1, cex = 0.6)
+
+
+```
