@@ -6,11 +6,14 @@ output: html_notebook
 
 # Introduction
 
-This is the R code for my Inbreeding management model. I used SLiM to generate data and R to then analyze it. 
+This is the R code for my Inbreeding management model 1. I used SLiM to generate data and R to then analyze it. 
 
 
-## Generating Data in SLiM with Parameters from R - model 1 with non-random mating selecting for not related
+## Generating Data in SLiM with Parameters from R 
 
+First I have 3 chunks, which will send information to my slim model - With this callback I can make 20 repetitions of my simulation in SLiM and save the output files. 
+
+non-random mating selecting for not related mates (nrnr)
 ```{r eval=FALSE, include=FALSE}
 
 rm(list=ls(all=TRUE)) #clear R environment
@@ -20,69 +23,62 @@ options(scipen = 999) #scientific notation penalty, with this R does not use sci
 setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 
 reps <- 20
-repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+repetition <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20) #This tells SliM how many repetitions I want (defined constant in SLiM)
 
 
 for(r in 1:reps){
   slim_code_block <- paste0("slim -d repetition=", r, " model1_nonrandom_notrelated.slim")
-  #slim_code_block 
+  #slim_code_block - goes through the amount of repetitions I want
   system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
 }
-
-
-
-#Here i could soft code the variables of the model, maybe the different management strategies (maybe better in SLiM...?)
-#parameters will be hard coded in SLiM
-
-#ALso I have to add a codeblock - so it will send all informations needed to SLiM
 
 ```
 
 
 
 Analyzing the output files from SLiM
-model 1 with non-random mating selecting for not related
+non-random mating selecting for not related
 
 ```{r}
 #setwd("~/Documents/GitHub/2502_emma_bsc/Outputs/") #setting the working directory
-getwd()  # Prints the current working directory
-## all SLiM output files which shiw nonrandom mating with mate choice for least relatedness
+
+## all SLiM output files which show nonrandom mating with mate choice for least relatedness are listed
 slim_out_files <- list.files(pattern = "_nonrandom_notrelated_")
 
-length(slim_out_files)
+length(slim_out_files) #tells me how long the list is, I just do this to check if it worked. 
 #install.packages("hierfstat")
-library("hierfstat")
+library("hierfstat") #useful package for analyzing
 
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 100991, by = 20)
-#row_names <- paste(row_numbers, "reps", "seed", sep = ";")
+row_numbers <- seq(100001, 100991, by = 20) #define the rownumbers as the generations
 
-results_df_nrnr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
-colnames(results_df_nrnr) <- c(row_numbers,"reps","seed")
-length(c(row_numbers,"reps","seed"))
-dim(results_df_nrnr)
+results_df_nrnr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2)) #create a matrix to store all the data, rows for the repetitions and columns for the heterozygosity values across the generations 
+colnames(results_df_nrnr) <- c(row_numbers,"reps","seed") #name the columns, first few with the generations and the last two as "reps" and "seed"
+length(c(row_numbers,"reps","seed")) #check if it worked
+dim(results_df_nrnr) #check if it worked
 
 
+#now I start with filling in the created matrix - 
 for(i in 1:length(slim_out_files)){ 
   
   single_file <- slim_out_files[i] ## this is the name of a single SLiM result file
   get_the_reps <- as.numeric(gsub(".*_reps_([0-9]+)_.*", "\\1", single_file))  ## use gsub() to get the value of 'reps' that we saved in the name of the results file
   get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) ## and for the seed....
-  
-  results_df_nrnr[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
   #.*_reps_ → Matches everything before _reps_
   #([0-9]+) → Captures one or more digits (the reps number)
   #_.* → Matches everything after the number (so it gets removed)
   #"\\1" → Extracts only the number inside ().
   
-  results_df_nrnr[i,"seed"] <- get_the_seed ## record the seed for this particular results file
+  results_df_nrnr[i,"reps"] <- get_the_reps ## fill in the values for repetition in the matrix
   
-  # Read the CSV file, ensure that it recognizes the header
+  results_df_nrnr[i,"seed"] <- get_the_seed ## record the seed for this particular results file and put it in the matrix
+  
+  # Read the single CSV file, ensure that it recognizes the header
   df <- read.csv(single_file, header = TRUE) 
   
-  # Ensure the column names are correct
+  # name the columns of the CSV file
   colnames(df) <- c("cycle", "Heterozygosity")  
 
   # Match cycle numbers to the matrix column names
@@ -95,11 +91,11 @@ for(i in 1:length(slim_out_files)){
 
 # Calculate column means (excluding the last two columns: "reps" and "seed")
 column_means <- colMeans(results_df_nrnr[, 1:(ncol(results_df_nrnr)-2)], na.rm = TRUE)
-# Create a new row with NA for "reps" and "seed" columns
+# Create a new row to later save the means - NA for "reps" and "seed" columns since they dont have a mean
 mean_row <- c(column_means, NA, NA)
 # Bind the new row to the bottom of results_df_nrnr
 results_df_nrnr <- rbind(results_df_nrnr, mean_row)
-# Assign row names 
+# Assign "mean" to the last row
 rownames(results_df_nrnr)[nrow(results_df_nrnr)] <- "Mean"
 
 # Print the final matrix with the mean row
@@ -121,24 +117,24 @@ cycle_numbers <- as.numeric(colnames(results_df_nrnr)[1:(ncol(results_df_nrnr)-2
 # Extract the heterozygosity values (excluding the last row "Mean" and last two columns "reps" & "seed")
 heterozygosity_values_nrnr <- results_df_nrnr[1:(nrow(results_df_nrnr)-1), 1:(ncol(results_df_nrnr)-2)]
 
-# Extract the mean heterozygosity values from the last row --> Last row, so we can use nrow
+# Extract the mean heterozygosity values from the last row for every column exceot the last two--> Last row, so we can use nrow
 mean_values_nrnr <- results_df_nrnr[nrow(results_df_nrnr), 1:(ncol(results_df_nrnr)-2)]
 
 # Create the plot
 matplot(
   cycle_numbers,  # X-axis: Generations
-  t(heterozygosity_values_nrnr),  # Transpose to align data correctly
+  t(heterozygosity_values_nrnr),  # Transpose to align data correctly - this is needed since matplot expects that each column is a separate data series - my separate data series are stored as rows, so i have to transpose them. 
   type = "p",  # "p" for points
   pch = 16,  # Use small dots for points
-  col = rgb(0.4, 0.6, 1, 0.2),  # Blue with transparency --> rgb is kind of nice, (red, green, blue, alpha)
-  xlab = "Generation (Cycle)",
+  col = rgb(0.4, 0.6, 1, 0.2),  # Blue with transparency --> rgb is kind of nice, (red, green, blue, alpha (transparency))
+  xlab = "Generation (Cycle)", #name the axis of the plot
   ylab = "Heterozygosity",
-  main = "Heterozygosity Across Generations - nonrandom-mating selecting for nonrelatedness",
+  main = "Heterozygosity Across Generations - nonrandom-mating selecting for nonrelatedness", #title of the plot
   cex.main = 0.8  # Makes title smaller
 )
 
 # Add the mean line
-lines(cycle_numbers, mean_values_nrnr, col = "orange", lwd = 2)  # Red solid line
+lines(cycle_numbers, mean_values_nrnr, col = "orange", lwd = 2)  # orange solid line
 
 
 
@@ -146,8 +142,9 @@ lines(cycle_numbers, mean_values_nrnr, col = "orange", lwd = 2)  # Red solid lin
 
 
 
-## Generating Data in SLiM with Parameters from R - model 1 with non-random mating selecting for relatedness
+Here i repeat all the steps from before, just for another model in SliM with a different mateChoice callback. For better annotation look above. 
 
+non-random mating selecting for related mates (nrr)
 ```{r eval=FALSE, include=FALSE}
 
 rm(list=ls(all=TRUE)) #clear R environment
@@ -171,12 +168,12 @@ for(r in 1:reps){
 
 
 Analyzing the output files from SLiM
-model 1 with non-random mating selecting for relatedness
+non-random mating selecting for relatedness
 
 ```{r}
 #setwd("~/Documents/GitHub/2502_emma_bsc/Outputs/") #setting the working directory
 getwd()  # Prints the current working directory
-## all SLiM output files which shiw nonrandom mating with mate choice for least relatedness
+## all SLiM output files which show nonrandom mating with mate choice for highest relatedness
 slim_out_files <- list.files(pattern = "_nonrandom_related_")
 
 length(slim_out_files)
@@ -187,7 +184,6 @@ library("hierfstat")
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
 row_numbers <- seq(100001, 100991, by = 20) #this will help me create the columns i need in my matrix
-#row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_nrr <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
 colnames(results_df_nrr) <- c(row_numbers,"reps","seed")
@@ -202,17 +198,13 @@ for(i in 1:length(slim_out_files)){
   get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) ## and for the seed....
   
   results_df_nrr[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
-  #.*_reps_ → Matches everything before _reps_
-  #([0-9]+) → Captures one or more digits (the reps number)
-  #_.* → Matches everything after the number (so it gets removed)
-  #"\\1" → Extracts only the number inside ().
   
   results_df_nrr[i,"seed"] <- get_the_seed ## record the seed for this particular results file
   
-  # Read the CSV file, ensure that it recognizes the header
+  # Read the single CSV file, ensure that it recognizes the header
   df <- read.csv(single_file, header = TRUE) 
   
-  # Ensure the column names are correct
+  # Ensure the column names of this single file are correct
   colnames(df) <- c("cycle", "Heterozygosity")  
 
   # Match cycle numbers to the matrix column names
@@ -229,7 +221,7 @@ column_means <- colMeans(results_df_nrr[, 1:(ncol(results_df_nrr)-2)], na.rm = T
 mean_row <- c(column_means, NA, NA)
 # Bind the new row to the bottom of results_df_nrr
 results_df_nrr <- rbind(results_df_nrr, mean_row)
-# Assign row names 
+# Assign last row names 
 rownames(results_df_nrr)[nrow(results_df_nrr)] <- "Mean"
 
 # Print the final matrix with the mean row
@@ -268,7 +260,7 @@ matplot(
 )
 
 # Add the mean line
-lines(cycle_numbers, mean_values_nrr, col = "orange", lwd = 2)  # Red solid line
+lines(cycle_numbers, mean_values_nrr, col = "orange", lwd = 2)  # orange solid line
 
 
 
@@ -276,11 +268,9 @@ lines(cycle_numbers, mean_values_nrr, col = "orange", lwd = 2)  # Red solid line
 
 
 
-Now i do exactly the same, but (without any mate choice command in slim). So the mating will be random...
+Now i do exactly the same, for the last model in Slim, which has a mateChoice command selecting mates at random. So the mating will be random...
 
-
-## Generating Data in SLiM with Parameters from R - model 1 with random mating
-
+random mating (r)
 ```{r eval=FALSE, include=FALSE}
 
 rm(list=ls(all=TRUE)) #clear R environment
@@ -304,8 +294,7 @@ for(r in 1:reps){
 
 
 Analyzing the output files from SLiM
-model 1 with random mating 
-
+random mating 
 ```{r}
 #setwd("~/Documents/GitHub/2502_emma_bsc/Outputs/") #setting the working directory
 getwd()  # Prints the current working directory
@@ -320,7 +309,6 @@ library("hierfstat")
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
 row_numbers <- seq(100001, 100991, by = 20) #this will help me create the columns i need in my matrix
-#row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_r <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
 colnames(results_df_r) <- c(row_numbers,"reps","seed")
@@ -335,14 +323,10 @@ for(i in 1:length(slim_out_files)){
   get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) ## and for the seed....
   
   results_df_r[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
-  #.*_reps_ → Matches everything before _reps_
-  #([0-9]+) → Captures one or more digits (the reps number)
-  #_.* → Matches everything after the number (so it gets removed)
-  #"\\1" → Extracts only the number inside ().
-  
+ 
   results_df_r[i,"seed"] <- get_the_seed ## record the seed for this particular results file
   
-  # Read the CSV file, ensure that it recognizes the header
+  # Read the single CSV file, ensure that it recognizes the header
   df <- read.csv(single_file, header = TRUE) 
   
   # Ensure the column names are correct
@@ -362,7 +346,7 @@ column_means <- colMeans(results_df_r[, 1:(ncol(results_df_r)-2)], na.rm = TRUE)
 mean_row <- c(column_means, NA, NA)
 # Bind the new row to the bottom of results_df_r
 results_df_r <- rbind(results_df_r, mean_row)
-# Assign row names 
+# Assign row name to the last row
 rownames(results_df_r)[nrow(results_df_r)] <- "Mean"
 
 # Print the final matrix with the mean row
@@ -410,7 +394,7 @@ lines(cycle_numbers, mean_values_r, col = "orange", lwd = 2)  # Red solid line
 ```
 
 
-now i want to combine all the three graphs i just generated into one. This helps me to better compare the outputs...
+This chunk combines all the three graphs i just generated into one. This helps me to better compare the outputs...
 
 ```{r}
 

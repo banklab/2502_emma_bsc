@@ -4,8 +4,8 @@ author: "Emma Ochsner"
 output: html_notebook
 ---
 
-This notebook is building on the other notebook - here i want to focus on the firs 100 generations.
-To generate the data, i changed some parameters in SLiM: The generations and especially also the amount of outputs generated. Now I want every 5th cycle to print out the heterozygosity.
+This notebook is building on the other notebook (R_notebook_bsc_model1) - here i want to focus on the firs 100 generations.
+To generate the data, i changed some parameters in SLiM: The generations and especially also the amount of outputs generated. Now I want every second cycle to print out the heterozygosity.
 
 ```{r eval=FALSE, include=FALSE}
 
