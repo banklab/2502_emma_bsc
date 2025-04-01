@@ -1,0 +1,102 @@
+initialize() {
+	initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
+	//turning on pedigree tracking, as relatedness
+	initializeSLiMOptions(keepPedigrees = T); // Track ancestry
+	initializeMutationRate(1e-5); //defining mutation rate
+	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
+	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
+	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
+	initializeRecombinationRate(1e-7); // specifies recombination rate
+	
+    initializeTreeSeq(); //this command enables me to read in the safed (output from earlier simulation) population
+
+	initializeSex("A"); //creates males and females in the population
+}
+
+////for non-random matechoice just uncomment this whole part (min or max for selecting for non-relatedness or relatedness)
+//mateChoice() {
+//	females = subpop.individuals[subpop.individuals.sex == "F"]; // Get all females
+//	males = subpop.individuals[subpop.individuals.sex == "M"]; // Get all males
+//
+//	if (individual.sex == "F" & size(males) > 0) {
+//		// Compute relatedness to all males
+//		relatedness = males.relatedness(individual);
+//		
+//		// Print relatedness values for debugging
+//		for (i in seqLen(size(males))) {
+////   	cat("Female " + individual.index + " - Male " + males[i].index + " relatedness: " + relatedness[i] + "\n");
+//	}
+//	bestIndex = which(relatedness == min(relatedness)); // gives out all males which have lowest relatedness value
+//	// Randomly shuffle individuals to prevent bias - this line creates a new list where every individual from p1 gets picked only once
+//    shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F);
+//    
+//	bestMate = shuffledInds[0];
+////	cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " with relatedness " + relatedness[bestIndex] + "\n");
+//		// Remove selected male from pool
+//		males = males[males != bestMate];
+//		return bestMate;
+//	}
+//
+//	return NULL;
+//}
+
+
+//For random mate choice
+mateChoice() {
+// Prefer relatives as mates
+	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
+	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
+
+    if (individual.sex == F & size(males) > 0) {  // If female and if there are some males
+		// Randomly shuffle males to prevent bias - this line creates a new list where every male gets picked only once
+		shuffledInds = sample(males, size(males), replace = F);
+		//Take first individual from that list as mate
+		bestMate = shuffledInds[0];
+
+		males = males[males != bestMate]; //removes bestMate from the list, so that all males only get to pair once
+		return bestMate;
+	}
+   
+		return NULL;  // No valid mate found
+}
+
+
+100001 early() {
+	sim.readFromPopulationFile("1000_1e-7_output.trees");
+	// p1 now exists, restored from file
+   catn("Restored population size: " + size(p1.individuals));
+	//p1.setSubpopulationSize(100);
+	// Randomly select 100 survivors
+	heterozygosity = calcHeterozygosity(p1.genomes);
+	cat("Mean heterozygosity = " + heterozygosity + "\n");
+}
+
+100001: 100100 early() {
+
+	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1
+	if (newSize >= 300) 
+	{
+			newSize = 300;
+	}	
+	p1.setSubpopulationSize(newSize);
+	cat("Population size =" + size(p1.individuals) +  "\n");	
+	
+	inds = p1.individuals;
+   N = size(inds);
+	totalRel = 0.0;
+   count = 0;	
+	
+	for (i in seqLen(N - 1)) {
+        for (j in seq(i + 1, N - 1)) {
+            totalRel = totalRel + inds[i].relatedness(inds[j]);
+            count = count + 1;
+        }
+    }
+    meanRel = (count > 0) ? (totalRel / count) else 0.0;
+    het = calcHeterozygosity(p1.genomes);
+	cat("Mean relatedness =" + meanRel + "\n");
+	cat("Heterozygosity =" + het + "\n");
+	
+    // Output to file (append)
+   writeFile("relatedness_heterozygosity_r.txt", sim.cycle + "\t" + meanRel + "\t" + het + "\n", append=T);
+}

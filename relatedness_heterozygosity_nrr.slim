@@ -25,7 +25,7 @@ mateChoice() {
 	if (individual.sex == "F" & size(males) > 0) {
 	
 		relatedness = males.relatedness(individual); 		// Compute relatedness to all males
-		bestIndex = which(relatedness == max(relatedness)); // gives out all males which have lowest relatedness value
+		bestIndex = which(relatedness == max(relatedness)); // gives out all lowest relatedness value
 
 	// Randomly shuffle individuals to prevent bias - this line creates a new list where every male with the lowest index gets picked only once
     	shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F);

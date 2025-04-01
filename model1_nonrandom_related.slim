@@ -1,27 +1,26 @@
-
+//This is my first model. With this model I want to test if my mateChoice callbacks behave as I wish and also how different mateChoices will influence the heterosygosity of the whole population. 
 initialize() {
 
-	initializeSLiMOptions(keepPedigrees = T);
-	initializeMutationRate(1e-7);
-	initializeMutationType("m1", 0.5, "f", 0.0);
-	initializeGenomicElementType("g1", m1, 1.0);
-	initializeGenomicElement(g1, 0, 99999);
-	initializeRecombinationRate(1e-7);
+	initializeSLiMOptions(keepPedigrees = T); //Ensables the program to keep track of the ancestry
+	initializeMutationRate(1e-7); //define a mutation rate
+	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
+	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
+	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases
+	initializeRecombinationRate(1e-7); // define the recombination rate
 	initializeSex("A"); //creates males and females in the population
 
-    initializeTreeSeq();
+    initializeTreeSeq(); //this command enables me to read in the safed (output from earlier simulation) population
 
 
-	defineConstant("reps", repetition);
+	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
 
 }
 
 //maybe add n uneven sex ratio!! this is now not implemented...
 //Also not sure about the sexes at the beginning --> define this and also one par of siblings at the start!!!
 
-
+//With the mateChoice command i can specify a specific pattern for matings. This one is a non-random mating, selecting mates with the highest relatedness. 
 mateChoice() {
-// Prefer relatives as mates
 	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
 	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
 
@@ -29,10 +28,11 @@ mateChoice() {
       // Compute relatedness for each male
 		relatedness = males.relatedness(individual);
 		
-		bestIndex = which(relatedness == max(relatedness)); // gives out all males which have lowest relatedness value
+		bestIndex = which(relatedness == max(relatedness)); // gives out the highest relatedness value
 			
-		// Randomly shuffle individuals to prevent bias - this line creates a new list where every male with lowest relatedness gets picked only once
-		shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F);
+		// Randomly shuffle individuals to prevent bias - this line creates a new list where every male with the highest relatedness gets picked only once
+		shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F); 	
+		
 		//Take first individual from that list as mate
 		bestMate = shuffledInds[0];
 
@@ -44,35 +44,33 @@ mateChoice() {
 }
 
 100001 early() {
-//	sim.addSubpop("p1", 16);
 	sim.readFromPopulationFile("final_output.trees"); // p1 now exists, restored from file
    catn("Restored population size: " + size(p1.individuals)); //prints out the number of individuals I have...
-	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
-	log = community.createLogFile("sim_log_nonrandom_related_" + "reps_" + reps + simID  + ".csv", logInterval=2);
+	defineConstant("simID", "_seed =" + getSeed()); // creates a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
+	log = community.createLogFile("sim_log_nonrandom_related_" + "reps_" + reps + simID  + ".csv", logInterval=2); //This creates my file - the name of the file contains the name of the model, the current repetition and the seed of the current simulation, i do this for every second generation (logInterval)
 //	log = community.createLogFile("sim_log_nonrandom_notrelated" + ".csv", logInterval=10);
-	log.addCycle();
-	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);");
+	log.addCycle(); //This adds the generations to my file
+	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);"); //here i create a column in my file to later save the generated values of heterozygosity
 }
 
 100001:100049 early() {
-	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1
+	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1 with a carrying capacity of "newSize"
 	if (newSize >= 1000) 
 	{
 			newSize = 1000;
 	}	
-	p1.setSubpopulationSize(newSize);
-	//cat("Population size =" + size(p1.individuals) +  "\n");
+	p1.setSubpopulationSize(newSize); //Population cannot get bigger than "newSize"
+	cat("Population size =" + size(p1.individuals) +  "\n");
 }
 
 100050 late() {
-// Print mean heterozygosity across the population
+// Print mean heterozygosity across the population in each generation
 	heterozygosity = calcHeterozygosity(p1.genomes);
-	cat("Mean heterozygosity = " + heterozygosity + "\n");
+	cat("Mean heterozygosity = " + heterozygosity + "\n"); //Here i fill in the heterozygosity values over the different generations
 //	sim.output(sim.mutationsOfType(m1),"slim_output_" + "reps_" + reps +"_"+ simID  + ".csv");
-
 
 }
 
 
-
 //Take care - i now changed generation time, as well as the amount of outputs!
+
