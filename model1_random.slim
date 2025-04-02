@@ -52,23 +52,26 @@ mateChoice() {
 	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);"); //here i create a column in my file to later save the generated values of heterozygosity
 }
 
-100001:100049 early() {
+100001:100100 early() {
 	newSize = asInteger(p1.individualCount * 1.1); //increas popsize every generation by the factor 1.1 with a carrying capacity of "newSize"
 	if (newSize >= 1000) 
 	{
 			newSize = 1000;
 	}	
 	p1.setSubpopulationSize(newSize); //Population cannot get bigger than "newSize"
-	//cat("Population size =" + size(p1.individuals) +  "\n");
-}
-
-100050 late() {
-// Print mean heterozygosity across the population for each generation
-	heterozygosity = calcHeterozygosity(p1.genomes);
+	
+	heterozygosity = calcHeterozygosity(p1.genomes); //calculate the heterozygosity 
 	cat("Mean heterozygosity = " + heterozygosity + "\n"); //Here i fill in the heterozygosity values over the different generations
-//	sim.output(sim.mutationsOfType(m1),"slim_output_" + "reps_" + reps +"_"+ simID  + ".csv");
 
 }
+
+//100050 late() {
+//// Print mean heterozygosity across the population for each generation
+//	heterozygosity = calcHeterozygosity(p1.genomes);
+//	cat("Mean heterozygosity = " + heterozygosity + "\n"); //Here i fill in the heterozygosity values over the different generations
+////	sim.output(sim.mutationsOfType(m1),"slim_output_" + "reps_" + reps +"_"+ simID  + ".csv");
+//
+//}
 
 
 //Take care - i now changed generation time, as well as the amount of outputs!

@@ -48,9 +48,9 @@ mateChoice() {
 100001: 100100 early() {
 
 	newSize = asInteger(p1.individualCount * 1.1); //increase popsize every generation by the factor 1.1 with a carrying capacity of "newSize"
-	if (newSize >= 300) 
+	if (newSize >= 1000) 
 	{
-			newSize = 300;
+			newSize = 1000;
 	}	
 	p1.setSubpopulationSize(newSize);
 	
