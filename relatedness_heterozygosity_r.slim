@@ -2,7 +2,7 @@ initialize() {
 	initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
 	//turning on pedigree tracking, as relatedness
 	initializeSLiMOptions(keepPedigrees = T); // Track ancestry
-	initializeMutationRate(1e-5); //defining mutation rate
+	initializeMutationRate(1e-7); //defining mutation rate
 	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
 	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
 	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
@@ -39,17 +39,21 @@ mateChoice() {
 
 
 100001 early() {
-	sim.readFromPopulationFile("final_output.trees");//final_output.tree is the file where i saved my starting population of 16 individuals. This command uploads the file into this model and sets those individuals as my p1
+	//This command uploads the saved file from a previous simulation into this model and sets those individuals as my p1
+	//sim.readFromPopulationFile("final_output.trees"); // p1 now exists, restored from file - those are my 16 saved individuals
+	sim.readFromPopulationFile("1000_1e-7_output.trees"); // p1 now exists, restored from file - those are my 1000 saved individuals
 }
+
 
 100001: 100100 early() {
 
-	newSize = asInteger(p1.individualCount * 1.1); //increase popsize every generation by the factor 1.1 with a carrying capacity of "newSize"
-	if (newSize >= 1000) 
-	{
-			newSize = 1000;
-	}	
-	p1.setSubpopulationSize(newSize);
+////Just uncomment this part to let pop size chage
+//	newSize = asInteger(p1.individualCount * 1.1); //increase popsize every generation by the factor 1.1 with a carrying capacity of "newSize"
+//	if (newSize >= 1000) 
+//	{
+//			newSize = 1000;
+//	}	
+//	p1.setSubpopulationSize(newSize);
 	
 	inds = p1.individuals;
    N = size(inds);
