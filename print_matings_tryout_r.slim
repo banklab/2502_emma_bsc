@@ -12,8 +12,8 @@ initialize() {
 
 	initializeSex("A"); //creates males and females in the population
 	
-	//defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
-	//defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
+	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
+	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
 }
 	
 
@@ -32,38 +32,24 @@ initialize() {
 	males = subpop.individuals[subpop.individuals.sex == "M"]; // Get all males
 
 
-//With the mateChoice command i can specify a specific pattern for matings. This one is a non-random mating, selecting mates with the lowest relatedness. 
-//for (f in seqLen(size(females))){
-//mateChoice() {
-//	females = subpop.individuals[subpop.individuals.sex == "F"]; // Get all females
-//	males = subpop.individuals[subpop.individuals.sex == "M"]; // Get all males
-
-	//if (individual.sex == "F" & size(males) > 0) {
-//			for (f in seqLen(size(females))){
-
-//			relatedness = males.relatedness(females[f]); // Compute relatedness to all males
-				relatedness = males.relatedness(individual);
-				for (i in seqLen(size(males))) {
-   			cat("Female " + individual.index + " - Male " + males[i].index + " relatedness: " + relatedness[i] + "\n");
- 				}		
-		
-			bestIndex = which(relatedness == min(relatedness)); // gives out all males which have lowest relatedness value for the specific female
-			//cat("Best Index = " + bestIndex +  "\n");
+//With the mateChoice command i can specify a specific pattern for matings. This one is random mating.
 
 
-	// Randomly shuffle individuals (sample command) to prevent bias - this line creates a new list where every male with the lowest index gets picked only once
-    	shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F);
-    
-    //cat("shuffled individuals" + paste(shuffledInds)  + "\n");    
-    
+// Randomly shuffle individuals to prevent bias - this line creates a new list where every male gets picked only once
+		shuffledInds = sample(males, size(males), replace = F);
+		//Take first individual from that list as mate
 		bestMate = shuffledInds[0];
 		
 //	cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " with relatedness " + relatedness[bestIndex] + " at generation " + sim.cycle + "\n");		
-cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " with relatedness " + bestMate.relatedness(individual) + " at generation " + sim.cycle + "\n");		
+		cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " with relatedness " + bestMate.relatedness(individual) + " at generation " + sim.cycle + "\n");		
 		
 	//	females = females[females != individual];
 	//	males = males[males != bestMate]; // Remove selected male from pool --> Test this maybe?
 		//}
+		
+	//	writeFile("mateChoices_nrnr.txt", sim.cycle + "\t" + "female:" + individual.index + "\t" + "male:" + bestMate.index + "\n", append=T);
+		writeFile("mateChoices_r_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + individual.index + "\t" + bestMate.index + "\n", append=T);
+
 		
 		return bestMate;
 	//}
@@ -72,17 +58,6 @@ cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " wi
 		
 	
 }
-
-
-////Just uncomment this part to let pop size chage
-//	newSize = asInteger(p1.individualCount * 1.1); //increase popsize every generation by the factor 1.1 with a carrying capacity of "newSize"
-//	if (newSize >= 100) 
-//	{
-//			newSize = 100;
-//	}	
-//	p1.setSubpopulationSize(newSize);
-//	
-
 
 100001: 100100 early() {
 	inds = p1.individuals;
@@ -102,7 +77,8 @@ cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " wi
 	//Now i want the meanRel and the het printed out in a file for every generation. In the name of the file there should be the model name (relatedness_heterozygosity_nrnr_), the current repetition (1-10) as well as the seed for the current simulation. 
  //  writeFile("relatedness_heterozygosity_nrnr_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + meanRel + "\t" + het + "\n", append=T);
  
-     cat("popsize" + size(p1.individuals)  + "\n");    
-
+    cat("popsize" + size(p1.individuals)  + "\n");    
+    cat("heterozygosity =" + het + "\n");
+	//writeFile("mateChoices_nrnr.txt", sim.cycle + "\t" + "female:" + individual.index + "\t" + "male" + bestMate.index + "\n", append=T);
  
 }

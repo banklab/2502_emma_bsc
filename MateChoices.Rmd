@@ -1,0 +1,99 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+# Read the data. No header in my text file, so header = FALSE
+df <- read.table("mateChoices_nrnr.txt", header = FALSE)
+
+# Assign meaningful column names
+colnames(df) <- c("Generation", "FemaleIndex", "MaleIndex")
+
+#install.packages("dplyr")
+library(dplyr)
+
+# Summarize by generation
+#%>%: take the output of whatever’s on the left side and pass it automatically as the first argument to the function on the right side.
+# --> in the following code: the df is forwarded into arrange() as its first argument. Then the output of arrange() is forwarded into head()
+df_counts <- df %>%
+  group_by(Generation) %>%
+  summarise(
+    distinctFemales = n_distinct(FemaleIndex),   # how many female indexes appear
+    distinctMales   = n_distinct(MaleIndex),     # how many male indexes appear
+    missingFemales  = 8 - n_distinct(FemaleIndex), # how many of the 8 never appear
+    missingMales    = 8 - n_distinct(MaleIndex)
+  )
+
+# Look at the result
+df_counts
+
+
+
+
+```
+
+
+
+
+Now make a plot out of this: 
+```{r}
+
+max <- max (df_counts$missingFemales, df_counts$missingMales)
+  
+x_vals <- df_counts$Generation
+y_vals <- df_counts$missingFemales
+
+matplot(
+  x = x_vals,
+  y = y_vals,
+  type = "l",           # "b" means points connected by lines
+  xlab = "Generation",
+  ylab = "Number Missing", 
+  ylim = c(0, max),
+  col = "lightseagreen"
+)
+
+lines(x_vals, df_counts$missingMales, type = "l", col = "pink")
+
+legend("topright",legend = c("Missing Females", "Missing Males"),
+  lty = 1, col = c("lightseagreen", "pink"), cex = 0.6)
+
+```
+
+
+
+
+Now exactly the same for the random mating
+
+```{r}
+# Read the data. No header in my text file, so header = FALSE
+df <- read.table("mateChoices_r.txt", header = FALSE)
+
+# Assign meaningful column names
+colnames(df) <- c("Generation", "FemaleIndex", "MaleIndex")
+
+#install.packages("dplyr")
+library(dplyr)
+
+# Summarize by generation
+#%>%: take the output of whatever’s on the left side and pass it automatically as the first argument to the function on the right side.
+# --> in the following code: the df is forwarded into arrange() as its first argument. Then the output of arrange() is forwarded into head()
+df_counts <- df %>%
+  group_by(Generation) %>%
+  summarise(
+    distinctFemales = n_distinct(FemaleIndex),   # how many female indexes appear
+    distinctMales   = n_distinct(MaleIndex),     # how many male indexes appear
+    missingFemales  = 8 - n_distinct(FemaleIndex), # how many of the 8 never appear
+    missingMales    = 8 - n_distinct(MaleIndex)
+  )
+
+# Look at the result
+df_counts
+
+
+
+
+```
