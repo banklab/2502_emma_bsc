@@ -1,0 +1,27 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This R notebook serves to vidualize the color palett of the sihek crew. I use some of the colora for my plots...
+
+```{r}
+install.packages("paletteer")
+library(paletteer)
+  Alacena <- paletteer_d("MexBrewer::Alacena")
+  Color_Blind <- paletteer_d("ggthemes::Color_Blind")
+  pal_seegruen <- paletteer_d("unikn::pal_seegruen")
+  green_material <- paletteer_d("ggsci::green_material")
+  
+  my_palette <- c(Alacena[1], Color_Blind[c(6, 9)], "royalblue4", Color_Blind[5], pal_seegruen[c(5, 2)], "gray15", Color_Blind[10], green_material[8],
+                  "sienna", "tan1", "dodgerblue4", Alacena[7], pal_seegruen[c(4, 1)], Color_Blind[c(4, 3)], green_material[c(10, 6)],
+                  Alacena[2], Color_Blind[2], Alacena[8], Color_Blind[c(1, 8)], "deepskyblue4", pal_seegruen[3], Color_Blind[7], green_material[c(9, 4)])
+  
+
+  my_palette_hex_groups <- c("#693829FF", "#C85200FF", "#FFBC79FF",   "#27408B", "#5FA2CEFF", "#067E79FF", "#54BFB7FF",   "#262626", "#C8D0D9FF", "#388E3CFF", 
+                             "#A0522D",   "#FFA54F",   "#104E8B", "#5480B5FF", "#0A9086FF", "#71D1CCFF", "#57606CFF", "#A3ACB9FF", "#1B5E20FF", "#4CAF50FF", 
+                             "#894B33FF", "#FC7D0BFF", "#3D619DFF", "#1170AAFF", "#A3CCE9FF",   "#00688B", "#0AA398FF", "#7B848FFF", "#2E7D32FF", "#81C784FF")
+  
+```
+
+
