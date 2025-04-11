@@ -77,11 +77,6 @@ initialize() {
         // Compute relatedness of focal to the entire remaining set
         relVals = focal.relatedness(remainingmales);
         
-//        don't need this anymore since i compare males and females...
-//        // Exclude the focal itself from partner selection by making its relVal very low
-//        idxFocal = which(remaining == focal);
-//        relVals[idxFocal] = -9999.0;
-
         // Identify the single highest‐related individual
         maxVal = max(relVals);
         idxPartner = which(relVals == maxVal)[0]; // pick first if multiple ties
@@ -96,54 +91,16 @@ initialize() {
 
 
     cat("chosen pair: " + focal.index + " + " + partner.index + " with relatedness: " + maxVal + "\n" );
-                
     }
 
-    // move those 8 individuals to p2
-    //p2.takeMigrants( chosenForP2);
-
-    //p1.splitSubpopulation("p2", chosenForP2);
-//   sim.addSubpopSplit("p2", chosenForP2, p1);
-
-// randomly choose 8 individuals for reintroduction
- //  sim.addSubpopSplit("p2", 8, p1);
-   
-   
-   //sim.createSubpopulation("p2", chosenForP2);
-    //cat("Chosen 4 random focals + their best partners => " + size(chosenForP2) + " individuals moved to p2.\n");
-    //cat("popsize p2 = " + size(p2.individuals) +"\n");
-    
-//    females = p2.individuals[p2.individuals.sex == "F"]; // Get all females
-//   // for (ind in seqLen(size(females))){
-//    males = p2.individuals[p2.individuals.sex == "M"]; // Get all males
-//    relatedness = males.relatedness(females);
-//    
-//    for (i in seqLen(size(males))) {
-//    cat("Female " + females.index + " - Male " + males[i].index + " relatedness: " + relatedness[i] + "\n");    
-//    
-//	}
-    
-   // }
-
-   // sim.addSubpop("p2", 8);
-
+	    cat("indexes:" +  chosenForP2.index +   "\n" );
+	     writeFile("model2_" + "individuals" + ".txt",   chosenForP2.index +  "\n", append=T);
 
 }
 
-//100036:100040 mateChoice(p2) {
-//
-//    if (sim.cycle == 100036) {
-//        // Return only the chosen eight from p1
-//        return p1.individuals[chosenForP2];
-//    }
-//    else {
-//        // Return whoever you want in later generations—possibly all of p2
-//        // or any other new mate choice scheme you have in mind.
-//        return p2.individuals;
-//    }
-//}
+100036 late() {
 
-
-//100036 late() {
-//simulationFinished();
-//}
+	sim.treeSeqOutput("model2.trees");
+	sim.simulationFinished();
+		
+		}
