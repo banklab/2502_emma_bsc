@@ -1,0 +1,120 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+ 
+
+```{r}
+packageVersion("reticulate")
+
+#install.packages("reticulate")
+library(reticulate)
+
+#create a new environment
+conda_create("r-slendr")
+use_condaenv("r-slendr", required = TRUE)
+py_config()
+
+
+py_config()                       # Shows the Python being used
+py_module_available("tskit")      # Should be TRUE
+
+```
+
+
+```{r}
+library(reticulate)
+use_condaenv("r-slendr", required = TRUE)
+py_config()  # confirm environment is "r-slendr"
+#conda_install("r-slendr", "pyslim", pip = TRUE)
+
+conda_install("r-slendr", "gsl", channel = "conda-forge")
+conda_install("r-slendr", "msprime", channel = "conda-forge")
+
+#reticulate::py_run_string("import pyslim")
+
+
+```
+
+
+
+```{r}
+setwd("~/Documents/GitHub/2502_emma_bsc")
+
+library(reticulate)
+use_condaenv("r-slendr", required = TRUE)
+py_config()
+
+#install.packages("remotes")  # if not already installed
+library(remotes)
+
+py_module_available("tskit")   # should be TRUE
+
+
+# Import tskit
+tskit <- import("tskit")
+
+# Load the .trees file
+ts <- tskit$load("model2.trees")
+
+# Now I have a Python object 'ts' that I can use in R
+print(ts)
+cat("Total individuals:", ts$num_individuals, "\n")
+
+
+lines <- readLines("model2_individuals.txt")
+lines <- lines[lines != ""]
+lines
+
+# Now convert to integers
+individuals_to_keep <- as.integer(lines)
+individuals_to_keep
+# Check
+#range(individuals_to_keep)
+
+for (ind_id in individuals_to_keep[1:5]) {  # just look at a few
+  cat("Individual:", ind_id, "\n")
+  nodes_python <- ts$individual(ind_id)$nodes
+  str(nodes_python)  # How does reticulate show these? 
+  nodes_r <- py_to_r(nodes_python)
+  str(nodes_r)       # What does it look like after py_to_r()?
+}
+
+
+# Step A: Gather all node objects, explicitly call .tolist() in Python
+all_node_lists_py <- lapply(individuals_to_keep, function(ind_id) {
+  node_obj <- ts$individual(ind_id)$nodes
+  
+  # Convert the NumPy array (or array-like) to a pure Python list:
+  node_obj$tolist()
+})
+
+# Step B: Now convert *that* entire list-of-lists from Python into R objects
+all_node_lists_r <- py_to_r(all_node_lists_py)
+
+# Step C: Flatten everything into one long R vector
+node_ids <- unlist(all_node_lists_r)
+
+# Step D: Finally, convert to integer
+node_ids <- as.integer(node_ids)
+
+cat("Final node IDs:", node_ids, "\n")
+
+# 4) Use simplify to keep just those nodes (and the relevant ancestral nodes).
+
+ts_filtered <- ts$simplify(
+  samples = node_ids,
+  filter_populations = FALSE,  # keep original pop table
+  filter_individuals = TRUE    # remove individuals not in node_ids
+)
+
+
+# 5) Optionally, dump the filtered tree sequence to a new file.
+ts_filtered$dump("model2_filteredinds.trees")
+
+# 6) Inspect your filtered TS in R if desired.
+cat("Number of individuals in the filtered TS:", ts_filtered$num_individuals, "\n")
+cat("Number of samples in the filtered TS:", ts_filtered$num_samples, "\n")
+
+
+```
