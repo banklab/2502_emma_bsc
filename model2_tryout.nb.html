@@ -1754,336 +1754,235 @@ display: none;
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFja2FnZVZlcnNpb24oXCJyZXRpY3VsYXRlXCIpXG5gYGAifQ== -->
-<pre class="r"><code>packageVersion(&quot;reticulate&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIOKAmDEuNDIuMOKAmVxuIn0= -->
-<pre><code>[1] ‘1.42.0’</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc3RhbGwucGFja2FnZXMoXCJyZXRpY3VsYXRlXCIpXG5saWJyYXJ5KHJldGljdWxhdGUpXG5cbiNjcmVhdGUgYSBuZXcgZW52aXJvbm1lbnRcbmNvbmRhX2NyZWF0ZShcInItc2xlbmRyXCIpXG5gYGAifQ== -->
-<pre class="r"><code>#install.packages(&quot;reticulate&quot;)
-library(reticulate)
-
-#create a new environment
-conda_create(&quot;r-slendr&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiKyAvVXNlcnMvYmVudXR6ZXJpbi9MaWJyYXJ5L3ItbWluaWNvbmRhL2Jpbi9jb25kYSBjcmVhdGUgLS15ZXMgLS1uYW1lIHItc2xlbmRyICdweXRob249My4xMCcgLS1xdWlldCAtYyBjb25kYS1mb3JnZVxuIn0= -->
-<pre><code>+ /Users/benutzerin/Library/r-miniconda/bin/conda create --yes --name r-slendr &#39;python=3.10&#39; --quiet -c conda-forge</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUmV0cmlldmluZyBub3RpY2VzOiAuLi53b3JraW5nLi4uIGRvbmVcbkNoYW5uZWxzOlxuIC0gY29uZGEtZm9yZ2VcbiAtIGRlZmF1bHRzXG5QbGF0Zm9ybTogb3N4LTY0XG5Db2xsZWN0aW5nIHBhY2thZ2UgbWV0YWRhdGEgKHJlcG9kYXRhLmpzb24pOiAuLi53b3JraW5nLi4uIGRvbmVcblNvbHZpbmcgZW52aXJvbm1lbnQ6IC4uLndvcmtpbmcuLi4gZG9uZVxuXG4jIyBQYWNrYWdlIFBsYW4gIyNcblxuICBlbnZpcm9ubWVudCBsb2NhdGlvbjogL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyXG5cbiAgYWRkZWQgLyB1cGRhdGVkIHNwZWNzOlxuICAgIC0gcHl0aG9uPTMuMTBcblxuXG5UaGUgZm9sbG93aW5nIE5FVyBwYWNrYWdlcyB3aWxsIGJlIElOU1RBTExFRDpcblxuICBiemlwMiAgICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpiemlwMi0xLjAuOC1oZmRmNDQ3NV83IFxuICBjYS1jZXJ0aWZpY2F0ZXMgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpjYS1jZXJ0aWZpY2F0ZXMtMjAyNS4xLjMxLWg4ODU3ZmQwXzAgXG4gIGxpYmV4cGF0ICAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OmxpYmV4cGF0LTIuNy4wLWgyNDA4MzNlXzAgXG4gIGxpYmZmaSAgICAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OmxpYmZmaS0zLjQuNi1oMjgxNjcxZF8xIFxuICBsaWJsem1hICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpsaWJsem1hLTUuOC4xLWhkNDcxOTM5XzAgXG4gIGxpYnNxbGl0ZSAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OmxpYnNxbGl0ZS0zLjQ5LjEtaGRiNmRhZTVfMiBcbiAgbGliemxpYiAgICAgICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6bGliemxpYi0xLjMuMS1oZDIzZmMxM18yIFxuICBuY3Vyc2VzICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpuY3Vyc2VzLTYuNS1oMDYyMmE5YV8zIFxuICBvcGVuc3NsICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpvcGVuc3NsLTMuNS4wLWhjNDI2ZjNmXzAgXG4gIHBpcCAgICAgICAgICAgICAgICBjb25kYS1mb3JnZS9ub2FyY2g6OnBpcC0yNS4wLjEtcHloOGIxOTcxOF8wIFxuICBweXRob24gICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpweXRob24tMy4xMC4xNy1oOTNlOGE5Ml8wX2NweXRob24gXG4gIHJlYWRsaW5lICAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OnJlYWRsaW5lLTguMi1oN2NjYTRhZl8yIFxuICBzZXR1cHRvb2xzICAgICAgICAgY29uZGEtZm9yZ2Uvbm9hcmNoOjpzZXR1cHRvb2xzLTc4LjEuMC1weWhmZjJkNTY3XzAgXG4gIHRrICAgICAgICAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OnRrLTguNi4xMy1oMWFiY2Q5NV8xIFxuICB0emRhdGEgICAgICAgICAgICAgY29uZGEtZm9yZ2Uvbm9hcmNoOjp0emRhdGEtMjAyNWItaDc4ZTEwNWRfMCBcbiAgd2hlZWwgICAgICAgICAgICAgIGNvbmRhLWZvcmdlL25vYXJjaDo6d2hlZWwtMC40NS4xLXB5aGQ4ZWQxYWJfMSBcblxuXG5QcmVwYXJpbmcgdHJhbnNhY3Rpb246IC4uLndvcmtpbmcuLi4gZG9uZVxuVmVyaWZ5aW5nIHRyYW5zYWN0aW9uOiAuLi53b3JraW5nLi4uIGRvbmVcbkV4ZWN1dGluZyB0cmFuc2FjdGlvbjogLi4ud29ya2luZy4uLiBkb25lXG5bMV0gXCIvVXNlcnMvYmVudXR6ZXJpbi9MaWJyYXJ5L3ItbWluaWNvbmRhL2VudnMvci1zbGVuZHIvYmluL3B5dGhvblwiXG4ifQ== -->
-<pre><code>Retrieving notices: ...working... done
-Channels:
- - conda-forge
- - defaults
-Platform: osx-64
-Collecting package metadata (repodata.json): ...working... done
-Solving environment: ...working... done
-
-## Package Plan ##
-
-  environment location: /Users/benutzerin/Library/r-miniconda/envs/r-slendr
-
-  added / updated specs:
-    - python=3.10
-
-
-The following NEW packages will be INSTALLED:
-
-  bzip2              conda-forge/osx-64::bzip2-1.0.8-hfdf4475_7 
-  ca-certificates    conda-forge/osx-64::ca-certificates-2025.1.31-h8857fd0_0 
-  libexpat           conda-forge/osx-64::libexpat-2.7.0-h240833e_0 
-  libffi             conda-forge/osx-64::libffi-3.4.6-h281671d_1 
-  liblzma            conda-forge/osx-64::liblzma-5.8.1-hd471939_0 
-  libsqlite          conda-forge/osx-64::libsqlite-3.49.1-hdb6dae5_2 
-  libzlib            conda-forge/osx-64::libzlib-1.3.1-hd23fc13_2 
-  ncurses            conda-forge/osx-64::ncurses-6.5-h0622a9a_3 
-  openssl            conda-forge/osx-64::openssl-3.5.0-hc426f3f_0 
-  pip                conda-forge/noarch::pip-25.0.1-pyh8b19718_0 
-  python             conda-forge/osx-64::python-3.10.17-h93e8a92_0_cpython 
-  readline           conda-forge/osx-64::readline-8.2-h7cca4af_2 
-  setuptools         conda-forge/noarch::setuptools-78.1.0-pyhff2d567_0 
-  tk                 conda-forge/osx-64::tk-8.6.13-h1abcd95_1 
-  tzdata             conda-forge/noarch::tzdata-2025b-h78e105d_0 
-  wheel              conda-forge/noarch::wheel-0.45.1-pyhd8ed1ab_1 
-
-
-Preparing transaction: ...working... done
-Verifying transaction: ...working... done
-Executing transaction: ...working... done
-[1] &quot;/Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python&quot;</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXNlX2NvbmRhZW52KFwici1zbGVuZHJcIiwgcmVxdWlyZWQgPSBUUlVFKVxucHlfY29uZmlnKClcbmBgYCJ9 -->
-<pre class="r"><code>use_condaenv(&quot;r-slendr&quot;, required = TRUE)
-py_config()</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicHl0aG9uOiAgICAgICAgIC9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kci9iaW4vcHl0aG9uXG5saWJweXRob246ICAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyL2xpYi9saWJweXRob24zLjEwLmR5bGliXG5weXRob25ob21lOiAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyOi9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kclxudmVyc2lvbjogICAgICAgIDMuMTAuMTcgfCBwYWNrYWdlZCBieSBjb25kYS1mb3JnZSB8IChtYWluLCBBcHIgMTAgMjAyNSwgMjI6MTU6NDkpIFtDbGFuZyAxOC4xLjggXVxubnVtcHk6ICAgICAgICAgICBbTk9UIEZPVU5EXVxuXG5OT1RFOiBQeXRob24gdmVyc2lvbiB3YXMgZm9yY2VkIGJ5IHVzZV9weXRob24oKSBmdW5jdGlvblxuIn0= -->
-<pre><code>python:         /Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python
-libpython:      /Users/benutzerin/Library/r-miniconda/envs/r-slendr/lib/libpython3.10.dylib
-pythonhome:     /Users/benutzerin/Library/r-miniconda/envs/r-slendr:/Users/benutzerin/Library/r-miniconda/envs/r-slendr
-version:        3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:15:49) [Clang 18.1.8 ]
-numpy:           [NOT FOUND]
-
-NOTE: Python version was forced by use_python() function</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uZGFfaW5zdGFsbChcInItc2xlbmRyXCIsIFwicHlzbGltXCIsIHBpcCA9IFRSVUUpXG5gYGAifQ== -->
-<pre class="r"><code>conda_install(&quot;r-slendr&quot;, &quot;pyslim&quot;, pip = TRUE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiKyAuIC9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvYmluL2FjdGl2YXRlXG4rIGNvbmRhIGFjdGl2YXRlICdyLXNsZW5kcidcbisgJy9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kci9iaW4vcHl0aG9uJyAtbSBwaXAgaW5zdGFsbCAtLXVwZ3JhZGUgLS1uby11c2VyIHB5c2xpbVxuQ29sbGVjdGluZyBweXNsaW1cbiAgVXNpbmcgY2FjaGVkIHB5c2xpbS0xLjAuNC1weTMtbm9uZS1hbnkud2hsLm1ldGFkYXRhICgxLjMga0IpXG5Db2xsZWN0aW5nIG1zcHJpbWU+PTEuMC4xIChmcm9tIHB5c2xpbSlcbiAgVXNpbmcgY2FjaGVkIG1zcHJpbWUtMS4zLjMtY3AzMTAtY3AzMTAtbWFjb3N4XzExXzBfeDg2XzY0LndobC5tZXRhZGF0YSAoMy42IGtCKVxuQ29sbGVjdGluZyBudW1weSAoZnJvbSBweXNsaW0pXG4gIFVzaW5nIGNhY2hlZCBudW1weS0yLjIuNC1jcDMxMC1jcDMxMC1tYWNvc3hfMTRfMF94ODZfNjQud2hsLm1ldGFkYXRhICg2MiBrQilcbkNvbGxlY3RpbmcgdHNraXQgKGZyb20gcHlzbGltKVxuICBVc2luZyBjYWNoZWQgdHNraXQtMC42LjItY3AzMTAtY3AzMTAtbWFjb3N4XzEwXzlfdW5pdmVyc2FsMi53aGwubWV0YWRhdGEgKDIuMCBrQilcbkNvbGxlY3RpbmcgbmV3aWNrPj0xLjMuMCAoZnJvbSBtc3ByaW1lPj0xLjAuMS0+cHlzbGltKVxuICBVc2luZyBjYWNoZWQgbmV3aWNrLTEuMTAuMC1weTIucHkzLW5vbmUtYW55LndobC5tZXRhZGF0YSAoOC40IGtCKVxuQ29sbGVjdGluZyBkZW1lcz49MC4yIChmcm9tIG1zcHJpbWU+PTEuMC4xLT5weXNsaW0pXG4gIFVzaW5nIGNhY2hlZCBkZW1lcy0wLjIuMy1weTMtbm9uZS1hbnkud2hsLm1ldGFkYXRhICgxLjkga0IpXG5Db2xsZWN0aW5nIGpzb25zY2hlbWE+PTMuMC4wIChmcm9tIHRza2l0LT5weXNsaW0pXG4gIFVzaW5nIGNhY2hlZCBqc29uc2NoZW1hLTQuMjMuMC1weTMtbm9uZS1hbnkud2hsLm1ldGFkYXRhICg3Ljkga0IpXG5Db2xsZWN0aW5nIGF0dHJzPj0yMC4zLjAgKGZyb20gZGVtZXM+PTAuMi0+bXNwcmltZT49MS4wLjEtPnB5c2xpbSlcbiAgVXNpbmcgY2FjaGVkIGF0dHJzLTI1LjMuMC1weTMtbm9uZS1hbnkud2hsLm1ldGFkYXRhICgxMCBrQilcbkNvbGxlY3RpbmcgcnVhbWVsLnlhbWw+PTAuMTUuNzggKGZyb20gZGVtZXM+PTAuMi0+bXNwcmltZT49MS4wLjEtPnB5c2xpbSlcbiAgVXNpbmcgY2FjaGVkIHJ1YW1lbC55YW1sLTAuMTguMTAtcHkzLW5vbmUtYW55LndobC5tZXRhZGF0YSAoMjMga0IpXG5Db2xsZWN0aW5nIGpzb25zY2hlbWEtc3BlY2lmaWNhdGlvbnM+PTIwMjMuMDMuNiAoZnJvbSBqc29uc2NoZW1hPj0zLjAuMC0+dHNraXQtPnB5c2xpbSlcbiAgVXNpbmcgY2FjaGVkIGpzb25zY2hlbWFfc3BlY2lmaWNhdGlvbnMtMjAyNC4xMC4xLXB5My1ub25lLWFueS53aGwubWV0YWRhdGEgKDMuMCBrQilcbkNvbGxlY3RpbmcgcmVmZXJlbmNpbmc+PTAuMjguNCAoZnJvbSBqc29uc2NoZW1hPj0zLjAuMC0+dHNraXQtPnB5c2xpbSlcbiAgVXNpbmcgY2FjaGVkIHJlZmVyZW5jaW5nLTAuMzYuMi1weTMtbm9uZS1hbnkud2hsLm1ldGFkYXRhICgyLjgga0IpXG5Db2xsZWN0aW5nIHJwZHMtcHk+PTAuNy4xIChmcm9tIGpzb25zY2hlbWE+PTMuMC4wLT50c2tpdC0+cHlzbGltKVxuICBVc2luZyBjYWNoZWQgcnBkc19weS0wLjI0LjAtY3AzMTAtY3AzMTAtbWFjb3N4XzEwXzEyX3g4Nl82NC53aGwubWV0YWRhdGEgKDQuMSBrQilcbkNvbGxlY3RpbmcgdHlwaW5nLWV4dGVuc2lvbnM+PTQuNC4wIChmcm9tIHJlZmVyZW5jaW5nPj0wLjI4LjQtPmpzb25zY2hlbWE+PTMuMC4wLT50c2tpdC0+cHlzbGltKVxuICBVc2luZyBjYWNoZWQgdHlwaW5nX2V4dGVuc2lvbnMtNC4xMy4yLXB5My1ub25lLWFueS53aGwubWV0YWRhdGEgKDMuMCBrQilcbkNvbGxlY3RpbmcgcnVhbWVsLnlhbWwuY2xpYj49MC4yLjcgKGZyb20gcnVhbWVsLnlhbWw+PTAuMTUuNzgtPmRlbWVzPj0wLjItPm1zcHJpbWU+PTEuMC4xLT5weXNsaW0pXG4gIFVzaW5nIGNhY2hlZCBydWFtZWxfeWFtbF9jbGliLTAuMi4xMi1jcDMxMC1jcDMxMC1tYWNvc3hfMTBfMTNfeDg2XzY0LndobFxuVXNpbmcgY2FjaGVkIHB5c2xpbS0xLjAuNC1weTMtbm9uZS1hbnkud2hsICg2NSBrQilcblVzaW5nIGNhY2hlZCBtc3ByaW1lLTEuMy4zLWNwMzEwLWNwMzEwLW1hY29zeF8xMV8wX3g4Nl82NC53aGwgKDM4NiBrQilcblVzaW5nIGNhY2hlZCBudW1weS0yLjIuNC1jcDMxMC1jcDMxMC1tYWNvc3hfMTRfMF94ODZfNjQud2hsICg3LjAgTUIpXG5Vc2luZyBjYWNoZWQgdHNraXQtMC42LjItY3AzMTAtY3AzMTAtbWFjb3N4XzEwXzlfdW5pdmVyc2FsMi53aGwgKDc0OSBrQilcblVzaW5nIGNhY2hlZCBkZW1lcy0wLjIuMy1weTMtbm9uZS1hbnkud2hsICg0MCBrQilcblVzaW5nIGNhY2hlZCBqc29uc2NoZW1hLTQuMjMuMC1weTMtbm9uZS1hbnkud2hsICg4OCBrQilcblVzaW5nIGNhY2hlZCBuZXdpY2stMS4xMC4wLXB5Mi5weTMtbm9uZS1hbnkud2hsICgxNSBrQilcblVzaW5nIGNhY2hlZCBhdHRycy0yNS4zLjAtcHkzLW5vbmUtYW55LndobCAoNjMga0IpXG5Vc2luZyBjYWNoZWQganNvbnNjaGVtYV9zcGVjaWZpY2F0aW9ucy0yMDI0LjEwLjEtcHkzLW5vbmUtYW55LndobCAoMTgga0IpXG5Vc2luZyBjYWNoZWQgcmVmZXJlbmNpbmctMC4zNi4yLXB5My1ub25lLWFueS53aGwgKDI2IGtCKVxuVXNpbmcgY2FjaGVkIHJwZHNfcHktMC4yNC4wLWNwMzEwLWNwMzEwLW1hY29zeF8xMF8xMl94ODZfNjQud2hsICgzNzcga0IpXG5Vc2luZyBjYWNoZWQgcnVhbWVsLnlhbWwtMC4xOC4xMC1weTMtbm9uZS1hbnkud2hsICgxMTcga0IpXG5Vc2luZyBjYWNoZWQgdHlwaW5nX2V4dGVuc2lvbnMtNC4xMy4yLXB5My1ub25lLWFueS53aGwgKDQ1IGtCKVxuSW5zdGFsbGluZyBjb2xsZWN0ZWQgcGFja2FnZXM6IHR5cGluZy1leHRlbnNpb25zLCBydWFtZWwueWFtbC5jbGliLCBycGRzLXB5LCBudW1weSwgbmV3aWNrLCBhdHRycywgcnVhbWVsLnlhbWwsIHJlZmVyZW5jaW5nLCBqc29uc2NoZW1hLXNwZWNpZmljYXRpb25zLCBkZW1lcywganNvbnNjaGVtYSwgdHNraXQsIG1zcHJpbWUsIHB5c2xpbVxuU3VjY2Vzc2Z1bGx5IGluc3RhbGxlZCBhdHRycy0yNS4zLjAgZGVtZXMtMC4yLjMganNvbnNjaGVtYS00LjIzLjAganNvbnNjaGVtYS1zcGVjaWZpY2F0aW9ucy0yMDI0LjEwLjEgbXNwcmltZS0xLjMuMyBuZXdpY2stMS4xMC4wIG51bXB5LTIuMi40IHB5c2xpbS0xLjAuNCByZWZlcmVuY2luZy0wLjM2LjIgcnBkcy1weS0wLjI0LjAgcnVhbWVsLnlhbWwtMC4xOC4xMCBydWFtZWwueWFtbC5jbGliLTAuMi4xMiB0c2tpdC0wLjYuMiB0eXBpbmctZXh0ZW5zaW9ucy00LjEzLjJcblsxXSBcInB5c2xpbVwiXG4ifQ== -->
-<pre><code>+ . /Users/benutzerin/Library/r-miniconda/bin/activate
-+ conda activate &#39;r-slendr&#39;
-+ &#39;/Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python&#39; -m pip install --upgrade --no-user pyslim
-Collecting pyslim
-  Using cached pyslim-1.0.4-py3-none-any.whl.metadata (1.3 kB)
-Collecting msprime&gt;=1.0.1 (from pyslim)
-  Using cached msprime-1.3.3-cp310-cp310-macosx_11_0_x86_64.whl.metadata (3.6 kB)
-Collecting numpy (from pyslim)
-  Using cached numpy-2.2.4-cp310-cp310-macosx_14_0_x86_64.whl.metadata (62 kB)
-Collecting tskit (from pyslim)
-  Using cached tskit-0.6.2-cp310-cp310-macosx_10_9_universal2.whl.metadata (2.0 kB)
-Collecting newick&gt;=1.3.0 (from msprime&gt;=1.0.1-&gt;pyslim)
-  Using cached newick-1.10.0-py2.py3-none-any.whl.metadata (8.4 kB)
-Collecting demes&gt;=0.2 (from msprime&gt;=1.0.1-&gt;pyslim)
-  Using cached demes-0.2.3-py3-none-any.whl.metadata (1.9 kB)
-Collecting jsonschema&gt;=3.0.0 (from tskit-&gt;pyslim)
-  Using cached jsonschema-4.23.0-py3-none-any.whl.metadata (7.9 kB)
-Collecting attrs&gt;=20.3.0 (from demes&gt;=0.2-&gt;msprime&gt;=1.0.1-&gt;pyslim)
-  Using cached attrs-25.3.0-py3-none-any.whl.metadata (10 kB)
-Collecting ruamel.yaml&gt;=0.15.78 (from demes&gt;=0.2-&gt;msprime&gt;=1.0.1-&gt;pyslim)
-  Using cached ruamel.yaml-0.18.10-py3-none-any.whl.metadata (23 kB)
-Collecting jsonschema-specifications&gt;=2023.03.6 (from jsonschema&gt;=3.0.0-&gt;tskit-&gt;pyslim)
-  Using cached jsonschema_specifications-2024.10.1-py3-none-any.whl.metadata (3.0 kB)
-Collecting referencing&gt;=0.28.4 (from jsonschema&gt;=3.0.0-&gt;tskit-&gt;pyslim)
-  Using cached referencing-0.36.2-py3-none-any.whl.metadata (2.8 kB)
-Collecting rpds-py&gt;=0.7.1 (from jsonschema&gt;=3.0.0-&gt;tskit-&gt;pyslim)
-  Using cached rpds_py-0.24.0-cp310-cp310-macosx_10_12_x86_64.whl.metadata (4.1 kB)
-Collecting typing-extensions&gt;=4.4.0 (from referencing&gt;=0.28.4-&gt;jsonschema&gt;=3.0.0-&gt;tskit-&gt;pyslim)
-  Using cached typing_extensions-4.13.2-py3-none-any.whl.metadata (3.0 kB)
-Collecting ruamel.yaml.clib&gt;=0.2.7 (from ruamel.yaml&gt;=0.15.78-&gt;demes&gt;=0.2-&gt;msprime&gt;=1.0.1-&gt;pyslim)
-  Using cached ruamel_yaml_clib-0.2.12-cp310-cp310-macosx_10_13_x86_64.whl
-Using cached pyslim-1.0.4-py3-none-any.whl (65 kB)
-Using cached msprime-1.3.3-cp310-cp310-macosx_11_0_x86_64.whl (386 kB)
-Using cached numpy-2.2.4-cp310-cp310-macosx_14_0_x86_64.whl (7.0 MB)
-Using cached tskit-0.6.2-cp310-cp310-macosx_10_9_universal2.whl (749 kB)
-Using cached demes-0.2.3-py3-none-any.whl (40 kB)
-Using cached jsonschema-4.23.0-py3-none-any.whl (88 kB)
-Using cached newick-1.10.0-py2.py3-none-any.whl (15 kB)
-Using cached attrs-25.3.0-py3-none-any.whl (63 kB)
-Using cached jsonschema_specifications-2024.10.1-py3-none-any.whl (18 kB)
-Using cached referencing-0.36.2-py3-none-any.whl (26 kB)
-Using cached rpds_py-0.24.0-cp310-cp310-macosx_10_12_x86_64.whl (377 kB)
-Using cached ruamel.yaml-0.18.10-py3-none-any.whl (117 kB)
-Using cached typing_extensions-4.13.2-py3-none-any.whl (45 kB)
-Installing collected packages: typing-extensions, ruamel.yaml.clib, rpds-py, numpy, newick, attrs, ruamel.yaml, referencing, jsonschema-specifications, demes, jsonschema, tskit, msprime, pyslim
-Successfully installed attrs-25.3.0 demes-0.2.3 jsonschema-4.23.0 jsonschema-specifications-2024.10.1 msprime-1.3.3 newick-1.10.0 numpy-2.2.4 pyslim-1.0.4 referencing-0.36.2 rpds-py-0.24.0 ruamel.yaml-0.18.10 ruamel.yaml.clib-0.2.12 tskit-0.6.2 typing-extensions-4.13.2
-[1] &quot;pyslim&quot;</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHlfY29uZmlnKCkgICAgICAgICAgICAgICAgICAgICAgICMgU2hvd3MgdGhlIFB5dGhvbiBiZWluZyB1c2VkXG5gYGAifQ== -->
-<pre class="r"><code>py_config()                       # Shows the Python being used</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicHl0aG9uOiAgICAgICAgIC9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kci9iaW4vcHl0aG9uXG5saWJweXRob246ICAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyL2xpYi9saWJweXRob24zLjEwLmR5bGliXG5weXRob25ob21lOiAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyOi9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kclxudmVyc2lvbjogICAgICAgIDMuMTAuMTcgfCBwYWNrYWdlZCBieSBjb25kYS1mb3JnZSB8IChtYWluLCBBcHIgMTAgMjAyNSwgMjI6MTU6NDkpIFtDbGFuZyAxOC4xLjggXVxubnVtcHk6ICAgICAgICAgICBbTk9UIEZPVU5EXVxuXG5OT1RFOiBQeXRob24gdmVyc2lvbiB3YXMgZm9yY2VkIGJ5IHVzZV9weXRob24oKSBmdW5jdGlvblxuIn0= -->
-<pre><code>python:         /Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python
-libpython:      /Users/benutzerin/Library/r-miniconda/envs/r-slendr/lib/libpython3.10.dylib
-pythonhome:     /Users/benutzerin/Library/r-miniconda/envs/r-slendr:/Users/benutzerin/Library/r-miniconda/envs/r-slendr
-version:        3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:15:49) [Clang 18.1.8 ]
-numpy:           [NOT FOUND]
-
-NOTE: Python version was forced by use_python() function</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHlfbW9kdWxlX2F2YWlsYWJsZShcInRza2l0XCIpICAgICAgIyBTaG91bGQgYmUgVFJVRVxuYGBgIn0= -->
-<pre class="r"><code>py_module_available(&quot;tskit&quot;)      # Should be TRUE</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFRSVUVcbiJ9 -->
-<pre><code>[1] TRUE</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHlfbW9kdWxlX2F2YWlsYWJsZShcInB5c2xpbVwiKSAgICAgIyBTaG91bGQgYmUgVFJVRVxuYGBgIn0= -->
-<pre class="r"><code>py_module_available(&quot;pyslim&quot;)     # Should be TRUE</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIEZBTFNFXG4ifQ== -->
-<pre><code>[1] FALSE</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZXRpY3VsYXRlKVxudXNlX2NvbmRhZW52KFwici1zbGVuZHJcIiwgcmVxdWlyZWQgPSBUUlVFKVxucHlfY29uZmlnKCkgICMgY29uZmlybSBlbnZpcm9ubWVudCBpcyBcInItc2xlbmRyXCJcbmBgYCJ9 -->
-<pre class="r"><code>library(reticulate)
-use_condaenv(&quot;r-slendr&quot;, required = TRUE)
-py_config()  # confirm environment is &quot;r-slendr&quot;</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicHl0aG9uOiAgICAgICAgIC9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kci9iaW4vcHl0aG9uXG5saWJweXRob246ICAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyL2xpYi9saWJweXRob24zLjEwLmR5bGliXG5weXRob25ob21lOiAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyOi9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kclxudmVyc2lvbjogICAgICAgIDMuMTAuMTcgfCBwYWNrYWdlZCBieSBjb25kYS1mb3JnZSB8IChtYWluLCBBcHIgMTAgMjAyNSwgMjI6MTU6NDkpIFtDbGFuZyAxOC4xLjggXVxubnVtcHk6ICAgICAgICAgICBbTk9UIEZPVU5EXVxuXG5OT1RFOiBQeXRob24gdmVyc2lvbiB3YXMgZm9yY2VkIGJ5IHVzZV9weXRob24oKSBmdW5jdGlvblxuIn0= -->
-<pre><code>python:         /Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python
-libpython:      /Users/benutzerin/Library/r-miniconda/envs/r-slendr/lib/libpython3.10.dylib
-pythonhome:     /Users/benutzerin/Library/r-miniconda/envs/r-slendr:/Users/benutzerin/Library/r-miniconda/envs/r-slendr
-version:        3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:15:49) [Clang 18.1.8 ]
-numpy:           [NOT FOUND]
-
-NOTE: Python version was forced by use_python() function</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2NvbmRhX2luc3RhbGwoXCJyLXNsZW5kclwiLCBcInB5c2xpbVwiLCBwaXAgPSBUUlVFKVxuXG5jb25kYV9pbnN0YWxsKFwici1zbGVuZHJcIiwgXCJnc2xcIiwgY2hhbm5lbCA9IFwiY29uZGEtZm9yZ2VcIilcbmBgYCJ9 -->
-<pre class="r"><code>#conda_install(&quot;r-slendr&quot;, &quot;pyslim&quot;, pip = TRUE)
-
-conda_install(&quot;r-slendr&quot;, &quot;gsl&quot;, channel = &quot;conda-forge&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiKyAvVXNlcnMvYmVudXR6ZXJpbi9MaWJyYXJ5L3ItbWluaWNvbmRhL2Jpbi9jb25kYSBpbnN0YWxsIC0teWVzIC0tbmFtZSByLXNsZW5kciAtYyBjb25kYS1mb3JnZSBnc2xcbiJ9 -->
-<pre><code>+ /Users/benutzerin/Library/r-miniconda/bin/conda install --yes --name r-slendr -c conda-forge gsl</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ2hhbm5lbHM6XG4gLSBjb25kYS1mb3JnZVxuIC0gZGVmYXVsdHNcblBsYXRmb3JtOiBvc3gtNjRcbkNvbGxlY3RpbmcgcGFja2FnZSBtZXRhZGF0YSAocmVwb2RhdGEuanNvbik6IC4uLndvcmtpbmcuLi4gZG9uZVxuU29sdmluZyBlbnZpcm9ubWVudDogLi4ud29ya2luZy4uLiBkb25lXG4ifQ== -->
-<pre><code>Channels:
- - conda-forge
- - defaults
-Platform: osx-64
-Collecting package metadata (repodata.json): ...working... done
-Solving environment: ...working... done</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5cbj09PiBXQVJOSU5HOiBBIG5ld2VyIHZlcnNpb24gb2YgY29uZGEgZXhpc3RzLiA8PT1cbiAgICBjdXJyZW50IHZlcnNpb246IDI1LjEuMVxuICAgIGxhdGVzdCB2ZXJzaW9uOiAyNS4zLjFcblxuUGxlYXNlIHVwZGF0ZSBjb25kYSBieSBydW5uaW5nXG5cbiAgICAkIGNvbmRhIHVwZGF0ZSAtbiBiYXNlIC1jIGRlZmF1bHRzIGNvbmRhXG4ifQ== -->
-<pre><code>
-
-==&gt; WARNING: A newer version of conda exists. &lt;==
-    current version: 25.1.1
-    latest version: 25.3.1
-
-Please update conda by running
-
-    $ conda update -n base -c defaults conda</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4jIyBQYWNrYWdlIFBsYW4gIyNcblxuICBlbnZpcm9ubWVudCBsb2NhdGlvbjogL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyXG5cbiAgYWRkZWQgLyB1cGRhdGVkIHNwZWNzOlxuICAgIC0gZ3NsXG5cblxuVGhlIGZvbGxvd2luZyBORVcgcGFja2FnZXMgd2lsbCBiZSBJTlNUQUxMRUQ6XG5cbiAgZ3NsICAgICAgICAgICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6Z3NsLTIuOC1oYzcwN2VlNl8xIFxuICBsaWJibGFzICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpsaWJibGFzLTMuOS4wLTMxX2g3ZjYwODIzX29wZW5ibGFzIFxuICBsaWJjYmxhcyAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpsaWJjYmxhcy0zLjkuMC0zMV9oZmY2Y2FiNF9vcGVuYmxhcyBcbiAgbGliZ2ZvcnRyYW4gICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6bGliZ2ZvcnRyYW4tMTQuMi4wLWhlZjM2YjY4XzEwNSBcbiAgbGliZ2ZvcnRyYW41ICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6bGliZ2ZvcnRyYW41LTE0LjIuMC1oNTg1MjhmM18xMDUgXG4gIGxpYm9wZW5ibGFzICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OmxpYm9wZW5ibGFzLTAuMy4yOS1vcGVubXBfaGJmNjRhNTJfMCBcbiAgbGx2bS1vcGVubXAgICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6bGx2bS1vcGVubXAtMjAuMS4yLWhhNTRkYWUxXzEgXG5cblxuXG5Eb3dubG9hZGluZyBhbmQgRXh0cmFjdGluZyBQYWNrYWdlczogLi4ud29ya2luZy4uLiBkb25lXG5QcmVwYXJpbmcgdHJhbnNhY3Rpb246IC0gXGJcYmRvbmVcblZlcmlmeWluZyB0cmFuc2FjdGlvbjogfCBcYlxiLyBcYlxiZG9uZVxuRXhlY3V0aW5nIHRyYW5zYWN0aW9uOiBcXCBcYlxifCBcYlxiZG9uZVxuIn0= -->
-<pre><code>
-## Package Plan ##
-
-  environment location: /Users/benutzerin/Library/r-miniconda/envs/r-slendr
-
-  added / updated specs:
-    - gsl
-
-
-The following NEW packages will be INSTALLED:
-
-  gsl                conda-forge/osx-64::gsl-2.8-hc707ee6_1 
-  libblas            conda-forge/osx-64::libblas-3.9.0-31_h7f60823_openblas 
-  libcblas           conda-forge/osx-64::libcblas-3.9.0-31_hff6cab4_openblas 
-  libgfortran        conda-forge/osx-64::libgfortran-14.2.0-hef36b68_105 
-  libgfortran5       conda-forge/osx-64::libgfortran5-14.2.0-h58528f3_105 
-  libopenblas        conda-forge/osx-64::libopenblas-0.3.29-openmp_hbf64a52_0 
-  llvm-openmp        conda-forge/osx-64::llvm-openmp-20.1.2-ha54dae1_1 
-
-
-
-Downloading and Extracting Packages: ...working... done
-Preparing transaction: - done
-Verifying transaction: | / done
-Executing transaction: \ | done</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uZGFfaW5zdGFsbChcInItc2xlbmRyXCIsIFwibXNwcmltZVwiLCBjaGFubmVsID0gXCJjb25kYS1mb3JnZVwiKVxuYGBgIn0= -->
-<pre class="r"><code>conda_install(&quot;r-slendr&quot;, &quot;msprime&quot;, channel = &quot;conda-forge&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiKyAvVXNlcnMvYmVudXR6ZXJpbi9MaWJyYXJ5L3ItbWluaWNvbmRhL2Jpbi9jb25kYSBpbnN0YWxsIC0teWVzIC0tbmFtZSByLXNsZW5kciAtYyBjb25kYS1mb3JnZSBtc3ByaW1lXG4ifQ== -->
-<pre><code>+ /Users/benutzerin/Library/r-miniconda/bin/conda install --yes --name r-slendr -c conda-forge msprime</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ2hhbm5lbHM6XG4gLSBjb25kYS1mb3JnZVxuIC0gZGVmYXVsdHNcblBsYXRmb3JtOiBvc3gtNjRcbkNvbGxlY3RpbmcgcGFja2FnZSBtZXRhZGF0YSAocmVwb2RhdGEuanNvbik6IC4uLndvcmtpbmcuLi4gZG9uZVxuU29sdmluZyBlbnZpcm9ubWVudDogLi4ud29ya2luZy4uLiBkb25lXG4ifQ== -->
-<pre><code>Channels:
- - conda-forge
- - defaults
-Platform: osx-64
-Collecting package metadata (repodata.json): ...working... done
-Solving environment: ...working... done</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5cbj09PiBXQVJOSU5HOiBBIG5ld2VyIHZlcnNpb24gb2YgY29uZGEgZXhpc3RzLiA8PT1cbiAgICBjdXJyZW50IHZlcnNpb246IDI1LjEuMVxuICAgIGxhdGVzdCB2ZXJzaW9uOiAyNS4zLjFcblxuUGxlYXNlIHVwZGF0ZSBjb25kYSBieSBydW5uaW5nXG5cbiAgICAkIGNvbmRhIHVwZGF0ZSAtbiBiYXNlIC1jIGRlZmF1bHRzIGNvbmRhXG4ifQ== -->
-<pre><code>
-
-==&gt; WARNING: A newer version of conda exists. &lt;==
-    current version: 25.1.1
-    latest version: 25.3.1
-
-Please update conda by running
-
-    $ conda update -n base -c defaults conda</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4jIyBQYWNrYWdlIFBsYW4gIyNcblxuICBlbnZpcm9ubWVudCBsb2NhdGlvbjogL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyXG5cbiAgYWRkZWQgLyB1cGRhdGVkIHNwZWNzOlxuICAgIC0gbXNwcmltZVxuXG5cblRoZSBmb2xsb3dpbmcgTkVXIHBhY2thZ2VzIHdpbGwgYmUgSU5TVEFMTEVEOlxuXG4gIGF0dHJzICAgICAgICAgICAgICBjb25kYS1mb3JnZS9ub2FyY2g6OmF0dHJzLTI1LjMuMC1weWg3MTUxM2FlXzAgXG4gIGRlbWVzICAgICAgICAgICAgICBjb25kYS1mb3JnZS9ub2FyY2g6OmRlbWVzLTAuMi4zLXB5aGQ4ZWQxYWJfMSBcbiAgaW1wb3J0bGliX3Jlc291cmN+IGNvbmRhLWZvcmdlL25vYXJjaDo6aW1wb3J0bGliX3Jlc291cmNlcy02LjUuMi1weWhkOGVkMWFiXzAgXG4gIGpzb25zY2hlbWEgICAgICAgICBjb25kYS1mb3JnZS9ub2FyY2g6Ompzb25zY2hlbWEtNC4yMy4wLXB5aGQ4ZWQxYWJfMSBcbiAganNvbnNjaGVtYS1zcGVjaWZ+IGNvbmRhLWZvcmdlL25vYXJjaDo6anNvbnNjaGVtYS1zcGVjaWZpY2F0aW9ucy0yMDI0LjEwLjEtcHloZDhlZDFhYl8xIFxuICBsaWJjeHggICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0OjpsaWJjeHgtMjAuMS4yLWhmOTVkMTY5XzAgXG4gIGxpYmxhcGFjayAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OmxpYmxhcGFjay0zLjkuMC0zMV9oMjM2YWI5OV9vcGVuYmxhcyBcbiAgbXNwcmltZSAgICAgICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6bXNwcmltZS0xLjMuMy1weTMxMGhhZGVhYzI2XzEgXG4gIG51bXB5ICAgICAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6Om51bXB5LTIuMi40LXB5MzEwaDA3YzViNGRfMCBcbiAgcGtndXRpbC1yZXNvbHZlLW5+IGNvbmRhLWZvcmdlL25vYXJjaDo6cGtndXRpbC1yZXNvbHZlLW5hbWUtMS4zLjEwLXB5aGQ4ZWQxYWJfMiBcbiAgcHl0aG9uX2FiaSAgICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6cHl0aG9uX2FiaS0zLjEwLTZfY3AzMTAgXG4gIHJlZmVyZW5jaW5nICAgICAgICBjb25kYS1mb3JnZS9ub2FyY2g6OnJlZmVyZW5jaW5nLTAuMzYuMi1weWgyOTMzMmMzXzAgXG4gIHJwZHMtcHkgICAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OnJwZHMtcHktMC4yNC4wLXB5MzEwaDQwYTg5NGNfMCBcbiAgcnVhbWVsLnlhbWwgICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6cnVhbWVsLnlhbWwtMC4xOC4xMC1weTMxMGhiYjhjMzc2XzAgXG4gIHJ1YW1lbC55YW1sLmNsaWIgICBjb25kYS1mb3JnZS9vc3gtNjQ6OnJ1YW1lbC55YW1sLmNsaWItMC4yLjgtcHkzMTBoYjlkMTliNl8xIFxuICB0c2tpdCAgICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0Ojp0c2tpdC0wLjYuMi1weTMxMGg2ZmE2MTc5XzAgXG4gIHR5cGluZ19leHRlbnNpb25zICBjb25kYS1mb3JnZS9ub2FyY2g6OnR5cGluZ19leHRlbnNpb25zLTQuMTMuMi1weWgyOTMzMmMzXzAgXG4gIHppcHAgICAgICAgICAgICAgICBjb25kYS1mb3JnZS9ub2FyY2g6OnppcHAtMy4yMS4wLXB5aGQ4ZWQxYWJfMSBcblxuVGhlIGZvbGxvd2luZyBwYWNrYWdlcyB3aWxsIGJlIERPV05HUkFERUQ6XG5cbiAgZ3NsICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDIuOC1oYzcwN2VlNl8xIC0tPiAyLjctaDkzMjU5YjBfMCBcblxuXG5cbkRvd25sb2FkaW5nIGFuZCBFeHRyYWN0aW5nIFBhY2thZ2VzOiAuLi53b3JraW5nLi4uIGRvbmVcblByZXBhcmluZyB0cmFuc2FjdGlvbjogLSBcYlxiXFwgXGJcYmRvbmVcblZlcmlmeWluZyB0cmFuc2FjdGlvbjogLyBcYlxiLSBcYlxiXFwgXGJcYnwgXGJcYi8gXGJcYi0gXGJcYlxcIFxiXGJ8IFxiXGJkb25lXG5FeGVjdXRpbmcgdHJhbnNhY3Rpb246IC0gXGJcYlxcIFxiXGJ8IFxiXGIvIFxiXGItIFxiXGJcXCBcYlxifCBcYlxiLyBcYlxiLSBcYlxiXFwgXGJcYnwgXGJcYi8gXGJcYi0gXGJcYlxcIFxiXGJ8IFxiXGIvIFxiXGItIFxiXGJcXCBcYlxifCBcYlxiLyBcYlxiLSBcYlxiXFwgXGJcYnwgXGJcYi8gXGJcYi0gXGJcYlxcIFxiXGJ8IFxiXGIvIFxiXGItIFxiXGJcXCBcYlxifCBcYlxiLyBcYlxiLSBcYlxiXFwgXGJcYnwgXGJcYi8gXGJcYi0gXGJcYlxcIFxiXGJ8IFxiXGIvIFxiXGItIFxiXGJcXCBcYlxifCBcYlxiLyBcYlxiLSBcYlxiXFwgXGJcYnwgXGJcYi8gXGJcYi0gXGJcYlxcIFxiXGJ8IFxiXGJkb25lXG4ifQ== -->
-<pre><code>
-## Package Plan ##
-
-  environment location: /Users/benutzerin/Library/r-miniconda/envs/r-slendr
-
-  added / updated specs:
-    - msprime
-
-
-The following NEW packages will be INSTALLED:
-
-  attrs              conda-forge/noarch::attrs-25.3.0-pyh71513ae_0 
-  demes              conda-forge/noarch::demes-0.2.3-pyhd8ed1ab_1 
-  importlib_resourc~ conda-forge/noarch::importlib_resources-6.5.2-pyhd8ed1ab_0 
-  jsonschema         conda-forge/noarch::jsonschema-4.23.0-pyhd8ed1ab_1 
-  jsonschema-specif~ conda-forge/noarch::jsonschema-specifications-2024.10.1-pyhd8ed1ab_1 
-  libcxx             conda-forge/osx-64::libcxx-20.1.2-hf95d169_0 
-  liblapack          conda-forge/osx-64::liblapack-3.9.0-31_h236ab99_openblas 
-  msprime            conda-forge/osx-64::msprime-1.3.3-py310hadeac26_1 
-  numpy              conda-forge/osx-64::numpy-2.2.4-py310h07c5b4d_0 
-  pkgutil-resolve-n~ conda-forge/noarch::pkgutil-resolve-name-1.3.10-pyhd8ed1ab_2 
-  python_abi         conda-forge/osx-64::python_abi-3.10-6_cp310 
-  referencing        conda-forge/noarch::referencing-0.36.2-pyh29332c3_0 
-  rpds-py            conda-forge/osx-64::rpds-py-0.24.0-py310h40a894c_0 
-  ruamel.yaml        conda-forge/osx-64::ruamel.yaml-0.18.10-py310hbb8c376_0 
-  ruamel.yaml.clib   conda-forge/osx-64::ruamel.yaml.clib-0.2.8-py310hb9d19b6_1 
-  tskit              conda-forge/osx-64::tskit-0.6.2-py310h6fa6179_0 
-  typing_extensions  conda-forge/noarch::typing_extensions-4.13.2-pyh29332c3_0 
-  zipp               conda-forge/noarch::zipp-3.21.0-pyhd8ed1ab_1 
-
-The following packages will be DOWNGRADED:
-
-  gsl                                        2.8-hc707ee6_1 --&gt; 2.7-h93259b0_0 
-
-
-
-Downloading and Extracting Packages: ...working... done
-Preparing transaction: - \ done
-Verifying transaction: / - \ | / - \ | done
-Executing transaction: - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | done</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI3JldGljdWxhdGU6OnB5X3J1bl9zdHJpbmcoXCJpbXBvcnQgcHlzbGltXCIpXG5cblxuXG5cbmBgYCJ9 -->
-<pre class="r"><code>#reticulate::py_run_string(&quot;import pyslim&quot;)
-</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0d2QoXCJ+L0RvY3VtZW50cy9HaXRIdWIvMjUwMl9lbW1hX2JzY1wiKVxuXG5saWJyYXJ5KHJldGljdWxhdGUpXG51c2VfY29uZGFlbnYoXCJyLXNsZW5kclwiLCByZXF1aXJlZCA9IFRSVUUpXG5weV9jb25maWcoKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0d2QoXCJ+L0RvY3VtZW50cy9HaXRIdWIvMjUwMl9lbW1hX2JzY1wiKVxuXG5TeXMuc2V0ZW52KFJFVElDVUxBVEVfUFlUSE9OID0gXCIvVXNlcnMvYmVudXR6ZXJpbi9MaWJyYXJ5L3ItbWluaWNvbmRhL2VudnMvci1zbGVuZHIvYmluL3B5dGhvblwiKVxuXG5saWJyYXJ5KHJldGljdWxhdGUpXG51c2VfY29uZGFlbnYoXCJyLXNsZW5kclwiLCByZXF1aXJlZCA9IFRSVUUpXG5weV9jb25maWcoKVxuYGBgIn0= -->
 <pre class="r"><code>setwd(&quot;~/Documents/GitHub/2502_emma_bsc&quot;)
 
+Sys.setenv(RETICULATE_PYTHON = &quot;/Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python&quot;)
+
 library(reticulate)
 use_condaenv(&quot;r-slendr&quot;, required = TRUE)
 py_config()</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicHl0aG9uOiAgICAgICAgIC9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kci9iaW4vcHl0aG9uXG5saWJweXRob246ICAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyL2xpYi9saWJweXRob24zLjEwLmR5bGliXG5weXRob25ob21lOiAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyOi9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kclxudmVyc2lvbjogICAgICAgIDMuMTAuMTcgfCBwYWNrYWdlZCBieSBjb25kYS1mb3JnZSB8IChtYWluLCBBcHIgMTAgMjAyNSwgMjI6MTU6NDkpIFtDbGFuZyAxOC4xLjggXVxubnVtcHk6ICAgICAgICAgICBbTk9UIEZPVU5EXVxuXG5OT1RFOiBQeXRob24gdmVyc2lvbiB3YXMgZm9yY2VkIGJ5IHVzZV9weXRob24oKSBmdW5jdGlvblxuIn0= -->
+<!-- rnb-output-begin eyJkYXRhIjoicHl0aG9uOiAgICAgICAgIC9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kci9iaW4vcHl0aG9uXG5saWJweXRob246ICAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyL2xpYi9saWJweXRob24zLjEwLmR5bGliXG5weXRob25ob21lOiAgICAgL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyOi9Vc2Vycy9iZW51dHplcmluL0xpYnJhcnkvci1taW5pY29uZGEvZW52cy9yLXNsZW5kclxudmVyc2lvbjogICAgICAgIDMuMTAuMTcgfCBwYWNrYWdlZCBieSBjb25kYS1mb3JnZSB8IChtYWluLCBBcHIgMTAgMjAyNSwgMjI6MTU6NDkpIFtDbGFuZyAxOC4xLjggXVxubnVtcHk6ICAgICAgICAgICBbTk9UIEZPVU5EXVxuXG5OT1RFOiBQeXRob24gdmVyc2lvbiB3YXMgZm9yY2VkIGJ5IFJFVElDVUxBVEVfUFlUSE9OXG4ifQ== -->
 <pre><code>python:         /Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python
 libpython:      /Users/benutzerin/Library/r-miniconda/envs/r-slendr/lib/libpython3.10.dylib
 pythonhome:     /Users/benutzerin/Library/r-miniconda/envs/r-slendr:/Users/benutzerin/Library/r-miniconda/envs/r-slendr
 version:        3.10.17 | packaged by conda-forge | (main, Apr 10 2025, 22:15:49) [Clang 18.1.8 ]
 numpy:           [NOT FOUND]
 
-NOTE: Python version was forced by use_python() function</code></pre>
+NOTE: Python version was forced by RETICULATE_PYTHON</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZW1vdGVzKVxuXG5weV9tb2R1bGVfYXZhaWxhYmxlKFwidHNraXRcIikgICAjIHNob3VsZCBiZSBUUlVFXG5gYGAifQ== -->
-<pre class="r"><code>library(remotes)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2NvbmRhX2luc3RhbGwoXCJyLXNsZW5kclwiLCBcInB5c2xpbVwiLCBwaXAgPSBUUlVFKVxuI2NvbmRhX2luc3RhbGwoXCJyLXNsZW5kclwiLCBcInRza2l0XCIsIGNoYW5uZWwgPSBcImNvbmRhLWZvcmdlXCIpXG5jb25kYV9pbnN0YWxsKFwici1zbGVuZHJcIiwgXCJweXNsaW1cIiwgY2hhbm5lbCA9IFwiY29uZGEtZm9yZ2VcIilcbmBgYCJ9 -->
+<pre class="r"><code>#conda_install(&quot;r-slendr&quot;, &quot;pyslim&quot;, pip = TRUE)
+#conda_install(&quot;r-slendr&quot;, &quot;tskit&quot;, channel = &quot;conda-forge&quot;)
+conda_install(&quot;r-slendr&quot;, &quot;pyslim&quot;, channel = &quot;conda-forge&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiKyAvVXNlcnMvYmVudXR6ZXJpbi9MaWJyYXJ5L3ItbWluaWNvbmRhL2Jpbi9jb25kYSBpbnN0YWxsIC0teWVzIC0tbmFtZSByLXNsZW5kciAtYyBjb25kYS1mb3JnZSBweXNsaW1cbiJ9 -->
+<pre><code>+ /Users/benutzerin/Library/r-miniconda/bin/conda install --yes --name r-slendr -c conda-forge pyslim</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ2hhbm5lbHM6XG4gLSBjb25kYS1mb3JnZVxuIC0gZGVmYXVsdHNcblBsYXRmb3JtOiBvc3gtNjRcbkNvbGxlY3RpbmcgcGFja2FnZSBtZXRhZGF0YSAocmVwb2RhdGEuanNvbik6IC4uLndvcmtpbmcuLi4gZG9uZVxuU29sdmluZyBlbnZpcm9ubWVudDogLi4ud29ya2luZy4uLiBkb25lXG4ifQ== -->
+<pre><code>Channels:
+ - conda-forge
+ - defaults
+Platform: osx-64
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cbj09PiBXQVJOSU5HOiBBIG5ld2VyIHZlcnNpb24gb2YgY29uZGEgZXhpc3RzLiA8PT1cbiAgICBjdXJyZW50IHZlcnNpb246IDI1LjEuMVxuICAgIGxhdGVzdCB2ZXJzaW9uOiAyNS4zLjFcblxuUGxlYXNlIHVwZGF0ZSBjb25kYSBieSBydW5uaW5nXG5cbiAgICAkIGNvbmRhIHVwZGF0ZSAtbiBiYXNlIC1jIGRlZmF1bHRzIGNvbmRhXG4ifQ== -->
+<pre><code>
 
-py_module_available(&quot;tskit&quot;)   # should be TRUE</code></pre>
+==&gt; WARNING: A newer version of conda exists. &lt;==
+    current version: 25.1.1
+    latest version: 25.3.1
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4jIyBQYWNrYWdlIFBsYW4gIyNcblxuICBlbnZpcm9ubWVudCBsb2NhdGlvbjogL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyXG5cbiAgYWRkZWQgLyB1cGRhdGVkIHNwZWNzOlxuICAgIC0gcHlzbGltXG5cblxuVGhlIGZvbGxvd2luZyBwYWNrYWdlcyB3aWxsIGJlIGRvd25sb2FkZWQ6XG5cbiAgICBwYWNrYWdlICAgICAgICAgICAgICAgICAgICB8ICAgICAgICAgICAgYnVpbGRcbiAgICAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS18LS0tLS0tLS0tLS0tLS0tLS1cbiAgICBodW1hbml6ZS00LjEyLjIgICAgICAgICAgICB8ICAgICBweWhkOGVkMWFiXzAgICAgICAgICAgNjUgS0IgIGNvbmRhLWZvcmdlXG4gICAgaW1wb3J0bGliLW1ldGFkYXRhLTguNi4xICAgfCAgICAgcHloYTc3MGM3Ml8wICAgICAgICAgIDI4IEtCICBjb25kYS1mb3JnZVxuICAgIGltcG9ydGxpYl9tZXRhZGF0YS04LjYuMSAgIHwgICAgICAgaGQ4ZWQxYWJfMCAgICAgICAgICAgOSBLQiAgY29uZGEtZm9yZ2VcbiAgICBrYXN0b3JlLTAuMy4zICAgICAgICAgICAgICB8ICBweTMxMGhhOTAxZjk0XzQgICAgICAgICAgMzkgS0IgIGNvbmRhLWZvcmdlXG4gICAgcHlzbGltLTEuMC40ICAgICAgICAgICAgICAgfCAgICAgcHloZDhlZDFhYl8xICAgICAgICAgIDI5IEtCICBjb25kYS1mb3JnZVxuICAgIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRvdGFsOiAgICAgICAgIDE3MCBLQlxuXG5UaGUgZm9sbG93aW5nIE5FVyBwYWNrYWdlcyB3aWxsIGJlIElOU1RBTExFRDpcblxuICBkZW1lcyAgICAgICAgICAgICAgY29uZGEtZm9yZ2Uvbm9hcmNoOjpkZW1lcy0wLjIuMy1weWhkOGVkMWFiXzEgXG4gIGdzbCAgICAgICAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6OmdzbC0yLjctaDkzMjU5YjBfMCBcbiAgaHVtYW5pemUgICAgICAgICAgIGNvbmRhLWZvcmdlL25vYXJjaDo6aHVtYW5pemUtNC4xMi4yLXB5aGQ4ZWQxYWJfMCBcbiAgaW1wb3J0bGliLW1ldGFkYXRhIGNvbmRhLWZvcmdlL25vYXJjaDo6aW1wb3J0bGliLW1ldGFkYXRhLTguNi4xLXB5aGE3NzBjNzJfMCBcbiAgaW1wb3J0bGliX21ldGFkYXRhIGNvbmRhLWZvcmdlL25vYXJjaDo6aW1wb3J0bGliX21ldGFkYXRhLTguNi4xLWhkOGVkMWFiXzAgXG4gIGthc3RvcmUgICAgICAgICAgICBjb25kYS1mb3JnZS9vc3gtNjQ6Omthc3RvcmUtMC4zLjMtcHkzMTBoYTkwMWY5NF80IFxuICBtc3ByaW1lICAgICAgICAgICAgY29uZGEtZm9yZ2Uvb3N4LTY0Ojptc3ByaW1lLTEuMy4zLXB5MzEwaGFkZWFjMjZfMSBcbiAgcHlzbGltICAgICAgICAgICAgIGNvbmRhLWZvcmdlL25vYXJjaDo6cHlzbGltLTEuMC40LXB5aGQ4ZWQxYWJfMSBcbiAgcnVhbWVsLnlhbWwgICAgICAgIGNvbmRhLWZvcmdlL29zeC02NDo6cnVhbWVsLnlhbWwtMC4xOC4xMC1weTMxMGhiYjhjMzc2XzAgXG4gIHJ1YW1lbC55YW1sLmNsaWIgICBjb25kYS1mb3JnZS9vc3gtNjQ6OnJ1YW1lbC55YW1sLmNsaWItMC4yLjgtcHkzMTBoYjlkMTliNl8xIFxuXG5cblxuRG93bmxvYWRpbmcgYW5kIEV4dHJhY3RpbmcgUGFja2FnZXM6IC4uLndvcmtpbmcuLi5cbmh1bWFuaXplLTQuMTIuMiAgICAgIHwgNjUgS0IgICAgIHwgICAgICAgICAgICB8ICAgMCUgXG5cbmthc3RvcmUtMC4zLjMgICAgICAgIHwgMzkgS0IgICAgIHwgICAgICAgICAgICB8ICAgMCUgXHUwMDFiW0FcblxuXG5weXNsaW0tMS4wLjQgICAgICAgICB8IDI5IEtCICAgICB8ICAgICAgICAgICAgfCAgIDAlIFx1MDAxYltBXHUwMDFiW0FcblxuXG5cbmltcG9ydGxpYi1tZXRhZGF0YS04IHwgMjggS0IgICAgIHwgICAgICAgICAgICB8ICAgMCUgXHUwMDFiW0FcdTAwMWJbQVx1MDAxYltBXG5cblxuXG5cbmltcG9ydGxpYl9tZXRhZGF0YS04IHwgOSBLQiAgICAgIHwgICAgICAgICAgICB8ICAgMCUgXHUwMDFiW0FcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0FcblxuXG5weXNsaW0tMS4wLjQgICAgICAgICB8IDI5IEtCICAgICB8ICMjIyMjNSAgICAgfCAgNTYlIFx1MDAxYltBXHUwMDFiW0FcblxuXG5weXNsaW0tMS4wLjQgICAgICAgICB8IDI5IEtCICAgICB8ICMjIyMjIyMjIyMgfCAxMDAlIFx1MDAxYltBXHUwMDFiW0Fcbmh1bWFuaXplLTQuMTIuMiAgICAgIHwgNjUgS0IgICAgIHwgIyM0ICAgICAgICB8ICAyNSUgXG5odW1hbml6ZS00LjEyLjIgICAgICB8IDY1IEtCICAgICB8ICMjIyMjIyMjIyMgfCAxMDAlIFxuXG5cblxuaW1wb3J0bGliLW1ldGFkYXRhLTggfCAyOCBLQiAgICAgfCAjIyMjIzYgICAgIHwgIDU2JSBcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0FcblxuXG5cblxuaW1wb3J0bGliX21ldGFkYXRhLTggfCA5IEtCICAgICAgfCAjIyMjIyMjIyMjIHwgMTAwJSBcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0FcdTAwMWJbQVxuXG5cblxuaW1wb3J0bGliLW1ldGFkYXRhLTggfCAyOCBLQiAgICAgfCAjIyMjIyMjIyMjIHwgMTAwJSBcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0FcblxuXG5cblxuaW1wb3J0bGliX21ldGFkYXRhLTggfCA5IEtCICAgICAgfCAjIyMjIyMjIyMjIHwgMTAwJSBcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0FcdTAwMWJbQVxuXG5cbnB5c2xpbS0xLjAuNCAgICAgICAgIHwgMjkgS0IgICAgIHwgIyMjIyMjIyMjIyB8IDEwMCUgXHUwMDFiW0FcdTAwMWJbQVxuXG5cblxuaW1wb3J0bGliLW1ldGFkYXRhLTggfCAyOCBLQiAgICAgfCAjIyMjIyMjIyMjIHwgMTAwJSBcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0FcblxuXG5cbmltcG9ydGxpYi1tZXRhZGF0YS04IHwgMjggS0IgICAgIHwgIyMjIyMjIyMjIyB8IDEwMCUgXHUwMDFiW0FcdTAwMWJbQVx1MDAxYltBXG5cblxuXG5cbmltcG9ydGxpYl9tZXRhZGF0YS04IHwgOSBLQiAgICAgIHwgIyMjIyMjIyMjIyB8IDEwMCUgXHUwMDFiW0FcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0Fcblxua2FzdG9yZS0wLjMuMyAgICAgICAgfCAzOSBLQiAgICAgfCAjIyMjMSAgICAgIHwgIDQxJSBcdTAwMWJbQVxuaHVtYW5pemUtNC4xMi4yICAgICAgfCA2NSBLQiAgICAgfCAjIyMjIyMjIyMjIHwgMTAwJSBcbmh1bWFuaXplLTQuMTIuMiAgICAgIHwgNjUgS0IgICAgIHwgIyMjIyMjIyMjIyB8IDEwMCUgXG5cbmthc3RvcmUtMC4zLjMgICAgICAgIHwgMzkgS0IgICAgIHwgIyMjIyMjIyMjIyB8IDEwMCUgXHUwMDFiW0Fcblxua2FzdG9yZS0wLjMuMyAgICAgICAgfCAzOSBLQiAgICAgfCAjIyMjIyMjIyMjIHwgMTAwJSBcdTAwMWJbQVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcdTAwMWJbQVxuXG5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXHUwMDFiW0FcdTAwMWJbQVxuXG5cblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0FcblxuXG5cblxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcdTAwMWJbQVx1MDAxYltBXHUwMDFiW0FcdTAwMWJbQSBkb25lXG5QcmVwYXJpbmcgdHJhbnNhY3Rpb246IC0gXGJcYmRvbmVcblZlcmlmeWluZyB0cmFuc2FjdGlvbjogfCBcYlxiLyBcYlxiZG9uZVxuRXhlY3V0aW5nIHRyYW5zYWN0aW9uOiBcXCBcYlxifCBcYlxiLyBcYlxiLSBcYlxiXFwgXGJcYnwgXGJcYi8gXGJcYi0gXGJcYlxcIFxiXGJ8IFxiXGIvIFxiXGItIFxiXGJcXCBcYlxifCBcYlxiLyBcYlxiLSBcYlxiXFwgXGJcYnwgXGJcYi8gXGJcYi0gXGJcYlxcIFxiXGJ8IFxiXGIvIFxiXGItIFxiXGJcXCBcYlxifCBcYlxiLyBcYlxiLSBcYlxiXFwgXGJcYnwgXGJcYi8gXGJcYmRvbmVcbiJ9 -->
+<pre><code>
+## Package Plan ##
+
+  environment location: /Users/benutzerin/Library/r-miniconda/envs/r-slendr
+
+  added / updated specs:
+    - pyslim
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    humanize-4.12.2            |     pyhd8ed1ab_0          65 KB  conda-forge
+    importlib-metadata-8.6.1   |     pyha770c72_0          28 KB  conda-forge
+    importlib_metadata-8.6.1   |       hd8ed1ab_0           9 KB  conda-forge
+    kastore-0.3.3              |  py310ha901f94_4          39 KB  conda-forge
+    pyslim-1.0.4               |     pyhd8ed1ab_1          29 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:         170 KB
+
+The following NEW packages will be INSTALLED:
+
+  demes              conda-forge/noarch::demes-0.2.3-pyhd8ed1ab_1 
+  gsl                conda-forge/osx-64::gsl-2.7-h93259b0_0 
+  humanize           conda-forge/noarch::humanize-4.12.2-pyhd8ed1ab_0 
+  importlib-metadata conda-forge/noarch::importlib-metadata-8.6.1-pyha770c72_0 
+  importlib_metadata conda-forge/noarch::importlib_metadata-8.6.1-hd8ed1ab_0 
+  kastore            conda-forge/osx-64::kastore-0.3.3-py310ha901f94_4 
+  msprime            conda-forge/osx-64::msprime-1.3.3-py310hadeac26_1 
+  pyslim             conda-forge/noarch::pyslim-1.0.4-pyhd8ed1ab_1 
+  ruamel.yaml        conda-forge/osx-64::ruamel.yaml-0.18.10-py310hbb8c376_0 
+  ruamel.yaml.clib   conda-forge/osx-64::ruamel.yaml.clib-0.2.8-py310hb9d19b6_1 
+
+
+
+Downloading and Extracting Packages: ...working...
+humanize-4.12.2      | 65 KB     |            |   0% 
+
+kastore-0.3.3        | 39 KB     |            |   0% [A
+
+
+pyslim-1.0.4         | 29 KB     |            |   0% [A[A
+
+
+
+importlib-metadata-8 | 28 KB     |            |   0% [A[A[A
+
+
+
+
+importlib_metadata-8 | 9 KB      |            |   0% [A[A[A[A
+
+
+pyslim-1.0.4         | 29 KB     | #####5     |  56% [A[A
+
+
+pyslim-1.0.4         | 29 KB     | ########## | 100% [A[A
+humanize-4.12.2      | 65 KB     | ##4        |  25% 
+humanize-4.12.2      | 65 KB     | ########## | 100% 
+
+
+
+importlib-metadata-8 | 28 KB     | #####6     |  56% [A[A[A
+
+
+
+
+importlib_metadata-8 | 9 KB      | ########## | 100% [A[A[A[A
+
+
+
+importlib-metadata-8 | 28 KB     | ########## | 100% [A[A[A
+
+
+
+
+importlib_metadata-8 | 9 KB      | ########## | 100% [A[A[A[A
+
+
+pyslim-1.0.4         | 29 KB     | ########## | 100% [A[A
+
+
+
+importlib-metadata-8 | 28 KB     | ########## | 100% [A[A[A
+
+
+
+importlib-metadata-8 | 28 KB     | ########## | 100% [A[A[A
+
+
+
+
+importlib_metadata-8 | 9 KB      | ########## | 100% [A[A[A[A
+
+kastore-0.3.3        | 39 KB     | ####1      |  41% [A
+humanize-4.12.2      | 65 KB     | ########## | 100% 
+humanize-4.12.2      | 65 KB     | ########## | 100% 
+
+kastore-0.3.3        | 39 KB     | ########## | 100% [A
+
+kastore-0.3.3        | 39 KB     | ########## | 100% [A
+                                                     
+
+                                                     [A
+
+                                                     [A[A
+
+                                                     [A[A[A
+
+                                                     [A[A[A[A done
+Preparing transaction: - done
+Verifying transaction: | / done
+Executing transaction: \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / - \ | / done</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc3RhbGwucGFja2FnZXMoXCJyZW1vdGVzXCIpICAjIGlmIG5vdCBhbHJlYWR5IGluc3RhbGxlZFxubGlicmFyeShyZW1vdGVzKVxuXG4jIENoZWNrIHRoYXQgcHlzbGltIGFuZCB0c2tpdCBhcmUgYXZhaWxhYmxlIChzaG91bGQgcmV0dXJuIFRSVUUpXG5weV9tb2R1bGVfYXZhaWxhYmxlKFwicHlzbGltXCIpXG5gYGAifQ== -->
+<pre class="r"><code>#install.packages(&quot;remotes&quot;)  # if not already installed
+library(remotes)
+
+# Check that pyslim and tskit are available (should return TRUE)
+py_module_available(&quot;pyslim&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiWzFdIFRSVUVcbiJ9 -->
 <pre><code>[1] TRUE</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbXBvcnQgdHNraXRcbnRza2l0IDwtIGltcG9ydChcInRza2l0XCIpXG5cbiMgTG9hZCB0aGUgLnRyZWVzIGZpbGVcbnRzIDwtIHRza2l0JGxvYWQoXCJtb2RlbDIudHJlZXNcIilcblxuIyBOb3cgSSBoYXZlIGEgUHl0aG9uIG9iamVjdCAndHMnIHRoYXQgSSBjYW4gdXNlIGluIFJcbnByaW50KHRzKVxuYGBgIn0= -->
-<pre class="r"><code># Import tskit
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHlfbW9kdWxlX2F2YWlsYWJsZShcInRza2l0XCIpICAgIyBzaG91bGQgYmUgVFJVRVxuYGBgIn0= -->
+<pre class="r"><code>py_module_available(&quot;tskit&quot;)   # should be TRUE</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFRSVUVcbiJ9 -->
+<pre><code>[1] TRUE</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbXBvcnQgcHlzbGltICh3aGljaCBidWlsZHMgb24gdHNraXQgYnV0IHByZXNlcnZlcyBTTGlNIG1ldGFkYXRhKSBhbmQgdHNraXRcbnB5c2xpbSA8LSBpbXBvcnQoXCJweXNsaW1cIilcbnRza2l0IDwtIGltcG9ydChcInRza2l0XCIpXG5cbiNMb2FkIHRoZSAudHJlZXMgZmlsZSB3aXRoIHRza2l0LCB0aGVuIGFubm90YXRlIHdpdGggcHlzbGltIHRvIHByZXNlcnZlIFNMaU0gbWV0YWRhdGEgbGlrZSByZWxhdGVkbmVzc1xuI1dpdGggcHlsaW0gaXQgaXMgbm90IHBvc3NpYmxlIHRvIGxvYWQgdGhlIC50cmVlIGZpbGUuLi5cbiNUbyB1c2UgcHlzbGltLCBpIGFsc28gaGF2ZSB0byBhZGQgdGhlIGluZm9ybWF0aW9ucyBvZiBteSBzbGltIG1vZGVsIC0gaXQgaXMgYSBXRiBtb2RlbCBhbmQgZW5kcyBhdCB0aWNrIDEwMDAzNiAtIHlvdSBhbHNvIGhhdmUgdG8gdGVsbCBweXNsaW0gdG8gdHJlYXQgaW5kaXZpZHVhbHMgYXMgc2VwZXJhdGUgc2V4ZXMhXG50cyA8LSB0c2tpdCRsb2FkKFwibW9kZWwyLnRyZWVzXCIpXG50cyA8LSBweXNsaW0kYW5ub3RhdGUodHMsIG1vZGVsX3R5cGUgPSBcIldGXCIsIHRpY2sgPSBhcy5pbnRlZ2VyKDEwMDAzNikpICAgICAgXG5gYGAifQ== -->
+<pre class="r"><code># Import pyslim (which builds on tskit but preserves SLiM metadata) and tskit
+pyslim &lt;- import(&quot;pyslim&quot;)
 tskit &lt;- import(&quot;tskit&quot;)
 
-# Load the .trees file
+#Load the .trees file with tskit, then annotate with pyslim to preserve SLiM metadata like relatedness
+#With pylim it is not possible to load the .tree file...
+#To use pyslim, i also have to add the informations of my slim model - it is a WF model and ends at tick 100036 - you also have to tell pyslim to treat individuals as seperate sexes!
 ts &lt;- tskit$load(&quot;model2.trees&quot;)
+ts &lt;- pyslim$annotate(ts, model_type = &quot;WF&quot;, tick = as.integer(100036))      </code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiL1VzZXJzL2JlbnV0emVyaW4vTGlicmFyeS9yLW1pbmljb25kYS9lbnZzL3Itc2xlbmRyL2xpYi9weXRob24zLjEwL3NpdGUtcGFja2FnZXMvcHlzbGltL21ldGhvZHMucHk6Nzc3OiBVc2VyV2FybmluZzogVGhlIHByb3ZpZGVkIHRyZWUgc2VxdWVuY2UgYWxyZWFkeSBoYXMgc29tZSBtdXRhdGlvbnMgd2l0aCBtZXRhZGF0YTsgdGhpcyBtZXRhZGF0YSB3aWxsIGJlIG92ZXJ3cml0dGVuLlxuICB3YXJuaW5ncy53YXJuKFxuIn0= -->
+<pre><code>/Users/benutzerin/Library/r-miniconda/envs/r-slendr/lib/python3.10/site-packages/pyslim/methods.py:777: UserWarning: The provided tree sequence already has some mutations with metadata; this metadata will be overwritten.
+  warnings.warn(</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0KFwiUmF3IG1ldGFkYXRhIGZvciBpbmRpdmlkdWFsIDA6XFxuXCIpXG5gYGAifQ== -->
+<pre class="r"><code>cat(&quot;Raw metadata for individual 0:\n&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmF3IG1ldGFkYXRhIGZvciBpbmRpdmlkdWFsIDA6XG4ifQ== -->
+<pre><code>Raw metadata for individual 0:</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQodHMkaW5kaXZpZHVhbChhcy5pbnRlZ2VyKDgwKSkkbWV0YWRhdGEpXG5gYGAifQ== -->
+<pre class="r"><code>print(ts$individual(as.integer(80))$metadata)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiJHBlZGlncmVlX2lkXG5bMV0gODBcblxuJHBlZGlncmVlX3AxXG5bMV0gLTFcblxuJHBlZGlncmVlX3AyXG5bMV0gLTFcblxuJGFnZVxuWzFdIC0xXG5cbiRzdWJwb3B1bGF0aW9uXG5bMV0gMVxuXG4kc2V4XG5bMV0gLTFcblxuJGZsYWdzXG5bMV0gMFxuIn0= -->
+<pre><code>$pedigree_id
+[1] 80
 
-# Now I have a Python object &#39;ts&#39; that I can use in R
+$pedigree_p1
+[1] -1
+
+$pedigree_p2
+[1] -1
+
+$age
+[1] -1
+
+$subpopulation
+[1] 1
+
+$sex
+[1] -1
+
+$flags
+[1] 0</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBOb3cgSSBoYXZlIGEgUHl0aG9uIG9iamVjdCAndHMnIHRoYXQgSSBjYW4gdXNlIGluIFJcbnByaW50KHRzKVxuYGBgIn0= -->
+<pre class="r"><code># Now I have a Python object &#39;ts&#39; that I can use in R
 print(ts)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiPHRza2l0LnRyZWVzLlRyZWVTZXF1ZW5jZSBvYmplY3QgYXQgMHgxMGY4N2QxNTA+XG4ifQ== -->
-<pre><code>&lt;tskit.trees.TreeSequence object at 0x10f87d150&gt;</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiPHRza2l0LnRyZWVzLlRyZWVTZXF1ZW5jZSBvYmplY3QgYXQgMHgxMGUwYTQ1ZTA+XG4ifQ== -->
+<pre><code>&lt;tskit.trees.TreeSequence object at 0x10e0a45e0&gt;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0KFwiVG90YWwgaW5kaXZpZHVhbHM6XCIsIHRzJG51bV9pbmRpdmlkdWFscywgXCJcXG5cIilcbmBgYCJ9 -->
 <pre class="r"><code>cat(&quot;Total individuals:&quot;, ts$num_individuals, &quot;\n&quot;)</code></pre>
@@ -2159,20 +2058,21 @@ cat(&quot;Final node IDs:&quot;, node_ids, &quot;\n&quot;)</code></pre>
 <!-- rnb-output-begin eyJkYXRhIjoiRmluYWwgbm9kZSBJRHM6IDc2IDc3IDE3OCAxNzkgMTE2IDExNyAyMDAgMjAxIDU4IDU5IDE1NCAxNTUgNiA3IDIyMiAyMjMgXG4ifQ== -->
 <pre><code>Final node IDs: 76 77 178 179 116 117 200 201 58 59 154 155 6 7 222 223 </code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyA0KSBVc2Ugc2ltcGxpZnkgdG8ga2VlcCBqdXN0IHRob3NlIG5vZGVzIChhbmQgdGhlIHJlbGV2YW50IGFuY2VzdHJhbCBub2RlcykuXG5cbnRzX2ZpbHRlcmVkIDwtIHRzJHNpbXBsaWZ5KFxuICBzYW1wbGVzID0gbm9kZV9pZHMsXG4gIGZpbHRlcl9wb3B1bGF0aW9ucyA9IEZBTFNFLCAgIyBrZWVwIG9yaWdpbmFsIHBvcCB0YWJsZVxuICBmaWx0ZXJfaW5kaXZpZHVhbHMgPSBUUlVFICAgICMgcmVtb3ZlIGluZGl2aWR1YWxzIG5vdCBpbiBub2RlX2lkc1xuKVxuXG5cbiMgNSkgT3B0aW9uYWxseSwgZHVtcCB0aGUgZmlsdGVyZWQgdHJlZSBzZXF1ZW5jZSB0byBhIG5ldyBmaWxlLlxudHNfZmlsdGVyZWQkZHVtcChcIm1vZGVsMl9maWx0ZXJlZGluZHMudHJlZXNcIilcblxuIyA2KSBJbnNwZWN0IHlvdXIgZmlsdGVyZWQgVFMgaW4gUiBpZiBkZXNpcmVkLlxuY2F0KFwiTnVtYmVyIG9mIGluZGl2aWR1YWxzIGluIHRoZSBmaWx0ZXJlZCBUUzpcIiwgdHNfZmlsdGVyZWQkbnVtX2luZGl2aWR1YWxzLCBcIlxcblwiKVxuYGBgIn0= -->
-<pre class="r"><code># 4) Use simplify to keep just those nodes (and the relevant ancestral nodes).
-
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyA0KSBTaW1wbGlmeSB0aGUgdHJlZSBzZXF1ZW5jZSB3aGlsZSBwcmVzZXJ2aW5nIFNMaU0gbWV0YWRhdGE6XG4jIE5vdGUgdGhhdCBieSBzZXR0aW5nIGZpbHRlcl9wb3B1bGF0aW9ucz1GQUxTRSwgd2Uga2VlcCB0aGUgb3JpZ2luYWwgcG9wdWxhdGlvbiB0YWJsZSxcbiMgYW5kIGJ5IHNldHRpbmcga2VlcF9pbnB1dF9pbmRpdmlkdWFscz1UUlVFLCBweXNsaW0gcHJlc2VydmVzIGluZGl2aWR1YWwtbGV2ZWwgU0xpTSBtZXRhZGF0YSAoZS5nLiwgcmVsYXRlZG5lc3MpLlxudHNfZmlsdGVyZWQgPC0gdHMkc2ltcGxpZnkoXG4gIHNhbXBsZXMgPSBub2RlX2lkcyxcbiAgZmlsdGVyX3BvcHVsYXRpb25zID0gRkFMU0UsICAgIyBLZWVwIG9yaWdpbmFsIHBvcHVsYXRpb24gSURzIGFuZCB0YWJsZVxuICBmaWx0ZXJfaW5kaXZpZHVhbHMgPSBUUlVFLCAgICAjIFJlbW92ZSBpbmRpdmlkdWFscyB0aGF0IGFyZSBub3QgaW4gbm9kZV9pZHNcbilcblxuXG4jIDUpIGR1bXAgdGhlIGZpbHRlcmVkIHRyZWUgc2VxdWVuY2UgdG8gYSBuZXcgZmlsZS5cbnRzX2ZpbHRlcmVkJGR1bXAoXCJtb2RlbDJfZmlsdGVyZWRpbmRzLnRyZWVzXCIpXG5cbiMgNikgSW5zcGVjdCBmaWx0ZXJlZCBUUyBpbiBSLlxuY2F0KFwiTnVtYmVyIG9mIGluZGl2aWR1YWxzIGluIHRoZSBmaWx0ZXJlZCBUUzpcIiwgdHNfZmlsdGVyZWQkbnVtX2luZGl2aWR1YWxzLCBcIlxcblwiKVxuYGBgIn0= -->
+<pre class="r"><code># 4) Simplify the tree sequence while preserving SLiM metadata:
+# Note that by setting filter_populations=FALSE, we keep the original population table,
+# and by setting keep_input_individuals=TRUE, pyslim preserves individual-level SLiM metadata (e.g., relatedness).
 ts_filtered &lt;- ts$simplify(
   samples = node_ids,
-  filter_populations = FALSE,  # keep original pop table
-  filter_individuals = TRUE    # remove individuals not in node_ids
+  filter_populations = FALSE,   # Keep original population IDs and table
+  filter_individuals = TRUE,    # Remove individuals that are not in node_ids
 )
 
 
-# 5) Optionally, dump the filtered tree sequence to a new file.
+# 5) dump the filtered tree sequence to a new file.
 ts_filtered$dump(&quot;model2_filteredinds.trees&quot;)
 
-# 6) Inspect your filtered TS in R if desired.
+# 6) Inspect filtered TS in R.
 cat(&quot;Number of individuals in the filtered TS:&quot;, ts_filtered$num_individuals, &quot;\n&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiTnVtYmVyIG9mIGluZGl2aWR1YWxzIGluIHRoZSBmaWx0ZXJlZCBUUzogOCBcbiJ9 -->
@@ -2186,7 +2086,7 @@ cat(&quot;Number of individuals in the filtered TS:&quot;, ts_filtered$num_indiv
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQogCgpgYGB7cn0KcGFja2FnZVZlcnNpb24oInJldGljdWxhdGUiKQoKI2luc3RhbGwucGFja2FnZXMoInJldGljdWxhdGUiKQpsaWJyYXJ5KHJldGljdWxhdGUpCgojY3JlYXRlIGEgbmV3IGVudmlyb25tZW50CmNvbmRhX2NyZWF0ZSgici1zbGVuZHIiKQp1c2VfY29uZGFlbnYoInItc2xlbmRyIiwgcmVxdWlyZWQgPSBUUlVFKQpweV9jb25maWcoKQoKCnB5X2NvbmZpZygpICAgICAgICAgICAgICAgICAgICAgICAjIFNob3dzIHRoZSBQeXRob24gYmVpbmcgdXNlZApweV9tb2R1bGVfYXZhaWxhYmxlKCJ0c2tpdCIpICAgICAgIyBTaG91bGQgYmUgVFJVRQoKYGBgCgoKYGBge3J9CmxpYnJhcnkocmV0aWN1bGF0ZSkKdXNlX2NvbmRhZW52KCJyLXNsZW5kciIsIHJlcXVpcmVkID0gVFJVRSkKcHlfY29uZmlnKCkgICMgY29uZmlybSBlbnZpcm9ubWVudCBpcyAici1zbGVuZHIiCiNjb25kYV9pbnN0YWxsKCJyLXNsZW5kciIsICJweXNsaW0iLCBwaXAgPSBUUlVFKQoKY29uZGFfaW5zdGFsbCgici1zbGVuZHIiLCAiZ3NsIiwgY2hhbm5lbCA9ICJjb25kYS1mb3JnZSIpCmNvbmRhX2luc3RhbGwoInItc2xlbmRyIiwgIm1zcHJpbWUiLCBjaGFubmVsID0gImNvbmRhLWZvcmdlIikKCiNyZXRpY3VsYXRlOjpweV9ydW5fc3RyaW5nKCJpbXBvcnQgcHlzbGltIikKCgpgYGAKCgoKYGBge3J9CnNldHdkKCJ+L0RvY3VtZW50cy9HaXRIdWIvMjUwMl9lbW1hX2JzYyIpCgpsaWJyYXJ5KHJldGljdWxhdGUpCnVzZV9jb25kYWVudigici1zbGVuZHIiLCByZXF1aXJlZCA9IFRSVUUpCnB5X2NvbmZpZygpCgojaW5zdGFsbC5wYWNrYWdlcygicmVtb3RlcyIpICAjIGlmIG5vdCBhbHJlYWR5IGluc3RhbGxlZApsaWJyYXJ5KHJlbW90ZXMpCgpweV9tb2R1bGVfYXZhaWxhYmxlKCJ0c2tpdCIpICAgIyBzaG91bGQgYmUgVFJVRQoKCiMgSW1wb3J0IHRza2l0CnRza2l0IDwtIGltcG9ydCgidHNraXQiKQoKIyBMb2FkIHRoZSAudHJlZXMgZmlsZQp0cyA8LSB0c2tpdCRsb2FkKCJtb2RlbDIudHJlZXMiKQoKIyBOb3cgSSBoYXZlIGEgUHl0aG9uIG9iamVjdCAndHMnIHRoYXQgSSBjYW4gdXNlIGluIFIKcHJpbnQodHMpCmNhdCgiVG90YWwgaW5kaXZpZHVhbHM6IiwgdHMkbnVtX2luZGl2aWR1YWxzLCAiXG4iKQoKCmxpbmVzIDwtIHJlYWRMaW5lcygibW9kZWwyX2luZGl2aWR1YWxzLnR4dCIpCmxpbmVzIDwtIGxpbmVzW2xpbmVzICE9ICIiXQpsaW5lcwoKIyBOb3cgY29udmVydCB0byBpbnRlZ2VycwppbmRpdmlkdWFsc190b19rZWVwIDwtIGFzLmludGVnZXIobGluZXMpCmluZGl2aWR1YWxzX3RvX2tlZXAKIyBDaGVjawojcmFuZ2UoaW5kaXZpZHVhbHNfdG9fa2VlcCkKCmZvciAoaW5kX2lkIGluIGluZGl2aWR1YWxzX3RvX2tlZXBbMTo1XSkgeyAgIyBqdXN0IGxvb2sgYXQgYSBmZXcKICBjYXQoIkluZGl2aWR1YWw6IiwgaW5kX2lkLCAiXG4iKQogIG5vZGVzX3B5dGhvbiA8LSB0cyRpbmRpdmlkdWFsKGluZF9pZCkkbm9kZXMKICBzdHIobm9kZXNfcHl0aG9uKSAgIyBIb3cgZG9lcyByZXRpY3VsYXRlIHNob3cgdGhlc2U/IAogIG5vZGVzX3IgPC0gcHlfdG9fcihub2Rlc19weXRob24pCiAgc3RyKG5vZGVzX3IpICAgICAgICMgV2hhdCBkb2VzIGl0IGxvb2sgbGlrZSBhZnRlciBweV90b19yKCk/Cn0KCgojIFN0ZXAgQTogR2F0aGVyIGFsbCBub2RlIG9iamVjdHMsIGV4cGxpY2l0bHkgY2FsbCAudG9saXN0KCkgaW4gUHl0aG9uCmFsbF9ub2RlX2xpc3RzX3B5IDwtIGxhcHBseShpbmRpdmlkdWFsc190b19rZWVwLCBmdW5jdGlvbihpbmRfaWQpIHsKICBub2RlX29iaiA8LSB0cyRpbmRpdmlkdWFsKGluZF9pZCkkbm9kZXMKICAKICAjIENvbnZlcnQgdGhlIE51bVB5IGFycmF5IChvciBhcnJheS1saWtlKSB0byBhIHB1cmUgUHl0aG9uIGxpc3Q6CiAgbm9kZV9vYmokdG9saXN0KCkKfSkKCiMgU3RlcCBCOiBOb3cgY29udmVydCAqdGhhdCogZW50aXJlIGxpc3Qtb2YtbGlzdHMgZnJvbSBQeXRob24gaW50byBSIG9iamVjdHMKYWxsX25vZGVfbGlzdHNfciA8LSBweV90b19yKGFsbF9ub2RlX2xpc3RzX3B5KQoKIyBTdGVwIEM6IEZsYXR0ZW4gZXZlcnl0aGluZyBpbnRvIG9uZSBsb25nIFIgdmVjdG9yCm5vZGVfaWRzIDwtIHVubGlzdChhbGxfbm9kZV9saXN0c19yKQoKIyBTdGVwIEQ6IEZpbmFsbHksIGNvbnZlcnQgdG8gaW50ZWdlcgpub2RlX2lkcyA8LSBhcy5pbnRlZ2VyKG5vZGVfaWRzKQoKY2F0KCJGaW5hbCBub2RlIElEczoiLCBub2RlX2lkcywgIlxuIikKCiMgNCkgVXNlIHNpbXBsaWZ5IHRvIGtlZXAganVzdCB0aG9zZSBub2RlcyAoYW5kIHRoZSByZWxldmFudCBhbmNlc3RyYWwgbm9kZXMpLgoKdHNfZmlsdGVyZWQgPC0gdHMkc2ltcGxpZnkoCiAgc2FtcGxlcyA9IG5vZGVfaWRzLAogIGZpbHRlcl9wb3B1bGF0aW9ucyA9IEZBTFNFLCAgIyBrZWVwIG9yaWdpbmFsIHBvcCB0YWJsZQogIGZpbHRlcl9pbmRpdmlkdWFscyA9IFRSVUUgICAgIyByZW1vdmUgaW5kaXZpZHVhbHMgbm90IGluIG5vZGVfaWRzCikKCgojIDUpIE9wdGlvbmFsbHksIGR1bXAgdGhlIGZpbHRlcmVkIHRyZWUgc2VxdWVuY2UgdG8gYSBuZXcgZmlsZS4KdHNfZmlsdGVyZWQkZHVtcCgibW9kZWwyX2ZpbHRlcmVkaW5kcy50cmVlcyIpCgojIDYpIEluc3BlY3QgeW91ciBmaWx0ZXJlZCBUUyBpbiBSIGlmIGRlc2lyZWQuCmNhdCgiTnVtYmVyIG9mIGluZGl2aWR1YWxzIGluIHRoZSBmaWx0ZXJlZCBUUzoiLCB0c19maWx0ZXJlZCRudW1faW5kaXZpZHVhbHMsICJcbiIpCmNhdCgiTnVtYmVyIG9mIHNhbXBsZXMgaW4gdGhlIGZpbHRlcmVkIFRTOiIsIHRzX2ZpbHRlcmVkJG51bV9zYW1wbGVzLCAiXG4iKQoKCmBgYAo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQogCgpgYGB7cn0Kc2V0d2QoIn4vRG9jdW1lbnRzL0dpdEh1Yi8yNTAyX2VtbWFfYnNjIikKCiNjcmVhdGUgYSBuZXcgZW52aXJvbm1lbnQKI2NvbmRhX2NyZWF0ZSgici1zbGVuZHIiKQoKI1NwZWNpZnkgd2hpY2ggcHl0aG9uIGVudmlyb25tZW50IEkgd2FudCB0byB1c2UKU3lzLnNldGVudihSRVRJQ1VMQVRFX1BZVEhPTiA9ICIvVXNlcnMvYmVudXR6ZXJpbi9MaWJyYXJ5L3ItbWluaWNvbmRhL2VudnMvci1zbGVuZHIvYmluL3B5dGhvbiIpCgpsaWJyYXJ5KHJldGljdWxhdGUpCnVzZV9jb25kYWVudigici1zbGVuZHIiLCByZXF1aXJlZCA9IFRSVUUpCnB5X2NvbmZpZygpCgojdGhlc2UgMiBjb21tYW5kcyBhcmUgZm9yIGluc3RhbGxpbmcgdGhlIHBhY2thZ2VzIHRza2l0IGFuZCBweXNsaW0gaW50byBweXRob24uIAojY29uZGFfaW5zdGFsbCgici1zbGVuZHIiLCAidHNraXQiLCBjaGFubmVsID0gImNvbmRhLWZvcmdlIikKI2NvbmRhX2luc3RhbGwoInItc2xlbmRyIiwgInB5c2xpbSIsIGNoYW5uZWwgPSAiY29uZGEtZm9yZ2UiKQoKI3NvbWUgb3RoZXIgaGVscGZ1bCBwYWNrYWdlczoKI2NvbmRhX2luc3RhbGwoInItc2xlbmRyIiwgImdzbCIsIGNoYW5uZWwgPSAiY29uZGEtZm9yZ2UiKQojY29uZGFfaW5zdGFsbCgici1zbGVuZHIiLCAibXNwcmltZSIsIGNoYW5uZWwgPSAiY29uZGEtZm9yZ2UiKQoKI2luc3RhbGwucGFja2FnZXMoInJlbW90ZXMiKSAgIyBpZiBub3QgYWxyZWFkeSBpbnN0YWxsZWQKbGlicmFyeShyZW1vdGVzKQoKIyBDaGVjayB0aGF0IHB5c2xpbSBhbmQgdHNraXQgYXJlIGF2YWlsYWJsZSAoc2hvdWxkIHJldHVybiBUUlVFKQpweV9tb2R1bGVfYXZhaWxhYmxlKCJweXNsaW0iKQpweV9tb2R1bGVfYXZhaWxhYmxlKCJ0c2tpdCIpICAgIyBzaG91bGQgYmUgVFJVRQoKIyBJbXBvcnQgcHlzbGltICh3aGljaCBidWlsZHMgb24gdHNraXQgYnV0IHByZXNlcnZlcyBTTGlNIG1ldGFkYXRhKSBhbmQgdHNraXQKcHlzbGltIDwtIGltcG9ydCgicHlzbGltIikKdHNraXQgPC0gaW1wb3J0KCJ0c2tpdCIpCgojTG9hZCB0aGUgLnRyZWVzIGZpbGUgd2l0aCB0c2tpdCwgdGhlbiBhbm5vdGF0ZSB3aXRoIHB5c2xpbSB0byBwcmVzZXJ2ZSBTTGlNIG1ldGFkYXRhIGxpa2UgcmVsYXRlZG5lc3MKI1dpdGggcHlsaW0gaXQgaXMgbm90IHBvc3NpYmxlIHRvIGxvYWQgdGhlIC50cmVlIGZpbGUuLi4KI1RvIHVzZSBweXNsaW0sIGkgYWxzbyBoYXZlIHRvIGFkZCB0aGUgaW5mb3JtYXRpb25zIG9mIG15IHNsaW0gbW9kZWwgLSBpdCBpcyBhIFdGIG1vZGVsIGFuZCBlbmRzIGF0IHRpY2sgMTAwMDM2IC0geW91IGFsc28gaGF2ZSB0byB0ZWxsIHB5c2xpbSB0byB0cmVhdCBpbmRpdmlkdWFscyBhcyBzZXBlcmF0ZSBzZXhlcyEKdHMgPC0gdHNraXQkbG9hZCgibW9kZWwyLnRyZWVzIikKdHMgPC0gcHlzbGltJGFubm90YXRlKHRzLCBtb2RlbF90eXBlID0gIldGIiwgdGljayA9IGFzLmludGVnZXIoMTAwMDM2KSkgICAgICAKCmNhdCgiUmF3IG1ldGFkYXRhIGZvciBpbmRpdmlkdWFsIDA6XG4iKQpwcmludCh0cyRpbmRpdmlkdWFsKGFzLmludGVnZXIoODApKSRtZXRhZGF0YSkKCgojIE5vdyBJIGhhdmUgYSBQeXRob24gb2JqZWN0ICd0cycgdGhhdCBJIGNhbiB1c2UgaW4gUgpwcmludCh0cykKY2F0KCJUb3RhbCBpbmRpdmlkdWFsczoiLCB0cyRudW1faW5kaXZpZHVhbHMsICJcbiIpCgoKbGluZXMgPC0gcmVhZExpbmVzKCJtb2RlbDJfaW5kaXZpZHVhbHMudHh0IikKbGluZXMgPC0gbGluZXNbbGluZXMgIT0gIiJdCmxpbmVzCgojIE5vdyBjb252ZXJ0IHRvIGludGVnZXJzCmluZGl2aWR1YWxzX3RvX2tlZXAgPC0gYXMuaW50ZWdlcihsaW5lcykKaW5kaXZpZHVhbHNfdG9fa2VlcAojIENoZWNrCiNyYW5nZShpbmRpdmlkdWFsc190b19rZWVwKQoKZm9yIChpbmRfaWQgaW4gaW5kaXZpZHVhbHNfdG9fa2VlcFsxOjVdKSB7ICAjIGp1c3QgbG9vayBhdCBhIGZldwogIGNhdCgiSW5kaXZpZHVhbDoiLCBpbmRfaWQsICJcbiIpCiAgbm9kZXNfcHl0aG9uIDwtIHRzJGluZGl2aWR1YWwoaW5kX2lkKSRub2RlcwogIHN0cihub2Rlc19weXRob24pICAjIEhvdyBkb2VzIHJldGljdWxhdGUgc2hvdyB0aGVzZT8gCiAgbm9kZXNfciA8LSBweV90b19yKG5vZGVzX3B5dGhvbikKICBzdHIobm9kZXNfcikgICAgICAgIyBXaGF0IGRvZXMgaXQgbG9vayBsaWtlIGFmdGVyIHB5X3RvX3IoKT8KfQoKCiMgU3RlcCBBOiBHYXRoZXIgYWxsIG5vZGUgb2JqZWN0cywgZXhwbGljaXRseSBjYWxsIC50b2xpc3QoKSBpbiBQeXRob24KYWxsX25vZGVfbGlzdHNfcHkgPC0gbGFwcGx5KGluZGl2aWR1YWxzX3RvX2tlZXAsIGZ1bmN0aW9uKGluZF9pZCkgewogIG5vZGVfb2JqIDwtIHRzJGluZGl2aWR1YWwoaW5kX2lkKSRub2RlcwogIAogICMgQ29udmVydCB0aGUgTnVtUHkgYXJyYXkgKG9yIGFycmF5LWxpa2UpIHRvIGEgcHVyZSBQeXRob24gbGlzdDoKICBub2RlX29iaiR0b2xpc3QoKQp9KQoKIyBTdGVwIEI6IE5vdyBjb252ZXJ0ICp0aGF0KiBlbnRpcmUgbGlzdC1vZi1saXN0cyBmcm9tIFB5dGhvbiBpbnRvIFIgb2JqZWN0cwphbGxfbm9kZV9saXN0c19yIDwtIHB5X3RvX3IoYWxsX25vZGVfbGlzdHNfcHkpCgojIFN0ZXAgQzogRmxhdHRlbiBldmVyeXRoaW5nIGludG8gb25lIGxvbmcgUiB2ZWN0b3IKbm9kZV9pZHMgPC0gdW5saXN0KGFsbF9ub2RlX2xpc3RzX3IpCgojIFN0ZXAgRDogRmluYWxseSwgY29udmVydCB0byBpbnRlZ2VyCm5vZGVfaWRzIDwtIGFzLmludGVnZXIobm9kZV9pZHMpCgpjYXQoIkZpbmFsIG5vZGUgSURzOiIsIG5vZGVfaWRzLCAiXG4iKQoKIyA0KSBTaW1wbGlmeSB0aGUgdHJlZSBzZXF1ZW5jZSB3aGlsZSBwcmVzZXJ2aW5nIFNMaU0gbWV0YWRhdGE6CiMgTm90ZSB0aGF0IGJ5IHNldHRpbmcgZmlsdGVyX3BvcHVsYXRpb25zPUZBTFNFLCB3ZSBrZWVwIHRoZSBvcmlnaW5hbCBwb3B1bGF0aW9uIHRhYmxlLAojIGFuZCBieSBzZXR0aW5nIGtlZXBfaW5wdXRfaW5kaXZpZHVhbHM9VFJVRSwgcHlzbGltIHByZXNlcnZlcyBpbmRpdmlkdWFsLWxldmVsIFNMaU0gbWV0YWRhdGEgKGUuZy4sIHJlbGF0ZWRuZXNzKS4KdHNfZmlsdGVyZWQgPC0gdHMkc2ltcGxpZnkoCiAgc2FtcGxlcyA9IG5vZGVfaWRzLAogIGZpbHRlcl9wb3B1bGF0aW9ucyA9IEZBTFNFLCAgICMgS2VlcCBvcmlnaW5hbCBwb3B1bGF0aW9uIElEcyBhbmQgdGFibGUKICBmaWx0ZXJfaW5kaXZpZHVhbHMgPSBUUlVFLCAgICAjIFJlbW92ZSBpbmRpdmlkdWFscyB0aGF0IGFyZSBub3QgaW4gbm9kZV9pZHMKKQoKCiMgNSkgZHVtcCB0aGUgZmlsdGVyZWQgdHJlZSBzZXF1ZW5jZSB0byBhIG5ldyBmaWxlLgp0c19maWx0ZXJlZCRkdW1wKCJtb2RlbDJfZmlsdGVyZWRpbmRzLnRyZWVzIikKCiMgNikgSW5zcGVjdCBmaWx0ZXJlZCBUUyBpbiBSLgpjYXQoIk51bWJlciBvZiBpbmRpdmlkdWFscyBpbiB0aGUgZmlsdGVyZWQgVFM6IiwgdHNfZmlsdGVyZWQkbnVtX2luZGl2aWR1YWxzLCAiXG4iKQpjYXQoIk51bWJlciBvZiBzYW1wbGVzIGluIHRoZSBmaWx0ZXJlZCBUUzoiLCB0c19maWx0ZXJlZCRudW1fc2FtcGxlcywgIlxuIikKCgpgYGAK</div>
 
 
 

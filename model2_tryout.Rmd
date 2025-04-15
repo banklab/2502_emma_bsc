@@ -5,57 +5,46 @@ output: html_notebook
  
 
 ```{r}
-packageVersion("reticulate")
-
-#install.packages("reticulate")
-library(reticulate)
-
-#create a new environment
-conda_create("r-slendr")
-use_condaenv("r-slendr", required = TRUE)
-py_config()
-
-
-py_config()                       # Shows the Python being used
-py_module_available("tskit")      # Should be TRUE
-
-```
-
-
-```{r}
-library(reticulate)
-use_condaenv("r-slendr", required = TRUE)
-py_config()  # confirm environment is "r-slendr"
-#conda_install("r-slendr", "pyslim", pip = TRUE)
-
-conda_install("r-slendr", "gsl", channel = "conda-forge")
-conda_install("r-slendr", "msprime", channel = "conda-forge")
-
-#reticulate::py_run_string("import pyslim")
-
-
-```
-
-
-
-```{r}
 setwd("~/Documents/GitHub/2502_emma_bsc")
 
+#create a new environment
+#conda_create("r-slendr")
+
+#Specify which python environment I want to use
+Sys.setenv(RETICULATE_PYTHON = "/Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python")
+
 library(reticulate)
 use_condaenv("r-slendr", required = TRUE)
 py_config()
+
+#these 2 commands are for installing the packages tskit and pyslim into python. 
+#conda_install("r-slendr", "tskit", channel = "conda-forge")
+#conda_install("r-slendr", "pyslim", channel = "conda-forge")
+
+#some other helpful packages:
+#conda_install("r-slendr", "gsl", channel = "conda-forge")
+#conda_install("r-slendr", "msprime", channel = "conda-forge")
 
 #install.packages("remotes")  # if not already installed
 library(remotes)
 
+# Check that pyslim and tskit are available (should return TRUE)
+py_module_available("pyslim")
 py_module_available("tskit")   # should be TRUE
 
-
-# Import tskit
+# Import pyslim (which builds on tskit but preserves SLiM metadata) and tskit
+pyslim <- import("pyslim")
 tskit <- import("tskit")
 
-# Load the .trees file
+#Load the .trees file with tskit, then annotate with pyslim to preserve SLiM metadata like relatedness
+#With pylim it is not possible to load the .tree file...
+#To use pyslim, i also have to add the informations of my slim model - it is a WF model and ends at tick 100036 - you also have to tell pyslim to treat individuals as seperate sexes!
 ts <- tskit$load("model2.trees")
+ts <- pyslim$annotate(ts, model_type = "WF", tick = as.integer(100036))      
+
+cat("Raw metadata for individual 0:\n")
+print(ts$individual(as.integer(80))$metadata)
+
 
 # Now I have a Python object 'ts' that I can use in R
 print(ts)
@@ -100,19 +89,20 @@ node_ids <- as.integer(node_ids)
 
 cat("Final node IDs:", node_ids, "\n")
 
-# 4) Use simplify to keep just those nodes (and the relevant ancestral nodes).
-
+# 4) Simplify the tree sequence while preserving SLiM metadata:
+# Note that by setting filter_populations=FALSE, we keep the original population table,
+# and by setting keep_input_individuals=TRUE, pyslim preserves individual-level SLiM metadata (e.g., relatedness).
 ts_filtered <- ts$simplify(
   samples = node_ids,
-  filter_populations = FALSE,  # keep original pop table
-  filter_individuals = TRUE    # remove individuals not in node_ids
+  filter_populations = FALSE,   # Keep original population IDs and table
+  filter_individuals = TRUE,    # Remove individuals that are not in node_ids
 )
 
 
-# 5) Optionally, dump the filtered tree sequence to a new file.
+# 5) dump the filtered tree sequence to a new file.
 ts_filtered$dump("model2_filteredinds.trees")
 
-# 6) Inspect your filtered TS in R if desired.
+# 6) Inspect filtered TS in R.
 cat("Number of individuals in the filtered TS:", ts_filtered$num_individuals, "\n")
 cat("Number of samples in the filtered TS:", ts_filtered$num_samples, "\n")
 
