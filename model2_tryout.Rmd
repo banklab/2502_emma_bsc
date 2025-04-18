@@ -7,20 +7,26 @@ output: html_notebook
 ```{r}
 setwd("~/Documents/GitHub/2502_emma_bsc")
 
-#create a new environment
-#conda_create("r-slendr")
+#if it doesnt work - run in a different file: 
+#file.edit("~/.Renviron")
+#and then in the file whiiich was opened: 
+#RETICULATE_PYTHON=/Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python
 
 #Specify which python environment I want to use
 Sys.setenv(RETICULATE_PYTHON = "/Users/benutzerin/Library/r-miniconda/envs/r-slendr/bin/python")
 
 library(reticulate)
+
+#create a new environment
+#conda_create("r-slendr")
+
 use_condaenv("r-slendr", required = TRUE)
-py_config()
+#py_config()
 
 #these 2 commands are for installing the packages tskit and pyslim into python. 
 #conda_install("r-slendr", "tskit", channel = "conda-forge")
 #conda_install("r-slendr", "pyslim", channel = "conda-forge")
-
+#reticulate::conda_install("r-slendr", "pyslim>=0.0.54", channel="conda-forge")
 #some other helpful packages:
 #conda_install("r-slendr", "gsl", channel = "conda-forge")
 #conda_install("r-slendr", "msprime", channel = "conda-forge")
@@ -28,27 +34,29 @@ py_config()
 #install.packages("remotes")  # if not already installed
 library(remotes)
 
+# Import pyslim (which builds on tskit but preserves SLiM metadata) and tskit
+pyslim <- import("pyslim", convert = FALSE)
+tskit <- import("tskit", convert = FALSE)
+
 # Check that pyslim and tskit are available (should return TRUE)
 py_module_available("pyslim")
 py_module_available("tskit")   # should be TRUE
 
-# Import pyslim (which builds on tskit but preserves SLiM metadata) and tskit
-pyslim <- import("pyslim")
-tskit <- import("tskit")
-
 #Load the .trees file with tskit, then annotate with pyslim to preserve SLiM metadata like relatedness
 #With pylim it is not possible to load the .tree file...
 #To use pyslim, i also have to add the informations of my slim model - it is a WF model and ends at tick 100036 - you also have to tell pyslim to treat individuals as seperate sexes!
-ts <- tskit$load("model2.trees")
-ts <- pyslim$annotate(ts, model_type = "WF", tick = as.integer(100036))      
+ts_raw <- tskit$load("model2.trees")
+ts <- pyslim$annotate(ts_raw, model_type = "WF", tick = as.integer(100036))      
 
 cat("Raw metadata for individual 0:\n")
 print(ts$individual(as.integer(80))$metadata)
+print(ts$individual(as.integer(20))$metadata)
+
 
 
 # Now I have a Python object 'ts' that I can use in R
 print(ts)
-cat("Total individuals:", ts$num_individuals, "\n")
+#cat("Total individuals:", ts$num_individuals, "\n")
 
 
 lines <- readLines("model2_individuals.txt")
@@ -56,7 +64,7 @@ lines <- lines[lines != ""]
 lines
 
 # Now convert to integers
-individuals_to_keep <- as.integer(lines)
+individuals_to_keep <- sort(as.integer(lines))  # Sorting ensures smallest ID comes first
 individuals_to_keep
 # Check
 #range(individuals_to_keep)
@@ -70,22 +78,10 @@ for (ind_id in individuals_to_keep[1:5]) {  # just look at a few
 }
 
 
-# Step A: Gather all node objects, explicitly call .tolist() in Python
-all_node_lists_py <- lapply(individuals_to_keep, function(ind_id) {
-  node_obj <- ts$individual(ind_id)$nodes
-  
-  # Convert the NumPy array (or array-like) to a pure Python list:
-  node_obj$tolist()
-})
-
-# Step B: Now convert *that* entire list-of-lists from Python into R objects
-all_node_lists_r <- py_to_r(all_node_lists_py)
-
-# Step C: Flatten everything into one long R vector
-node_ids <- unlist(all_node_lists_r)
-
-# Step D: Finally, convert to integer
-node_ids <- as.integer(node_ids)
+# Directly pull each individual's nodes (reticulate auto-converts to R ints)
+node_ids <- unlist(lapply(individuals_to_keep, function(ind_id) {
+  py_to_r(ts$individual(as.integer(ind_id))$nodes)
+}))
 
 cat("Final node IDs:", node_ids, "\n")
 
@@ -98,13 +94,46 @@ ts_filtered <- ts$simplify(
   filter_individuals = TRUE,    # Remove individuals that are not in node_ids
 )
 
-
-# 5) dump the filtered tree sequence to a new file.
+# Dump the simplified TS
 ts_filtered$dump("model2_filteredinds.trees")
+
+# ----------------------------------------------------------------
+# Now embed a tiny Python block to write in the sexes:
+# ----------------------------------------------------------------
+
+
+reticulate::py_run_string("
+import tskit, pyslim
+from pyslim import INDIVIDUAL_TYPE_FEMALE, INDIVIDUAL_TYPE_MALE
+
+# 1) load the simplified TS
+ts = tskit.load('model2_filteredinds.trees')
+
+# 2) pull off its tables so we can edit the individuals table
+tables = ts.dump_tables()
+
+# 3) clear out the old individuals
+tables.individuals.clear()
+
+# 4) re‑append each individual, setting sex=F for idx 0–3, sex=M for 4–7
+for idx, ind in enumerate(ts.individuals()):
+    md = ind.metadata            # a dict with SLiM fields, including 'sex' :contentReference[oaicite:0]{index=0}
+    md['sex'] = INDIVIDUAL_TYPE_FEMALE if idx < 4 else INDIVIDUAL_TYPE_MALE
+    tables.individuals.append(ind.replace(metadata=md))
+
+# 5) rebuild the TS and flip on separate_sexes
+ts2 = tables.tree_sequence()
+ts2.metadata['SLiM']['separate_sexes'] = True
+
+# 6) write out your final file
+ts2.dump('model2_filteredinds_withsex.trees')
+print('✅ model2_filteredinds_withsex.trees written with sexes assigned')
+")
 
 # 6) Inspect filtered TS in R.
 cat("Number of individuals in the filtered TS:", ts_filtered$num_individuals, "\n")
 cat("Number of samples in the filtered TS:", ts_filtered$num_samples, "\n")
+
 
 
 ```

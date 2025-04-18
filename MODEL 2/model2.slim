@@ -100,7 +100,12 @@ initialize() {
 
 100036 late() {
 
-	sim.treeSeqOutput("model2.trees");
+// Remember all individuals so that their metadata is saved in the tree sequence:
+//sim.treeSeqOutput("model2.trees", simplify=F);
+sim.treeSeqOutput("model2.trees");
+
+
+
 	sim.simulationFinished();
 		
 		}
