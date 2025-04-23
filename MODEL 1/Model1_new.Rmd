@@ -76,8 +76,8 @@ for(r in 1:reps){
 Now i have generated my data and want to analyze them. First I have to order the data to have all the repetitions in one shared matrix. This will make it easier to visualize it in a plot.  
 
 ```{r}
-#setwd("~/Documents/GitHub/2502_emma_bsc")
-setwd("~/Documents/GitHub/2502_emma_bsc/MODEL 1/Model1_100gen_16-1000ind_20reps")
+setwd("~/Documents/GitHub/2502_emma_bsc")
+#setwd("~/Documents/GitHub/2502_emma_bsc/MODEL 1/Model1_100gen_16-1000ind_20reps")
 rm(list=ls(all=TRUE)) #clear R environment
 
 #First order the data for the not-random mating, selecting for not-related mates (nrnr)
@@ -91,7 +91,7 @@ library("hierfstat") #This package helps to analyze the data.
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 100100, by = 2) #This command will help me name/define the rows. These are the generations from my SLiM output - I had 100 generations and wrote down the heterozygosity for every second generation. 
+row_numbers <- seq(100001, 101000, by = 5) #This command will help me name/define the rows. These are the generations from my SLiM output - I had 100 generations and wrote down the heterozygosity for every second generation. 
 
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
@@ -128,7 +128,7 @@ length(files_nrr)
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 100100, by = 2)
+row_numbers <- seq(100001, 101000, by = 5)
 
 results_df_nrr <- matrix(NA ,nrow = (length(row_numbers)), ncol = length(files_nrr))
 rownames(results_df_nrr) <- c(row_numbers)
@@ -160,7 +160,7 @@ length(files_r)
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 100100, by = 2)
+row_numbers <- seq(100001, 101000, by = 5)
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_r <- matrix(NA ,nrow = (length(row_numbers)), ncol = length(files_r))
@@ -200,20 +200,20 @@ max_het <- max(results_df_nrnr, results_df_nrr, results_df_r)
 min_het <- min(results_df_nrnr, results_df_nrr, results_df_r)
 
 # Create a vector for the x-values (generations) - this will be used for the x axis of the plot. 
-x_values <- seq(2, 100, by = 2)
+x_values <- seq(2, 1000, by = 5)
 
 #Here i don't have to transpose the data, since each column is a separate data series - this is what matplot expects. 
 matplot( x_values, results_df_nrnr, type = "p", pch = 16, 
-        col = adjustcolor("#54BFB7FF", alpha.f = 0.1), # Model nrnr: light blue points, rgb(red, green, blue, alpha) enables me to modify the colors a bit better, alpha is the transparacy
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.05), # Model nrnr: light blue points, rgb(red, green, blue, alpha) enables me to modify the colors a bit better, alpha is the transparacy
         xlab = "Generation", ylab = "Heterozygosity", #name the axis
         ylim = c(min_het, max_het), main = "Heterozygosity over Generations")  #define the y axis and give the plot a title 
 
 #Now I generated the plot and can just add the data of the other models (nrr and r)
 # Model nrr: light green points
-matpoints(x_values, results_df_nrr, pch = 16, col = adjustcolor("#894B33FF", alpha.f = 0.1)) #adding points to the existing plot from above
+matpoints(x_values, results_df_nrr, pch = 16, col = adjustcolor("#894B33FF", alpha.f = 0.05)) #adding points to the existing plot from above
 
 # Model r: light purple points
-matpoints( x_values, results_df_r, pch = 16, col = adjustcolor("tan1", alpha.f = 0.1)) #again
+matpoints( x_values, results_df_r, pch = 16, col = adjustcolor("tan1", alpha.f = 0.05)) #again
 
 # adding Mean relatedness lines to the plot
 lines( x_values, mean_nrnr, col = "#54BFB7FF", lwd = 2)
@@ -221,7 +221,7 @@ lines( x_values, mean_nrr, col = "#894B33FF", lwd = 2)
 lines( x_values, mean_r, col = "tan1", lwd = 2)
 
 #create a legend for my plot
-legend("bottomleft", legend=c("non-random non-related", "non-rendom related", "random"), col=c("#54BFB7FF", "#894B33FF", "tan1"), lty=1, cex = 0.7)
+legend("topright", legend=c("non-random non-related", "non-rendom related", "random"), col=c("#54BFB7FF", "#894B33FF", "tan1"), lty=1, cex = 0.7)
 #cex = 0.7 makes the legend smaller, lty is for the lines
 
 
