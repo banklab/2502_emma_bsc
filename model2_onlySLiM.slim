@@ -16,7 +16,8 @@ initialize() {
     defineConstant("K_p1", 140); //carrying capacity for p1
     defineConstant("K_p2", 500); // carrying capacity for p2 - the reintroduced population
     
-// 	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
+    defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
+ 	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
     
     
 }
@@ -24,7 +25,7 @@ initialize() {
 100001 early() {
 	sim.readFromPopulationFile("final_output.trees"); // p1 now exists, restored from file
    catn("Restored population size: " + size(p1.individuals)); //prints out the number of individuals I have...
-//	defineConstant("simID", "_seed =" + getSeed()); // creates a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
+
 }
 
 100001:100035 mateChoice(){
@@ -86,12 +87,15 @@ initialize() {
             count = count + 1;
         }
     }
-    meanRel = (count > 0) ? (totalRel / count) else 0.0; //If the count is greater than 0, set meanRel to (totalRel/count), otherwise put it to 0
-cat("Mean Relatedness (start) = " + meanRel 	+ "\n");
+    meanRel_start = (count > 0) ? (totalRel / count) else 0.0; //If the count is greater than 0, set meanRel to (totalRel/count), otherwise put it to 0
+cat("Mean Relatedness (start) = " + meanRel_start 	+ "\n");
 	
 	//calculate the heterozygosity
-	heterozygosity = calcHeterozygosity(p1.genomes);
-	cat("Mean heterozygosity (start) = " + heterozygosity + "\n");
+	heterozygosity_start = calcHeterozygosity(p1.genomes);
+	cat("Mean heterozygosity (start) = " + heterozygosity_start + "\n");
+	
+writeFile("model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + meanRel_start + "\t" + heterozygosity_start +  "\n", append=T);	
+	
 }
 
 //Then i want to see how this "reintroduced" population behaves over time (1000 generations)
@@ -145,14 +149,16 @@ if (newSize >= K_p2)
             count = count + 1;
         }
     }
-    meanRel = (count > 0) ? (totalRel / count) else 0.0; //If the count is greater than 0, set meanRel to (totalRel/count), otherwise put it to 0
-	cat("Mean Relatedness (end) = " + meanRel 	+ "\n");
+    meanRel_end = (count > 0) ? (totalRel / count) else 0.0; //If the count is greater than 0, set meanRel to (totalRel/count), otherwise put it to 0
+	cat("Mean Relatedness (end) = " + meanRel_end 	+ "\n");
 
 
 //calculate the heterozygosity
-	heterozygosity = calcHeterozygosity(p1.genomes);
-	cat("Mean heterozygosity (end) = " + heterozygosity + "\n");
+	heterozygosity_end = calcHeterozygosity(p1.genomes);
+	cat("Mean heterozygosity (end) = " + heterozygosity_end + "\n");
 
+writeFile("model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t"  + meanRel_end + "\t" + heterozygosity_end + "\n", append=T);
+//writeFile("model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + meanRel_start + "\t" + heterozygosity_start + meanRel_end + "\t" + heterozygosity_end + "\n", append=T);
 
 //Simulationfinished
 
