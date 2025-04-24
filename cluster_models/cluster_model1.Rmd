@@ -14,14 +14,14 @@ rm(list=ls(all=TRUE)) #clear R environment
 
 options(scipen = 999) #scientific notation penalty, with this R does not use scientific notation for numbers
 
-setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
+setwd("~/storage/scratch/users/eo20t062/model1/slim_files") #setting the working directory
 
 reps <- 1000
 repetition <- 1:1000 #This tells SliM how many repetitions I want (defined constant in SLiM)
 
 
 for(r in 1:reps){
-  slim_code_block <- paste0("slim -d repetition=", r, " model1_nonrandom_notrelated.slim")
+  slim_code_block <- paste0("slim -d repetition=", r, " cluster_model1_nrnr.slim")
   #slim_code_block - goes through the amount of repetitions I want
   system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
 }
@@ -35,14 +35,14 @@ rm(list=ls(all=TRUE)) #clear R environment
 
 options(scipen = 999) #scientific notation penalty, with this R does not use scientific notation for numbers
 
-setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
+setwd("~/storage/scratch/users/eo20t062/model1/slim_files") #setting the working directory
 
 reps <- 1000
 repetition <- 1:1000  #This tells SliM how many repetitions I want (defined constant in SLiM)
 
 
 for(r in 1:reps){
-  slim_code_block <- paste0("slim -d repetition=", r, " model1_nonrandom_related.slim")
+  slim_code_block <- paste0("slim -d repetition=", r, " cluster_model1_nrr.slim")
   #slim_code_block - goes through the amount of repetitions I want
   system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
 }
@@ -57,14 +57,14 @@ rm(list=ls(all=TRUE)) #clear R environment
 
 options(scipen = 999) #scientific notation penalty, with this R does not use scientific notation for numbers
 
-setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
+setwd("~/storage/scratch/users/eo20t062/model1/slim_files") #setting the working directory
 
 reps <- 1000
 repetition <- 1:1000 #This tells SliM how many repetitions I want (defined constant in SLiM)
 
 
 for(r in 1:reps){
-  slim_code_block <- paste0("slim -d repetition=", r, " model1_random.slim")
+  slim_code_block <- paste0("slim -d repetition=", r, " cluster_model1_r.slim")
   #slim_code_block - goes through the amount of repetitions I want
   system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
 }
@@ -76,7 +76,7 @@ for(r in 1:reps){
 Now i have generated my data and want to analyze them. First I have to order the data to have all the repetitions in one shared matrix. This will make it easier to visualize it in a plot.  
 
 ```{r}
-setwd("~/Documents/GitHub/2502_emma_bsc")
+setwd("~/storage/scratch/users/eo20t062/model1/slim_output")
 #setwd("~/Documents/GitHub/2502_emma_bsc/MODEL 1/Model1_100gen_16-1000ind_20reps")
 rm(list=ls(all=TRUE)) #clear R environment
 
@@ -188,7 +188,7 @@ mean_r <- rowMeans(results_df_r, na.rm = TRUE)
 ```
 
 ```{r}
-setwd("~/Documents/GitHub/2502_emma_bsc/MODEL 1/Model1_100gen_16-1000ind_20reps") #setting the working directory
+setwd("~/storage/scratch/users/eo20t062/model1/slim_output") #setting the working directory
 
 
 #install.packages("paletteer")
