@@ -1,0 +1,85 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This notebook is for analyzing the outputs from the model2 in SLiM. 
+The working directory is set to a folder on the server, where i saved my outputs of this simulation. 
+
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data")
+list.files()
+# find all the SLiM output files
+files <- list.files(pattern = "model2_reps")
+
+
+# loop through and extract metrics -> I want relatedness at the beginning and heterozygosity at the end
+res_list <- lapply(files, function(f){
+  dat <- read.table(f, header = FALSE)  
+  data.frame(
+    relatedness_start   = dat[1, 2],
+    relatedness_end = dat[2,2],
+    heterozygosity_start = dat[1,3],
+    heterozygosity_end  = dat[2, 3]
+  )
+})
+
+# 4) bind into one data.frame
+df <- do.call(rbind, res_list)
+
+```
+
+
+And now make the plot
+```{r}
+
+par(mfrow = c(1,2))
+# 5) quick base‐R scatterplot
+plot(
+  df$relatedness_start,
+  df$heterozygosity_end,
+  xlab = "Starting relatedness",
+  ylab = "End heterozygosity",
+  main = "Rel start vs Het end",
+  pch = 19
+)
+
+# (optional) add a linear fit
+abline(lm(heterozygosity_end ~ relatedness_start, data = df), col = "#54BFB7FF")
+
+
+# Pearson’s correlation
+pearson_res <- cor.test(
+  df$relatedness_start,
+  df$heterozygosity_end,
+  method = "pearson"
+)
+print(pearson_res)
+
+# 5) quick base‐R scatterplot
+plot(
+  df$heterozygosity_start,
+  df$heterozygosity_end,
+  xlab = "Starting heterozygosity",
+  ylab = "End heterozygosity",
+  main = "Het start vs Het end",
+  pch = 19
+)
+
+# (optional) add a linear fit
+abline(lm(heterozygosity_end ~ heterozygosity_start, data = df), col = "#54BFB7FF")
+
+# Pearson’s correlation
+pearson_res <- cor.test(
+  df$heterozygosity_start,
+  df$heterozygosity_end,
+  method = "pearson"
+)
+print(pearson_res)
+
+
+
+```
+
