@@ -18,7 +18,7 @@ repetition <- seq(1:100)
 
 
 for(r in 1:reps){
-  slim_code_block <- paste0("slim -d repetition=", r, " model2_onlySLiM.slim")
+  slim_code_block <- paste0("slim -d repetition=", r, " model2_onlySLiM_random.slim")
   #slim_code_block 
   system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
 }
@@ -140,7 +140,51 @@ print(pearson_res)
 
 
 
+```{r}
+#first set the working directory
+setwd("~/Documents/GitHub/2502_emma_bsc") 
+rm(list=ls(all=TRUE)) #clear R environment
 
+# find all the SLiM output files
+files <- list.files(pattern = "model2_reps")
+
+
+# loop through and extract metrics -> I want relatedness at the beginning and heterozygosity at the end
+res_list <- lapply(files, function(f){
+  dat <- read.table(f, header = FALSE)  
+  data.frame(
+    relatedness_start   = dat[1, 2],
+    heterozygosity_start  = dat[2, 2]
+  )
+})
+
+# 4) bind into one data.frame
+df <- do.call(rbind, res_list)
+
+# 5) quick base‐R scatterplot
+plot(
+  df$relatedness_start,
+  df$heterozygosity_start,
+  xlab = "Starting relatedness",
+  ylab = "starting heterozygosity",
+  main = "Relatedness vs Heterozygosity",
+  pch = 19
+)
+
+# (optional) add a linear fit
+abline(lm(heterozygosity_start ~ relatedness_start, data = df), col = "#54BFB7FF")
+
+
+# Pearson’s correlation
+pearson_res <- cor.test(
+  df$relatedness_start,
+  df$heterozygosity_start,
+  method = "pearson"
+)
+print(pearson_res)
+
+
+```
 
 
 
