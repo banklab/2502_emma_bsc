@@ -9,7 +9,22 @@ The working directory is set to a folder on the server, where i saved my outputs
 ```{r}
 rm(list=ls(all=TRUE)) #clear R environment
 
-setwd("/tmp/server_data")
+#This one is for 8-500 ind, mating for 100 gen
+#setwd("/tmp/server_data")
+
+#This one is for 8-500 ind, mating for 5000 generations
+#setwd("/tmp/server_data_model25000")
+
+#This one is for 8-100 ind, mating for 1000 generations
+#setwd("/tmp/server_data_model2_100_1000")
+
+#This one is for 8-62 ind, mating for 100 gen
+#setwd("/tmp/server_data_model2_62_100")
+
+#This one is for 8-62 ind, mating for 100 Gen RANDOM
+setwd("/tmp/server_data_model2_62_100_r")
+
+
 list.files()
 # find all the SLiM output files
 files <- list.files(pattern = "model2_reps")
@@ -43,11 +58,12 @@ plot(
   xlab = "Starting relatedness",
   ylab = "End heterozygosity",
   main = "Rel start vs Het end",
-  pch = 19
+  pch = 19,
+  cex = 0.4
 )
 
 # (optional) add a linear fit
-abline(lm(heterozygosity_end ~ relatedness_start, data = df), col = "#54BFB7FF")
+abline(lm(heterozygosity_end ~ relatedness_start, data = df), col = "#54BFB7FF", lwd = 2)
 
 
 # Pearson’s correlation
@@ -65,11 +81,12 @@ plot(
   xlab = "Starting heterozygosity",
   ylab = "End heterozygosity",
   main = "Het start vs Het end",
-  pch = 19
+  pch = 19,
+  cex = 0.4
 )
 
 # (optional) add a linear fit
-abline(lm(heterozygosity_end ~ heterozygosity_start, data = df), col = "#54BFB7FF")
+abline(lm(heterozygosity_end ~ heterozygosity_start, data = df), col = "#54BFB7FF", lwd = 2)
 
 # Pearson’s correlation
 pearson_res <- cor.test(
@@ -80,6 +97,33 @@ pearson_res <- cor.test(
 print(pearson_res)
 
 
+
+```
+
+
+
+```{r}
+plot(
+  df$relatedness_start,
+  df$heterozygosity_start,
+  xlab = "Starting relatedness",
+  ylab = "starting heterozygosity",
+  main = "Relatedness vs Heterozygosity",
+  pch = 19,
+  cex = 0.4
+)
+
+# (optional) add a linear fit
+abline(lm(heterozygosity_start ~ relatedness_start, data = df), col = "#54BFB7FF", lwd = 2)
+
+
+# Pearson’s correlation
+pearson_res <- cor.test(
+  df$relatedness_start,
+  df$heterozygosity_start,
+  method = "pearson"
+)
+print(pearson_res)
 
 ```
 

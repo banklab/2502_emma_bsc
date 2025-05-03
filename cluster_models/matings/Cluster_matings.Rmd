@@ -1,0 +1,182 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This file is for analyzing the outputs of the Mating model, run on the server. 
+
+Sort the 1000 files (nrnr) to analyze the data
+
+```{r}
+
+rm(list=ls(all=TRUE)) #clear R environment
+
+#This command is setting the working directory
+#outputs of the mating model with 16 individuals
+#setwd("/tmp/server_data_matings")
+#outputs of the mating model with 16 individuals
+setwd("/tmp/server_data_matings_1000ind")
+
+library(dplyr)
+
+# Vector of file names (adjust as needed for your naming/paths)
+files_nrnr <- list.files(pattern = "mateChoices_nrnr_")
+
+# For each file, read it in, compute df_counts, and return it
+all_reps_nrnr <- lapply(files_nrnr, function(f) {
+  
+  # 1. Read the data
+  df_nrnr <- read.table(f, header = FALSE)
+  colnames(df_nrnr) <- c("Generation", "FemaleIndex", "MaleIndex")
+  
+  # 2. Summarize by generation
+  #take care - either make 8 or 500 here, depending if we have 16 or 1000 individuals!!
+  df_counts_nrnr <- df_nrnr %>%
+    group_by(Generation) %>%
+    summarise(
+      distinctFemales_nrnr = n_distinct(FemaleIndex),
+      distinctMales_nrnr   = n_distinct(MaleIndex),
+      missingFemales_nrnr  = 500 - n_distinct(FemaleIndex),
+      missingMales_nrnr    = 500 - n_distinct(MaleIndex),
+      #.groups = "drop"
+    )
+  
+  # Return the summarized table
+  df_counts_nrnr
+})
+
+# Bind all replicate summaries into one data frame, with a new column "rep" indicating which replicate
+df_all_nrnr <- bind_rows(all_reps_nrnr, .id = "rep") 
+# Now df_all has columns: rep, Generation, distinctFemales, distinctMales, missingFemales, missingMales
+
+#I now want to group the data by generations, to average the data across all replicates for each generation. 
+df_means_nrnr <- df_all_nrnr %>%
+  group_by(Generation) %>%
+  summarise(
+    meanMissingFemales_nrnr = mean(missingFemales_nrnr),
+    meanMissingMales_nrnr   = mean(missingMales_nrnr),
+    .groups = "drop" #remove the grouping again
+  )
+
+
+```
+
+
+And the same for the 1000 r files
+```{r}
+#for 16 individuals
+#setwd("/tmp/server_data_matings")
+#for 1000 individuals
+setwd("/tmp/server_data_matings_1000ind")
+
+
+library(dplyr)
+
+# Vector of file names (adjust as needed for your naming/paths)
+files_r <- list.files(pattern = "mateChoices_r_")
+
+# For each file, read it in, compute df_counts, and return it
+all_reps_r <- lapply(files_r, function(f) {
+  
+  # 1. Read the data
+  df_r <- read.table(f, header = FALSE)
+  colnames(df_r) <- c("Generation", "FemaleIndex", "MaleIndex")
+  
+  # 2. Summarize by generation
+  #take care - either make 8 or 500 here, depending if we have 16 or 1000 individuals!!
+  df_counts_r <- df_r %>%
+    group_by(Generation) %>%
+    summarise(
+      distinctFemales_r = n_distinct(FemaleIndex),
+      distinctMales_r   = n_distinct(MaleIndex),
+      missingFemales_r  = 500 - n_distinct(FemaleIndex),
+      missingMales_r    = 500 - n_distinct(MaleIndex),
+      #.groups = "drop"
+    )
+  
+  # Return the summarized table
+  df_counts_r
+})
+
+# Bind all replicate summaries into one data frame, with a new column "rep" indicating which replicate
+df_all_r <- bind_rows(all_reps_r, .id = "rep") 
+# Now df_all has columns: rep, Generation, distinctFemales, distinctMales, missingFemales, missingMales
+
+#I now want to group the data by generations, to average the data across all replicates for each generation. 
+df_means_r <- df_all_r %>%
+  group_by(Generation) %>%
+  summarise(
+    meanMissingFemales_r = mean(missingFemales_r),
+    meanMissingMales_r   = mean(missingMales_r),
+    .groups = "drop" #remove the grouping again
+  )
+
+```
+
+
+
+
+And then make the plot
+
+```{r}
+
+par(mfrow = c(1,2))
+
+max_nrnr <- max(df_means_nrnr$meanMissingFemales_nrnr, df_means_nrnr$meanMissingMales_nrnr)
+min_nrnr <- min(df_means_nrnr$meanMissingFemales_nrnr, df_means_nrnr$meanMissingMales_nrnr)
+  
+x_vals_nrnr <- 1:100
+y_vals_nrnr <- df_means_nrnr$meanMissingFemales_nrnr
+
+matplot(
+  x = x_vals_nrnr,
+  y = y_vals_nrnr,
+  type = "l",           # "b" means points connected by lines
+  xlab = "Generation",
+  ylab = "Number Missing", 
+  ylim = c(min_nrnr, max_nrnr),
+  #ylim = c(0, 3.5),
+  #ylim = c(60, 75),
+  col = "#54BFB7FF", 
+  main = "Nrnr Mating")
+
+
+
+lines(x_vals_nrnr, df_means_nrnr$meanMissingMales_nrnr, type = "l", col = "tan1")
+
+legend("topright",legend = c("Females", "Males"),
+  lty = 1, col = c("#54BFB7FF", "tan1"), cex = 0.6)
+
+#And the second plot
+
+max_r <- max(df_means_r$meanMissingFemales_r, df_means_r$meanMissingMales_r)
+min_r <- min(df_means_r$meanMissingFemales_r, df_means_r$meanMissingMales_r)
+  
+x_vals_r <- 1:100
+y_vals_r <- df_means_r$meanMissingFemales_r
+
+matplot(
+  x = x_vals_r,
+  y = y_vals_r,
+  type = "l",           # "b" means points connected by lines
+  xlab = "Generation",
+  ylab = "Number Missing", 
+  ylim = c(min_r, max_r),
+  #ylim = c(0, 3.5),
+  #ylim = c(60, 75),
+  col = "#54BFB7FF", 
+  main = "Random Mating")
+
+
+
+lines(x_vals_r, df_means_r$meanMissingMales_r, type = "l", col = "tan1")
+
+legend("topright",legend = c("Females", "Males"),
+  lty = 1, col = c("#54BFB7FF", "tan1"), cex = 0.6)
+
+
+
+
+
+```
+

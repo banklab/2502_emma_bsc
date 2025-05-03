@@ -3,81 +3,15 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-## Generating Data in SLiM with Parameters from R 
-
-First I have 3 chunks, which will send information to my slim model - With this callback I can make 20 repetitions of my simulation in SLiM and save the output files. I have 3 SLiM models which all show different mateCHoice commands (non-random selecting for non-related mates, non-random selecting for related mates and random mating)
-
-non-random mating selecting for not related mates (nrnr)
-```{r eval=FALSE, include=FALSE}
-
-rm(list=ls(all=TRUE)) #clear R environment
-
-options(scipen = 999) #scientific notation penalty, with this R does not use scientific notation for numbers
-
-setwd("~/storage/scratch/users/eo20t062/model1/slim_files") #setting the working directory
-
-reps <- 1000
-repetition <- 1:1000 #This tells SliM how many repetitions I want (defined constant in SLiM)
-
-
-for(r in 1:reps){
-  slim_code_block <- paste0("slim -d repetition=", r, " cluster_model1_nrnr.slim")
-  #slim_code_block - goes through the amount of repetitions I want
-  system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
-}
-
-```
-
-non-random mating selecting for related mates (nrr)
-```{r eval=FALSE, include=FALSE}
-
-rm(list=ls(all=TRUE)) #clear R environment
-
-options(scipen = 999) #scientific notation penalty, with this R does not use scientific notation for numbers
-
-setwd("~/storage/scratch/users/eo20t062/model1/slim_files") #setting the working directory
-
-reps <- 1000
-repetition <- 1:1000  #This tells SliM how many repetitions I want (defined constant in SLiM)
-
-
-for(r in 1:reps){
-  slim_code_block <- paste0("slim -d repetition=", r, " cluster_model1_nrr.slim")
-  #slim_code_block - goes through the amount of repetitions I want
-  system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
-}
-
-```
-
-
-random mating (r)
-```{r eval=FALSE, include=FALSE}
-
-rm(list=ls(all=TRUE)) #clear R environment
-
-options(scipen = 999) #scientific notation penalty, with this R does not use scientific notation for numbers
-
-setwd("~/storage/scratch/users/eo20t062/model1/slim_files") #setting the working directory
-
-reps <- 1000
-repetition <- 1:1000 #This tells SliM how many repetitions I want (defined constant in SLiM)
-
-
-for(r in 1:reps){
-  slim_code_block <- paste0("slim -d repetition=", r, " cluster_model1_r.slim")
-  #slim_code_block - goes through the amount of repetitions I want
-  system(slim_code_block)#call the code block for slim in the terminal via bash, system invokes the OS command specified by command.
-}
-
-```
-
-
 
 Now i have generated my data and want to analyze them. First I have to order the data to have all the repetitions in one shared matrix. This will make it easier to visualize it in a plot.  
 
 ```{r}
-setwd("~/storage/scratch/users/eo20t062/model1/slim_output")
-#setwd("~/Documents/GitHub/2502_emma_bsc/MODEL 1/Model1_100gen_16-1000ind_20reps")
+
+#Set the working directory - i connect it directly with the output file on the server. 
+setwd("/tmp/server_data_model1")
+
+
 rm(list=ls(all=TRUE)) #clear R environment
 
 #First order the data for the not-random mating, selecting for not-related mates (nrnr)
@@ -91,7 +25,7 @@ library("hierfstat") #This package helps to analyze the data.
 ## make a dataframe to collect results
 ## each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 101000, by = 5) #This command will help me name/define the rows. These are the generations from my SLiM output - I had 100 generations and wrote down the heterozygosity for every second generation. 
+row_numbers <- seq(100001, 101000, by = 5) #This command will help me name/define the rows. These are the generations from my SLiM output - I had 1000 generations and wrote down the heterozygosity for every fifth generation. 
 
 #row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
@@ -188,7 +122,7 @@ mean_r <- rowMeans(results_df_r, na.rm = TRUE)
 ```
 
 ```{r}
-setwd("~/storage/scratch/users/eo20t062/model1/slim_output") #setting the working directory
+#setwd("/tmp/server_data_model1")
 
 
 #install.packages("paletteer")
@@ -203,25 +137,25 @@ min_het <- min(results_df_nrnr, results_df_nrr, results_df_r)
 x_values <- seq(2, 1000, by = 5)
 
 #Here i don't have to transpose the data, since each column is a separate data series - this is what matplot expects. 
-matplot( x_values, results_df_nrnr, type = "p", pch = 16, 
-        col = adjustcolor("#54BFB7FF", alpha.f = 0.05), # Model nrnr: light blue points, rgb(red, green, blue, alpha) enables me to modify the colors a bit better, alpha is the transparacy
+matplot( x_values, results_df_nrnr, type = "p", pch = 16, cex = 0.4,
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.03), # Model nrnr: light blue points, rgb(red, green, blue, alpha) enables me to modify the colors a bit better, alpha is the transparacy
         xlab = "Generation", ylab = "Heterozygosity", #name the axis
-        ylim = c(min_het, max_het), main = "Heterozygosity over Generations")  #define the y axis and give the plot a title 
+        ylim = c(0,0.004), main = "Heterozygosity over Generations")  #define the y axis and give the plot a title 
 
 #Now I generated the plot and can just add the data of the other models (nrr and r)
 # Model nrr: light green points
-matpoints(x_values, results_df_nrr, pch = 16, col = adjustcolor("#894B33FF", alpha.f = 0.05)) #adding points to the existing plot from above
+matpoints(x_values, results_df_nrr, pch = 16, cex = 0.4,  col = adjustcolor("#894B33FF", alpha.f = 0.015)) #adding points to the existing plot from above
 
 # Model r: light purple points
-matpoints( x_values, results_df_r, pch = 16, col = adjustcolor("tan1", alpha.f = 0.05)) #again
+matpoints( x_values, results_df_r, pch = 16, cex = 0.4, col = adjustcolor("tan1", alpha.f = 0.015)) #again
 
 # adding Mean relatedness lines to the plot
-lines( x_values, mean_nrnr, col = "#54BFB7FF", lwd = 2)
-lines( x_values, mean_nrr, col = "#894B33FF", lwd = 2)
-lines( x_values, mean_r, col = "tan1", lwd = 2)
+lines( x_values, mean_nrnr, col = "#54BFB7FF", lwd = 2.5)
+lines( x_values, mean_nrr, col = "#894B33FF", lwd = 2.5)
+lines( x_values, mean_r, col = "tan1", lwd = 2.5)
 
 #create a legend for my plot
-legend("topright", legend=c("non-random non-related", "non-rendom related", "random"), col=c("#54BFB7FF", "#894B33FF", "tan1"), lty=1, cex = 0.7)
+legend("topright", legend=c("non-random non-related", "non-random related", "random"), col=c("#54BFB7FF", "#894B33FF", "tan1"), lty=1, cex = 0.7)
 #cex = 0.7 makes the legend smaller, lty is for the lines
 
 
