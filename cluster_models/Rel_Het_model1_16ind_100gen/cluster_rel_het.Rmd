@@ -1,0 +1,148 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This notebook helps looking at the rates of decline in heterozygosity and increase in relatedness for the different mateCHoice models.
+
+I have simulated the data on the server and want to analyze it now. For this i've created a folder, which is connected to the output server of this model. In this way, i dont have to load all the data on my computer.
+
+The size of the starting population is 1000 individuals or 16 individuals, which have different genomes and they mate for 100 generations.  
+
+```{r}
+
+
+setwd("/tmp/server_data_rel_het_16")
+
+rm(list=ls(all=TRUE)) #clear R environment
+
+files_nrnr <- list.files(pattern = "_heterozygosity_nrnr_") #list all files with this pattern in the name
+length(files_nrnr) #check if it got all the files
+
+#This will create a list of data frames, where every element is a replicate. Each replicate will have the column: Generation, Relatedness and heterozygosity. 
+rep_data_nrnr <- lapply(files_nrnr, function(f) {
+  read.table(f, col.names = c("generation", "relatedness", "heterozygosity"))
+})
+#lapply is a command which applies a function to all the elements in a vector - So here it names the columns of every file, stored in files_nrnr
+
+# Assume all replicates have the same generations - define the generations for later plot them
+generations <- rep_data_nrnr[[1]]$generation
+
+# Extract relatedness into a new matrix: each column = one replicate 
+rel_matrix_nrnr <- sapply(rep_data_nrnr, function(df) df$relatedness)
+#Specifically this tells R: Go through every element "df" in the list rep_data_nrnr, and extract the relatedness column. 
+
+# Compute mean relatedness per generation
+rel_mean_nrnr <- rowMeans(rel_matrix_nrnr)
+
+#Now do the same for heterozygosity
+het_matrix_nrnr <- sapply(rep_data_nrnr, function(df) df$heterozygosity) #create a new matrix for all heterozygosity values
+het_mean_nrnr <- rowMeans(het_matrix_nrnr)
+
+#And now again all this for the data of the model which has non-random mating selecting for relatedness (nrr)
+
+files_nrr <- list.files(pattern = "_heterozygosity_nrr_")
+length(files_nrr)
+
+rep_data_nrr <- lapply(files_nrr, function(f) {
+  read.table(f, col.names = c("generation", "relatedness", "heterozygosity"))
+})
+
+rel_matrix_nrr <- sapply(rep_data_nrr, function(df) df$relatedness)
+rel_mean_nrr <- rowMeans(rel_matrix_nrr)
+
+het_matrix_nrr <- sapply(rep_data_nrr, function(df) df$heterozygosity)
+het_mean_nrr <- rowMeans(het_matrix_nrr)
+
+
+#And now again all this for the data of the model which has random mating (r)
+
+files_r <- list.files(pattern = "_heterozygosity_r_")
+length(files_r)
+
+rep_data_r <- lapply(files_r, function(f) {
+  read.table(f, col.names = c("generation", "relatedness", "heterozygosity"))
+}) #lapply: apply a function over a list 
+
+rel_matrix_r <- sapply(rep_data_r, function(df) df$relatedness)
+rel_mean_r <- rowMeans(rel_matrix_r)
+
+het_matrix_r <- sapply(rep_data_r, function(df) df$heterozygosity)
+het_mean_r <- rowMeans(het_matrix_r)
+
+```
+
+
+Now i have sorted my data and can combine them into 2 graps. I do one graph which shows the relatedness over the generations in the 3 different models and one for the heterozygosity values. 
+```{r}
+
+
+par(mfrow = c(1, 2)) #To have 2 plots shown at once
+par(mfrow = c(1, 2), oma = c(2, 0, 1, 0))  # oma = outer margin area (bottom, left, top, right), leaves space for a title and some space at the bottom to add a legend outside of the plots. 
+
+par(mgp = c(1.8, 0.7, 0)) #This is to decrease the distance of the axis labels to the axis. 
+
+par(cex.lab = 0.8, cex.axis = 0.7, cex.main = 1) #this helps me rescaling the size of the labels
+
+# Combine both matrices into one big matrix to find global max and min
+max_rel <- max(rel_matrix_nrnr, rel_matrix_nrr, rel_matrix_r)
+min_rel <- min(rel_matrix_nrnr, rel_matrix_nrr, rel_matrix_r)
+
+x_vals <- 1:100
+
+# Model nrnr: light blue points
+#Here i dont have to transpose the data, since each column is a separate data series
+matplot(x_vals, rel_matrix_nrnr, type = "p", pch = 16, cex = 0.4,
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.015),
+        xlab = "Generation", ylab = "Relatedness",
+        ylim = c(min_rel, max_rel))  
+
+
+# Model nrr: light green points
+matpoints(x_vals, rel_matrix_nrr, pch = 16, cex = 0.4, col = adjustcolor("#894B33FF", alpha.f = 0.015)) #adding points to the existing plot from above
+
+# Model r: light purple points
+matpoints(x_vals, rel_matrix_r, pch = 16, cex = 0.4, col = adjustcolor("tan1", alpha.f = 0.015)) #again
+
+# === adding Mean relatedness lines to the plot ===
+lines(x_vals, rel_mean_nrnr, col = "#54BFB7FF", lwd = 2)
+lines(x_vals, rel_mean_nrr, col = "#894B33FF", lwd = 2)
+lines(x_vals, rel_mean_r, col = "tan1", lwd = 2)
+
+
+#And now the exactly same but for the heterozygosity values
+
+# Combine both matrices into one big matrix to find global max and min
+max_het <- max(het_matrix_nrnr, het_matrix_nrr, het_matrix_r)
+min_het <- min(het_matrix_nrnr, het_matrix_nrr, het_matrix_r)
+
+# Model nrnr: light blue points
+matplot(x_vals, het_matrix_nrnr, type = "p", pch = 16, cex = 0.4,
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.015),
+        xlab = "Generation", ylab = "Heterozygosity", 
+        ylim = c(min_het, max_het))  
+
+
+# Model nrr: light green points
+matpoints(x_vals, het_matrix_nrr, pch = 16, cex = 0.4, col = adjustcolor("#894B33FF", alpha.f = 0.015)) #add points
+
+# Model r: light purple points
+matpoints(x_vals, het_matrix_r, pch = 16, cex = 0.4, col = adjustcolor("tan1", alpha.f = 0.015)) #add points
+
+# === adding Mean relatedness lines to the plot ===
+lines(x_vals, het_mean_nrnr, col = "#54BFB7FF", lwd = 2)
+lines(x_vals, het_mean_nrr, col = "#894B33FF", lwd = 2)
+lines(x_vals, het_mean_r, col = "tan1", lwd = 2)
+
+mtext("Relatedness and Heterozygosity Over Time", side = 3, line = -2, outer = TRUE, cex = 1.2) #creates a shared title
+
+par(xpd = NA) #Allows drawing outside of the plot - this is for the legend
+legend("bottom", inset = c(0, -0.6), horiz = FALSE,
+       legend = c("not-random not-related", "not-random related", "random"),
+       col = c("#54BFB7FF", "#894B33FF", "tan1"),
+       lwd = 2, bty = "n", cex = 0.6)
+#inset: Pushes it down below the plot
+
+```
+
+
