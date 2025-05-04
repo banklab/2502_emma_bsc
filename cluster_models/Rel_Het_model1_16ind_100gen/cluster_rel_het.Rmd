@@ -11,8 +11,10 @@ The size of the starting population is 1000 individuals or 16 individuals, which
 
 ```{r}
 
-
+#This is for the output on the server for the model with 16 incividuals
 setwd("/tmp/server_data_rel_het_16")
+#This is for the output on the server for the model with 1000 incividuals
+#setwd("/tmp/server_data_rel_het_1000")
 
 rm(list=ls(all=TRUE)) #clear R environment
 
@@ -92,20 +94,20 @@ x_vals <- 1:100
 
 # Model nrnr: light blue points
 #Here i dont have to transpose the data, since each column is a separate data series
-matplot(x_vals, rel_matrix_nrnr, type = "p", pch = 16, cex = 0.4,
-        col = adjustcolor("#54BFB7FF", alpha.f = 0.015),
+matplot(x_vals, rel_matrix_nrnr, type = "p", pch = 16, cex = 0.3,
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.01),
         xlab = "Generation", ylab = "Relatedness",
         ylim = c(min_rel, max_rel))  
 
 
 # Model nrr: light green points
-matpoints(x_vals, rel_matrix_nrr, pch = 16, cex = 0.4, col = adjustcolor("#894B33FF", alpha.f = 0.015)) #adding points to the existing plot from above
+matpoints(x_vals, rel_matrix_nrr, pch = 16, cex = 0.3, col = adjustcolor("#894B33FF", alpha.f = 0.01)) #adding points to the existing plot from above
 
 # Model r: light purple points
-matpoints(x_vals, rel_matrix_r, pch = 16, cex = 0.4, col = adjustcolor("tan1", alpha.f = 0.015)) #again
+matpoints(x_vals, rel_matrix_r, pch = 16, cex = 0.2, col = adjustcolor("tan1", alpha.f = 0.01)) #again
 
 # === adding Mean relatedness lines to the plot ===
-lines(x_vals, rel_mean_nrnr, col = "#54BFB7FF", lwd = 2)
+lines(x_vals, rel_mean_nrnr, col = "#54BFB7FF", lwd = 2.5)
 lines(x_vals, rel_mean_nrr, col = "#894B33FF", lwd = 2)
 lines(x_vals, rel_mean_r, col = "tan1", lwd = 2)
 
@@ -117,17 +119,17 @@ max_het <- max(het_matrix_nrnr, het_matrix_nrr, het_matrix_r)
 min_het <- min(het_matrix_nrnr, het_matrix_nrr, het_matrix_r)
 
 # Model nrnr: light blue points
-matplot(x_vals, het_matrix_nrnr, type = "p", pch = 16, cex = 0.4,
-        col = adjustcolor("#54BFB7FF", alpha.f = 0.015),
+matplot(x_vals, het_matrix_nrnr, type = "p", pch = 16, cex = 0.3,
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.01),
         xlab = "Generation", ylab = "Heterozygosity", 
         ylim = c(min_het, max_het))  
 
 
 # Model nrr: light green points
-matpoints(x_vals, het_matrix_nrr, pch = 16, cex = 0.4, col = adjustcolor("#894B33FF", alpha.f = 0.015)) #add points
+matpoints(x_vals, het_matrix_nrr, pch = 16, cex = 0.3, col = adjustcolor("#894B33FF", alpha.f = 0.01)) #add points
 
 # Model r: light purple points
-matpoints(x_vals, het_matrix_r, pch = 16, cex = 0.4, col = adjustcolor("tan1", alpha.f = 0.015)) #add points
+matpoints(x_vals, het_matrix_r, pch = 16, cex = 0.2, col = adjustcolor("tan1", alpha.f = 0.01)) #add points
 
 # === adding Mean relatedness lines to the plot ===
 lines(x_vals, het_mean_nrnr, col = "#54BFB7FF", lwd = 2)
