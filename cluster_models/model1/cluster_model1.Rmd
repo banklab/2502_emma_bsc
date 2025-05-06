@@ -160,3 +160,94 @@ legend("topright", legend=c("non-random non-related", "non-random related", "ran
 
 
 ```
+
+
+
+Nd now another plot which shows only the first 100 generations
+```{r}
+#––– Plot only the first 100 generations –––#
+
+# find the indices of x_values ≤ 100
+idx <- which(x_values <= 80)
+
+# set up the empty plot for non-random non-related (nrnr)
+matplot(x_values[idx], results_df_nrnr[idx, ], type = "p", pch = 16, cex = 0.6,
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.3),
+        xlab = "Generation", ylab = "Heterozygosity",
+        ylim = c(0, 0.004),                              # same y-axis as before
+        main = "Heterozygosity: First 100 Generations")
+
+# add the other two models
+matpoints(x_values[idx], results_df_nrr[idx, ], pch = 16, cex = 0.6,
+          col = adjustcolor("#894B33FF", alpha.f = 0.05))
+matpoints(x_values[idx], results_df_r[idx, ], pch = 16, cex = 0.6,
+          col = adjustcolor("tan1",       alpha.f = 0.03))
+
+# overlay the mean‐lines for each model
+lines(x_values[idx], mean_nrnr[idx], col = "#54BFB7FF", lwd = 2.5)
+lines(x_values[idx], mean_nrr[idx], col = "#894B33FF", lwd = 2.5)
+lines(x_values[idx], mean_r[idx],   col = "tan1",       lwd = 2.5)
+
+# legend
+legend("topright",
+       legend = c("non-random non-related", "non-random related", "random"),
+       col    = c("#54BFB7FF",             "#894B33FF",             "tan1"),
+       lty    = 1, cex = 0.7)
+```
+
+
+And now a plot showing the median of the different simulations:
+
+```{r}
+#––– Compute median & quartiles if not already done –––#
+med_nrnr <- apply(results_df_nrnr, 1, median, na.rm = TRUE)
+p25_nrnr <- apply(results_df_nrnr, 1, function(x) quantile(x, 0.25, na.rm = TRUE))
+p75_nrnr <- apply(results_df_nrnr, 1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+med_nrr  <- apply(results_df_nrr,  1, median, na.rm = TRUE)
+p25_nrr  <- apply(results_df_nrr,  1, function(x) quantile(x, 0.25, na.rm = TRUE))
+p75_nrr  <- apply(results_df_nrr,  1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+med_r    <- apply(results_df_r,    1, median, na.rm = TRUE)
+p25_r    <- apply(results_df_r,    1, function(x) quantile(x, 0.25, na.rm = TRUE))
+p75_r    <- apply(results_df_r,    1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+
+#––– New empty plot window –––#
+# dev.new()  # uncomment if you want a separate graphics window
+plot(x_values, med_nrnr, type = "n",
+     xlab = "Generation", ylab = "Heterozygosity",
+     ylim = c(0, 0.004),
+     main = "Heterozygosity over Generations\n(median & 25/75%)")
+
+
+#––– Draw median (solid) and quartiles (dashed) –––#
+# Model: non-random non-related
+lines(x_values, med_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1)
+lines(x_values, p25_nrnr, col = "#54BFB7FF", lwd = 1.5, lty = 3)
+lines(x_values, p75_nrnr, col = "#54BFB7FF", lwd = 1.5, lty = 3)
+
+# Model: non-random related
+lines(x_values, med_nrr,  col = "#894B33FF", lwd = 2.5, lty = 1)
+lines(x_values, p25_nrr,  col = "#894B33FF", lwd = 1.5, lty = 3)
+lines(x_values, p75_nrr,  col = "#894B33FF", lwd = 1.5, lty = 3)
+
+# Model: random
+lines(x_values, med_r,    col = "tan1",       lwd = 2.5, lty = 1)
+lines(x_values, p25_r,    col = "tan1",       lwd = 1.5, lty = 3)
+lines(x_values, p75_r,    col = "tan1",       lwd = 1.5, lty = 3)
+
+
+#––– Legend –––#
+legend("topright",
+       legend = c("nrnr median", "nrnr 25/75%",
+                  "nrr median",  "nrr 25/75%",
+                  "r median",    "r 25/75%"),
+       col    = c("#54BFB7FF", "#54BFB7FF",
+                  "#894B33FF", "#894B33FF",
+                  "tan1",       "tan1"),
+       lty    = c(1, 2, 1, 2, 1, 2),
+       lwd    = c(2.5, 1.5, 2.5, 1.5, 2.5, 1.5),
+       cex    = 0.7)
+```
+
