@@ -1,0 +1,157 @@
+//This is my second model. With this model I first want to recreate the history of the sihek: After the bottleneck has sets the equilibrium population to 16 individuals, they mate based on low relatedness for 35 ?? years. This was done in different breeding facilities, increasing the population size to 140 individuals. After this, I want to simulate different reintroduction strategies. 8??? Individuals are picked from the captive population to be introduced to the wild. There they will mate at random. 
+
+//First I initialize the model and set some parameters
+initialize() {
+
+	initializeSLiMOptions(keepPedigrees = T); //Enables the program to keep track of the ancestry
+	initializeMutationRate(1e-7); //define a mutation rate - based on values for the common kingfisher. 
+	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 is has dominance coefficient 0.5 and is neutral (fitness 0.0)
+	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
+	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases
+	initializeRecombinationRate(1e-6); // define the recombination rate
+	initializeSex("A"); //creates males and females in the population
+
+    initializeTreeSeq(); //this command enables me to read in the safed (output from earlier simulation) population
+    
+    defineConstant("K_p1", 140); //carrying capacity for p1
+    defineConstant("K_p2", 62); // carrying capacity for p2 - the reintroduced population
+    
+    defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
+ 	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
+    
+    
+}
+
+100001 early() {
+	sim.readFromPopulationFile("16_1e-6_output.trees"); // p1 now exists, restored from file
+   catn("Restored population size: " + size(p1.individuals)); //prints out the number of individuals I have...
+
+}
+
+//For the first 35 generations i have a mate Choice, selecting nates based on lowest relatedness -> captive breeding
+100001:100035 mateChoice(){
+	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
+	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
+
+      // Compute relatedness for each male
+		relatedness = males.relatedness(individual);
+		
+		bestIndex = which(relatedness == min(relatedness)); // gives out the lowest relatedness value
+			
+		// Randomly shuffle individuals to prevent bias - this line creates a new list where every male with lowest relatedness gets picked only once
+		shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F); 	
+		
+		//Take first individual from that list as mate
+		bestMate = shuffledInds[0];
+		
+		//This command would print out each mating per generation
+		//cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " with relatedness " + bestMate.relatedness(individual) + " at generation " + sim.cycle + "\n");	 //This command prints out which individuals mated in each generation. 
+		return bestMate;
+	}
+   
+
+100001:100035 early() {
+	newSize = asInteger(p1.individualCount * 1.08); //increas popsize every generation by the factor 1.08 to reach 140 individuals after 35 generations (years)
+	if (newSize >= K_p1) 
+	{
+		newSize = K_p1; //never go above 140 individuals (K_p1)
+	}	
+	p1.setSubpopulationSize(newSize); //set population size to the "new size"
+	//cat("Population size =" + size(p1.individuals) +  "\n");
+
+}
+
+100036 early() {
+	p1.setSubpopulationSize(8); //randomly set the population size to 8 - this will be the reintroduced population
+	}
+	
+100037 early() {
+	females = p1.individuals[p1.individuals.sex == "F"]; //get all females
+	males = p1.individuals[p1.individuals.sex == "M"]; // get all males
+	
+	//now print out the relatedness values between all females and males
+	for (fem in females){
+		relVals = fem.relatedness(males); //For all femles, compute the relatedness to all males and print the values
+		cat("female id: " + fem.index + " + " + males.index + " with relatedness: " + relVals + "\n" );
+	}
+	
+	//Calculate the relatedness over the whole population
+	inds = p1.individuals;
+   N = size(inds);
+	totalRel = 0.0;
+   count = 0;	
+	
+	for (i in seqLen(N - 1)) {
+        for (j in seq(i + 1, N - 1)) {
+            totalRel = totalRel + inds[i].relatedness(inds[j]); //sum up the relatedness over the whole population -> for every pair, the relatedness value is added and after divided by the number of pairs (count)
+            count = count + 1;
+        }
+    }
+    meanRel_start = (count > 0) ? (totalRel / count) else 0.0; //If the count is greater than 0, set meanRel to (totalRel/count), otherwise put it to 0
+	//cat("Mean Relatedness (start) = " + meanRel_start 	+ "\n");
+	
+	//calculate the heterozygosity and prnit it
+	heterozygosity_start = calcHeterozygosity(p1.genomes);
+	//cat("Mean heterozygosity (start) = " + heterozygosity_start + "\n");
+	
+	//write a file with Relatedness and heterozygosity at the beginning
+	writeFile("/storage/scratch/users/eo20t062/1e-6/model2/output/model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + meanRel_start + "\t" + heterozygosity_start +  "\n", append=T);	
+	
+}
+
+//Then i want to see how this "reintroduced" population behaves over time (1000 generations)
+//Since in the real population, sihek tend to mate with their relatives, i use the same mateChoice command as before, but selecting for high relatedness 
+100037:100138 mateChoice() {
+	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
+	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
+     	
+	// Randomly shuffle individuals to prevent bias - this line creates a new list where every male gets picked only once
+	shuffledInds = sample(males, size(males), replace = F);
+	//Take first individual from that list as mate
+	bestMate = shuffledInds[0];
+
+	return bestMate;
+}
+
+100037:100138 early() {
+	newSize = asInteger(p1.individualCount * 1.125); //increas popsize every generation by the factor 1.08  (with 1.08 there is no change in pop size --> Take larger exp growth rate and maybe set a carrying capacity!!!)
+	
+if (newSize >= K_p2) 
+	{
+		newSize = K_p2; //never go above 140 individuals (K_p1)
+	}		
+	
+	p1.setSubpopulationSize(newSize); //set population size to the "new size"
+	//cat("Population size =" + size(p1.individuals) +  "\n");
+
+
+}
+
+100139 early(){
+
+	//cat("Population size =" + size(p1.individuals) +  "\n");
+
+//Calculate the relatedness over the whole population
+	inds = p1.individuals;
+   N = size(inds);
+	totalRel = 0.0;
+   count = 0;	
+	
+	for (i in seqLen(N - 1)) {
+        for (j in seq(i + 1, N - 1)) {
+            totalRel = totalRel + inds[i].relatedness(inds[j]); //sum up the relatedness over the whole population -> for every pair, the relatedness value is added and after divided by the number of pairs (count)
+            count = count + 1;
+        }
+    }
+    meanRel_end = (count > 0) ? (totalRel / count) else 0.0; //If the count is greater than 0, set meanRel to (totalRel/count), otherwise put it to 0
+	//cat("Mean Relatedness (end) = " + meanRel_end 	+ "\n");
+
+
+//calculate the heterozygosity and print it
+	heterozygosity_end = calcHeterozygosity(p1.genomes);
+	//cat("Mean heterozygosity (end) = " + heterozygosity_end + "\n");
+
+//add relatedness and heterozygosity values from the end population to the file
+writeFile("/storage/scratch/users/eo20t062/1e-6/model2/output/model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t"  + meanRel_end + "\t" + heterozygosity_end + "\n", append=T);
+
+}

@@ -8,9 +8,14 @@ Now i have generated my data and want to analyze them. First I have to order the
 
 ```{r}
 
-#Set the working directory - i connect it directly with the output file on the server. 
-setwd("/tmp/server_data_model1")
+#Set the working directory - I connect it directly with the output file on the server. 
+#setwd("/tmp/server_data_model1")
 
+#Now for model 1 but with recombination rate of 1e-6
+#setwd("/tmp/server_data_1e-6_model1")
+
+#And again for another recombination rate: 1e-8
+setwd("/tmp/server_data_1e-8_model1")
 
 rm(list=ls(all=TRUE)) #clear R environment
 
@@ -152,7 +157,7 @@ matpoints( x_values, results_df_r, pch = 16, cex = 0.4, col = adjustcolor("tan1"
 # adding Mean relatedness lines to the plot
 lines( x_values, mean_nrnr, col = "#54BFB7FF", lwd = 2.5)
 lines( x_values, mean_nrr, col = "#894B33FF", lwd = 2.5)
-lines( x_values, mean_r, col = "tan1", lwd = 2.5)
+lines( x_values, mean_r, col = "tan1", lwd = 2)
 
 #create a legend for my plot
 legend("topright", legend=c("non-random non-related", "non-random related", "random"), col=c("#54BFB7FF", "#894B33FF", "tan1"), lty=1, cex = 0.7)
@@ -199,7 +204,10 @@ legend("topright",
 And now a plot showing the median of the different simulations:
 
 ```{r}
-#––– Compute median & quartiles if not already done –––#
+
+#Compute median & quartiles (25 and 75 %)
+#the 1 means i want to apply the functions over the rows of my table and ignoring NA values (na.rm = TRUE)
+
 med_nrnr <- apply(results_df_nrnr, 1, median, na.rm = TRUE)
 p25_nrnr <- apply(results_df_nrnr, 1, function(x) quantile(x, 0.25, na.rm = TRUE))
 p75_nrnr <- apply(results_df_nrnr, 1, function(x) quantile(x, 0.75, na.rm = TRUE))
@@ -213,33 +221,33 @@ p25_r    <- apply(results_df_r,    1, function(x) quantile(x, 0.25, na.rm = TRUE
 p75_r    <- apply(results_df_r,    1, function(x) quantile(x, 0.75, na.rm = TRUE))
 
 
-#––– New empty plot window –––#
-# dev.new()  # uncomment if you want a separate graphics window
+#Make a plot with the median and the 25/75% as dashed lines
+
 plot(x_values, med_nrnr, type = "n",
      xlab = "Generation", ylab = "Heterozygosity",
      ylim = c(0, 0.004),
      main = "Heterozygosity over Generations\n(median & 25/75%)")
 
 
-#––– Draw median (solid) and quartiles (dashed) –––#
+#Draw median (solid line) and quartiles (dashed lines)
 # Model: non-random non-related
-lines(x_values, med_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1)
+lines(x_values, med_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1) #lwd is line width, lty is line type
 lines(x_values, p25_nrnr, col = "#54BFB7FF", lwd = 1.5, lty = 3)
 lines(x_values, p75_nrnr, col = "#54BFB7FF", lwd = 1.5, lty = 3)
 
 # Model: non-random related
-lines(x_values, med_nrr,  col = "#894B33FF", lwd = 2.5, lty = 1)
-lines(x_values, p25_nrr,  col = "#894B33FF", lwd = 1.5, lty = 3)
-lines(x_values, p75_nrr,  col = "#894B33FF", lwd = 1.5, lty = 3)
+lines(x_values, med_nrr, col = "#894B33FF", lwd = 2.5, lty = 1)
+lines(x_values, p25_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
+lines(x_values, p75_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
 
 # Model: random
-lines(x_values, med_r,    col = "tan1",       lwd = 2.5, lty = 1)
-lines(x_values, p25_r,    col = "tan1",       lwd = 1.5, lty = 3)
-lines(x_values, p75_r,    col = "tan1",       lwd = 1.5, lty = 3)
+lines(x_values, med_r, col = "tan1", lwd = 2.5, lty = 1)
+lines(x_values, p25_r, col = "tan1", lwd = 1.5, lty = 3)
+lines(x_values, p75_r, col = "tan1", lwd = 1.5, lty = 3)
 
 
-#––– Legend –––#
-legend("topright",
+#Add the Legend
+legend("topright", #where
        legend = c("nrnr median", "nrnr 25/75%",
                   "nrr median",  "nrr 25/75%",
                   "r median",    "r 25/75%"),
@@ -248,6 +256,6 @@ legend("topright",
                   "tan1",       "tan1"),
        lty    = c(1, 2, 1, 2, 1, 2),
        lwd    = c(2.5, 1.5, 2.5, 1.5, 2.5, 1.5),
-       cex    = 0.7)
+       cex    = 0.7) #size
 ```
 

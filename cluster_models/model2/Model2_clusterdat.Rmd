@@ -9,6 +9,7 @@ The working directory is set to a folder on the server, where i saved my outputs
 ```{r}
 rm(list=ls(all=TRUE)) #clear R environment
 
+#All of the followind were done with recombination rate of 1e-7
 #This one is for 8-500 ind, mating for 100 gen
 #setwd("/tmp/server_data")
 
@@ -22,8 +23,13 @@ rm(list=ls(all=TRUE)) #clear R environment
 #setwd("/tmp/server_data_model2_62_100")
 
 #This one is for 8-62 ind, mating for 100 Gen RANDOM
-setwd("/tmp/server_data_model2_62_100_r")
+#setwd("/tmp/server_data_model2_62_100_r")
 
+#This one is for a recombination rate of 1e-6 - 8-62 ind, mating for 100 Gen RANDOM
+#setwd("/tmp/server_data_1e-6_model2")
+
+#This one is for a recombination rate of 1e-8 - 8-62 ind, mating for 100 Gen RANDOM
+setwd("/tmp/server_data_1e-8_model2")
 
 list.files()
 # find all the SLiM output files
