@@ -147,4 +147,64 @@ legend("bottom", inset = c(0, -0.6), horiz = FALSE,
 
 ```
 
+And again the same graphs but without the points for better visualization...
+
+```{r}
+
+
+par(mfrow = c(1, 2)) #To have 2 plots shown at once
+par(mfrow = c(1, 2), oma = c(2, 0, 1, 0))  # oma = outer margin area (bottom, left, top, right), leaves space for a title and some space at the bottom to add a legend outside of the plots. 
+
+par(mgp = c(1.8, 0.7, 0)) #This is to decrease the distance of the axis labels to the axis. 
+
+par(cex.lab = 0.8, cex.axis = 0.7, cex.main = 1) #this helps me rescaling the size of the labels
+
+# Combine both matrices into one big matrix to find global max and min
+max_rel <- max(rel_matrix_nrnr, rel_matrix_nrr, rel_matrix_r)
+min_rel <- min(rel_matrix_nrnr, rel_matrix_nrr, rel_matrix_r)
+
+x_vals <- 1:100
+
+# Model nrnr: light blue points
+#Here i dont have to transpose the data, since each column is a separate data series
+matplot(x_vals, rel_mean_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1, type = "n",
+        xlab = "Generation", ylab = "Relatedness",
+        ylim = c(min_rel, max_rel))  
+
+
+
+# === adding Mean relatedness lines to the plot ===
+lines(x_vals, rel_mean_nrnr, col = "#54BFB7FF", lwd = 2.5)
+lines(x_vals, rel_mean_nrr, col = "#894B33FF", lwd = 2)
+lines(x_vals, rel_mean_r, col = "tan1", lwd = 2)
+
+
+#And now the exactly same but for the heterozygosity values
+
+# Combine both matrices into one big matrix to find global max and min
+max_het <- max(het_matrix_nrnr, het_matrix_nrr, het_matrix_r)
+min_het <- min(het_matrix_nrnr, het_matrix_nrr, het_matrix_r)
+
+# Model nrnr: light blue points
+matplot(x_vals, het_mean_nrnr, col = "#54BFB7FF", lwd = 2, lty = 1, type = "n",
+        xlab = "Generation", ylab = "Heterozygosity", 
+        ylim = c(min_het, max_het))  
+
+
+# === adding Mean relatedness lines to the plot ===
+lines(x_vals, het_mean_nrnr, col = "#54BFB7FF", lwd = 2)
+lines(x_vals, het_mean_nrr, col = "#894B33FF", lwd = 2)
+lines(x_vals, het_mean_r, col = "tan1", lwd = 2)
+
+mtext("Relatedness and Heterozygosity Over Time", side = 3, line = -2, outer = TRUE, cex = 1.2) #creates a shared title
+
+par(xpd = NA) #Allows drawing outside of the plot - this is for the legend
+legend("bottom", inset = c(0, -0.6), horiz = FALSE,
+       legend = c("not-random not-related", "not-random related", "random"),
+       col = c("#54BFB7FF", "#894B33FF", "tan1"),
+       lwd = 2, bty = "n", cex = 0.6)
+#inset: Pushes it down below the plot
+
+```
+
 

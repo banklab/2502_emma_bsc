@@ -29,7 +29,10 @@ rm(list=ls(all=TRUE)) #clear R environment
 #setwd("/tmp/server_data_1e-6_model2")
 
 #This one is for a recombination rate of 1e-8 - 8-62 ind, mating for 100 Gen RANDOM
-setwd("/tmp/server_data_1e-8_model2")
+#setwd("/tmp/server_data_1e-8_model2")
+
+#This one is for a recombination rate of 1e-9 - 8-62 ind, mating for 100 Gen RANDOM
+setwd("/tmp/server_data_1e-9_model2")
 
 list.files()
 # find all the SLiM output files
