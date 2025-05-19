@@ -9,10 +9,10 @@ Now i have generated my data and want to analyze them. First I have to order the
 ```{r}
 
 #Set the working directory - I connect it directly with the output file on the server. 
-setwd("/tmp/server_data_model1")
+#setwd("/tmp/server_data_model1")
 
 #Now for model 1 but with recombination rate of 1e-6
-#setwd("/tmp/server_data_1e-6_model1")
+setwd("/tmp/server_data_1e-6_model1")
 
 #And again for another recombination rate: 1e-8
 #setwd("/tmp/server_data_1e-8_model1")
@@ -171,7 +171,7 @@ legend("topright", legend=c("non-random non-related", "non-random related", "ran
 
 
 
-Nd now another plot which shows only the first 100 generations
+And now another plot which shows only the first 100 generations
 ```{r}
 #––– Plot only the first 100 generations –––#
 
@@ -231,7 +231,7 @@ x_values <- seq(2, 1000, by = 5)
 plot(x_values, med_nrnr, type = "n",
      xlab = "Generation", ylab = "Heterozygosity",
      ylim = c(0, 0.005),
-     main = "Heterozygosity over Generations\n(median & 25/75%)")
+     main = "Heterozygosity over Generations (1e-6)\n(median & 25/75%)")
 
 
 #Draw median (solid line) and quartiles (dashed lines)
@@ -283,7 +283,7 @@ x_values <- seq(2, 1000, by = 5)
 #change here the main if looking at another recombination rate
 matplot( x_values, mean_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1, type = "n",
         xlab = "Generation", ylab = "Heterozygosity", #name the axis
-        ylim = c(0,0.005), main = "Heterozygosity over Generations (1e-7)")  #define the y axis and give the plot a title 
+        ylim = c(0,0.005), main = "Heterozygosity over Generations (1e-6)")  #define the y axis and give the plot a title 
 
 
 # adding Mean relatedness lines to the plot

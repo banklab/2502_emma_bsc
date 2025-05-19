@@ -176,7 +176,7 @@ matplot(x_vals, rel_mean_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1, type = "n"
 # === adding Mean relatedness lines to the plot ===
 lines(x_vals, rel_mean_nrnr, col = "#54BFB7FF", lwd = 2.5)
 lines(x_vals, rel_mean_nrr, col = "#894B33FF", lwd = 2)
-lines(x_vals, rel_mean_r, col = "tan1", lwd = 2)
+lines(x_vals, rel_mean_r, col = "tan1", lwd = 2, lty = 4)
 
 
 #And now the exactly same but for the heterozygosity values
@@ -194,7 +194,7 @@ matplot(x_vals, het_mean_nrnr, col = "#54BFB7FF", lwd = 2, lty = 1, type = "n",
 # === adding Mean relatedness lines to the plot ===
 lines(x_vals, het_mean_nrnr, col = "#54BFB7FF", lwd = 2)
 lines(x_vals, het_mean_nrr, col = "#894B33FF", lwd = 2)
-lines(x_vals, het_mean_r, col = "tan1", lwd = 2)
+lines(x_vals, het_mean_r, col = "tan1", lwd = 2, lty = 4)
 
 mtext("Relatedness and Heterozygosity Over Time", side = 3, line = -2, outer = TRUE, cex = 1.2) #creates a shared title
 
@@ -207,4 +207,117 @@ legend("bottom", inset = c(0, -0.6), horiz = FALSE,
 
 ```
 
+Maybe also one where one can see median and 25/75%
+
+```{r}
+
+par(mfrow = c(1, 2)) #To have 2 plots shown at once
+par(mfrow = c(1, 2), oma = c(2, 0, 1, 0))  # oma = outer margin area (bottom, left, top, right), leaves space for a title and some space at the bottom to add a legend outside of the plots. 
+
+par(mgp = c(1.8, 0.7, 0)) #This is to decrease the distance of the axis labels to the axis. 
+
+par(cex.lab = 0.8, cex.axis = 0.7, cex.main = 1) #this helps me rescaling the size of the labels
+
+#Compute median & quartiles (25 and 75 %)
+#the 1 means i want to apply the functions over the rows of my table and ignoring NA values (na.rm = TRUE)
+#first for the heterozygosity values
+het_med_nrnr <- apply(het_matrix_nrnr, 1, median, na.rm = TRUE)
+het_p25_nrnr <- apply(het_matrix_nrnr, 1, function(x) quantile(x, 0.25, na.rm = TRUE))
+het_p75_nrnr <- apply(het_matrix_nrnr, 1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+het_med_nrr  <- apply(het_matrix_nrr,  1, median, na.rm = TRUE)
+het_p25_nrr  <- apply(het_matrix_nrr,  1, function(x) quantile(x, 0.25, na.rm = TRUE))
+het_p75_nrr  <- apply(het_matrix_nrr,  1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+het_med_r    <- apply(het_matrix_r,    1, median, na.rm = TRUE)
+het_p25_r    <- apply(het_matrix_r,    1, function(x) quantile(x, 0.25, na.rm = TRUE))
+het_p75_r    <- apply(het_matrix_r,    1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+#And now for relatedness values
+rel_med_nrnr <- apply(rel_matrix_nrnr, 1, median, na.rm = TRUE)
+rel_p25_nrnr <- apply(rel_matrix_nrnr, 1, function(x) quantile(x, 0.25, na.rm = TRUE))
+rel_p75_nrnr <- apply(rel_matrix_nrnr, 1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+rel_med_nrr  <- apply(rel_matrix_nrr,  1, median, na.rm = TRUE)
+rel_p25_nrr  <- apply(rel_matrix_nrr,  1, function(x) quantile(x, 0.25, na.rm = TRUE))
+rel_p75_nrr  <- apply(rel_matrix_nrr,  1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+rel_med_r    <- apply(rel_matrix_r,    1, median, na.rm = TRUE)
+rel_p25_r    <- apply(rel_matrix_r,    1, function(x) quantile(x, 0.25, na.rm = TRUE))
+rel_p75_r    <- apply(rel_matrix_r,    1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+# Create a vector for the x-values (generations) - this will be used for the x axis of the plot. 
+x_vals <- 1:100
+
+
+#For rel values
+#define max and min values
+max_rel <- max(rel_matrix_nrnr, rel_matrix_nrr, rel_matrix_r)
+min_rel <- min(rel_matrix_nrnr, rel_matrix_nrr, rel_matrix_r)
+
+plot(x_vals, rel_med_nrnr, type = "n",
+     xlab = "Generation", ylab = "Relatedness",
+     ylim = c(min_rel, max_rel),
+     main = "Heterozygosity over Generations \n(median & 25/75%)")
+
+#Draw median (solid line) and quartiles (dashed lines)
+# Model: non-random non-related
+lines(x_vals, rel_med_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1) #lwd is line width, lty is line type
+lines(x_vals, rel_p25_nrnr, col = "#54BFB7FF", lwd = 1.5, lty = 3)
+lines(x_vals, rel_p75_nrnr, col = "#54BFB7FF", lwd = 1.5, lty = 3)
+
+# Model: non-random related
+lines(x_vals, rel_med_nrr, col = "#894B33FF", lwd = 2.5, lty = 1)
+lines(x_vals, rel_p25_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
+lines(x_vals, rel_p75_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
+
+# Model: random
+lines(x_vals, rel_med_r, col = "tan1", lwd = 2.5, lty = 1)
+lines(x_vals, rel_p25_r, col = "tan1", lwd = 1.5, lty = 3)
+lines(x_vals, rel_p75_r, col = "tan1", lwd = 1.5, lty = 3)
+
+#define max and min values
+max_het <- max(het_matrix_nrnr, het_matrix_nrr, het_matrix_r)
+min_het <- min(het_matrix_nrnr, het_matrix_nrr, het_matrix_r)
+
+#Make a plot with the median and the 25/75% as dashed lines
+
+plot(x_vals, het_med_nrnr, type = "n",
+     xlab = "Generation", ylab = "Heterozygosity",
+     ylim = c(min_het, max_het),
+     main = "Heterozygosity over Generations \n(median & 25/75%)")
+
+
+#For het values
+# Model: non-random non-related
+lines(x_vals, het_med_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1) #lwd is line width, lty is line type
+lines(x_vals, het_p25_nrnr, col = "#54BFB7FF", lwd = 1.5, lty = 3)
+lines(x_vals, het_p75_nrnr, col = "#54BFB7FF", lwd = 1.5, lty = 3)
+
+# Model: non-random related
+lines(x_vals, het_med_nrr, col = "#894B33FF", lwd = 2.5, lty = 1)
+lines(x_vals, het_p25_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
+lines(x_vals, het_p75_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
+
+# Model: random
+lines(x_vals, het_med_r, col = "tan1", lwd = 2.5, lty = 1)
+lines(x_vals, het_p25_r, col = "tan1", lwd = 1.5, lty = 3)
+lines(x_vals, het_p75_r, col = "tan1", lwd = 1.5, lty = 3)
+
+
+
+#Add the legend
+par(xpd = NA) #Allows drawing outside of the plot - this is for the legend
+legend("bottom", inset = c(0, -0.6), horiz = FALSE, ncol     = 3, 
+  legend = c("nrnr median", "nrnr 25/75%", "nrr median", "nrr 25/75%", "r median","r 25/75%"),
+       col    = c("#54BFB7FF", "#54BFB7FF",
+                  "#894B33FF", "#894B33FF",
+                  "tan1",       "tan1"),
+       lty    = c(1, 2, 1, 2, 1, 2),
+       lwd    = c(2.5, 1.5, 2.5, 1.5, 2.5, 1.5),
+      bty = "n", cex = 0.6)
+#inset: Pushes it down below the plot
+
+
+```
 

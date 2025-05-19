@@ -34,6 +34,8 @@ now i want to analyze the data and make one single plot.
 
 ```{r}
 
+rm(list=ls(all=TRUE)) #clear R environment
+
 #if the model was run on the cluster - use this command
 setwd("/tmp/server_data_model2.1")
 
@@ -139,7 +141,7 @@ matplot( x_values, t(heterozygosity_only), # Transpose to align data correctly -
         ylim = c(0,0.004), main = "Heterozygosity over Generations")  #define the y axis and give the plot a title 
       
 
-lines( x_values, mean_values, col = "#54BFB7FF", lwd = 2.5)
+#lines( x_values, mean_values, col = "#54BFB7FF", lwd = 2.5)
 
 #Compute median & quartiles (25 and 75 %)
 #the 1 means i want to apply the functions over the rows of my table and ignoring NA values (na.rm = TRUE)
@@ -152,11 +154,22 @@ lines(x_values, med, col = "tan1", lwd = 2.5, lty = 1)
 lines(x_values, p25, col = "#894B33FF", lwd = 2, lty = 3)
 lines(x_values, p75, col = "#894B33FF", lwd = 2, lty = 3)
 
-legend("topright", legend=c("mean", "median", "25% & 75% quartile"), 
-       col=c("#54BFB7FF", "tan1", "#894B33FF"), 
-       lty = c(1, 1, 3), 
-       lwd = c(2.5, 2.5, 2), 
-       cex = 0.6)
+#Add a line to show the bottleneck at ggeneration 35
+abline(v = 35,        # x = 36
+       lty = 3,       # dashed line 
+       col = "red",   #line color
+       lwd = 1)       # line width
+
+
+legend("topright",
+       legend = c("all data", "median", "25% & 75% quartile"),
+       col    = c("#54BFB7FF",    "tan1",  "#894B33FF"),
+       pch    = c(16,            NA,       NA),    # point symbol for first, none for others
+       lty    = c(NA,             1,        3),    # no line for first, solid and dashed for rest
+       lwd    = c(NA,            2.5,       2),    # no line‐width for first
+       pt.cex = c(0.5,           NA,       NA),    # enlarge the point
+       cex    = 0.6)
+
 
 ```
 
