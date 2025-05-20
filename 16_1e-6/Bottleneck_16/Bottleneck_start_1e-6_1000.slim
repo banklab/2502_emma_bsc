@@ -30,11 +30,11 @@ initialize() {
 
 
 100000 early() {  
-		p1.setSubpopulationSize(1000);
+		p1.setSubpopulationSize(1000); //set population size to 1000
 }
 
 100001 late() {
-		sim.treeSeqOutput("/Users/benutzerin/Documents/GitHub/2502_emma_bsc/16_1e-6/1000_1e-6_output.trees");
+		sim.treeSeqOutput("1000_1e-6_output.trees"); //save these individuals in a .tree file
 		sim.simulationFinished();
 }
 

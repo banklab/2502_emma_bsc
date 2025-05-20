@@ -1,4 +1,4 @@
-//This is my second model. With this model I first want to recreate the history of the sihek: After the bottleneck has sets the equilibrium population to 16 individuals, they mate based on low relatedness for 35 ?? years. This was done in different breeding facilities, increasing the population size to 140 individuals. After this, I want to simulate different reintroduction strategies. 8??? Individuals are picked from the captive population to be introduced to the wild. There they will mate at random. 
+//This is my second model. With this model I first want to recreate the history of the sihek: After the bottleneck has set the equilibrium population to 16 individuals, they mate based on low relatedness for 35 years. This was done in different breeding facilities, increasing the population size to 140 individuals. After this, I want to simulate different reintroduction strategies. 8 Individuals are picked from the captive population to be introduced to the wild. There they will mate at random. 
 
 //First I initialize the model and set some parameters
 initialize() {
@@ -11,7 +11,7 @@ initialize() {
 	initializeRecombinationRate(1e-6); // define the recombination rate
 	initializeSex("A"); //creates males and females in the population
 
-    initializeTreeSeq(); //this command enables me to read in the safed (output from earlier simulation) population
+    initializeTreeSeq(); //this command enables me to read in the saved (output from earlier simulation) population
     
     defineConstant("K_p1", 140); //carrying capacity for p1
     defineConstant("K_p2", 62); // carrying capacity for p2 - the reintroduced population
@@ -28,7 +28,7 @@ initialize() {
 
 }
 
-//For the first 35 generations i have a mate Choice, selecting nates based on lowest relatedness -> captive breeding
+//For the first 35 generations i have a mate Choice, selecting mates based on lowest relatedness -> captive breeding
 100001:100035 mateChoice(){
 	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
 	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
@@ -95,12 +95,12 @@ initialize() {
 	//cat("Mean heterozygosity (start) = " + heterozygosity_start + "\n");
 	
 	//write a file with Relatedness and heterozygosity at the beginning
-	writeFile("/storage/scratch/users/eo20t062/1e-6/model2/output/model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + meanRel_start + "\t" + heterozygosity_start +  "\n", append=T);	
+	writeFile("/storage/homefs/eo20t062/all_stuff/1e-6/model2/output/model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + meanRel_start + "\t" + heterozygosity_start +  "\n", append=T);	
 	
 }
 
-//Then i want to see how this "reintroduced" population behaves over time (1000 generations)
-//Since in the real population, sihek tend to mate with their relatives, i use the same mateChoice command as before, but selecting for high relatedness 
+//Then i want to see how this "reintroduced" population behaves over time (100 generations)
+//Here random mating is implemented, since in the wild there is no option to control the reproduction...
 100037:100138 mateChoice() {
 	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
 	males = subpop.individuals[subpop.individuals.sex == "M"]; // get all males
@@ -114,7 +114,7 @@ initialize() {
 }
 
 100037:100138 early() {
-	newSize = asInteger(p1.individualCount * 1.125); //increas popsize every generation by the factor 1.08  (with 1.08 there is no change in pop size --> Take larger exp growth rate and maybe set a carrying capacity!!!)
+	newSize = asInteger(p1.individualCount * 1.125); //increase popsize every generation by the factor 1.25, otherwise the population would
 	
 if (newSize >= K_p2) 
 	{
@@ -152,6 +152,6 @@ if (newSize >= K_p2)
 	//cat("Mean heterozygosity (end) = " + heterozygosity_end + "\n");
 
 //add relatedness and heterozygosity values from the end population to the file
-writeFile("/storage/scratch/users/eo20t062/1e-6/model2/output/model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t"  + meanRel_end + "\t" + heterozygosity_end + "\n", append=T);
+writeFile("/storage/homefs/eo20t062/all_stuff/1e-6/model2/output/model2_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t"  + meanRel_end + "\t" + heterozygosity_end + "\n", append=T);
 
 }

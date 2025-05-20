@@ -10,6 +10,6 @@
 for i in {1..1000}
 do
 	
-/storage/scratch/users/eo20t062/SLiM/build/slim -d repetition=$i /storage/scratch/users/eo20t062/1e-6/model2/cluster_model2_1e-6_62ind_100gen.slim
+/storage/homefs/eo20t062/all_stuff/SLiM/build/slim -d repetition=$i /storage/homefs/eo20t062/all_stuff/1e-6/model2/cluster_model2_1e-6_62ind_100gen.slim
 
 done

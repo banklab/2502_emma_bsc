@@ -30,11 +30,11 @@ initialize() {
 
 
 100000 early() {  
-		p1.setSubpopulationSize(16);
+		p1.setSubpopulationSize(16); //set population to 16 individuals
 }
 
 100001 late() {
-		sim.treeSeqOutput("16_1e-6_output.trees");
+		sim.treeSeqOutput("16_1e-6_output.trees"); //save these individuals in a .tree file
 		sim.simulationFinished();
 }
 

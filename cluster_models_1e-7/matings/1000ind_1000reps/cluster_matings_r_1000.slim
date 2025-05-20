@@ -1,0 +1,72 @@
+//In this model, I just want to check how many individuals get to mate in each generation when using my mateChoice() commands. 
+
+//First I have to initialize the simulation and define some parameters. 
+initialize() {
+	initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model (+ some other assumptions)
+	initializeSLiMOptions(keepPedigrees = T); // Track ancestry
+	initializeMutationRate(1e-7); //defining mutation rate
+	initializeMutationType("m1", 0.5, "f", 0.0); //define mutation type m1 which has dominance coefficient 0.5 and is neutral (fitness 0.0)
+	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
+	initializeGenomicElement(g1, 0, 99999); //g1 has a length of 10'000 bases
+	initializeRecombinationRate(1e-7); // specifies recombination rate 
+	
+    initializeTreeSeq(); //this command enables me to read in the saved (output from earlier simulation) population
+
+	initializeSex("A"); //creates males and females in the population
+	
+	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
+	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
+}
+	
+
+100001 early() {
+
+	//This command uploads the saved file from a previous simulation into this model and sets those individuals as my p1
+	sim.readFromPopulationFile("1000_1e-7_output.trees"); // p1 now exists, restored from file - those are my 1000 saved individuals
+	 cat("popsize" + size(p1)  + "\n");    
+
+}
+
+//With the mateChoice command i can specify a specific pattern for matings. This one is random mating (r).
+100001: 100100 mateChoice() {
+
+	females = subpop.individuals[subpop.individuals.sex == "F"]; // Get all females
+	males = subpop.individuals[subpop.individuals.sex == "M"]; // Get all males
+
+//the mateChoice() randomly picks a female of the population and then based on the mateChoice command pickes a male from the population as mate. 
+
+// Randomly shuffle individuals to prevent bias - this line creates a new list where every male gets picked only once
+	shuffledInds = sample(males, size(males), replace = F);
+		//Take first individual from that list as mate
+	bestMate = shuffledInds[0];
+		
+//i put the command below in comment to let the simulation run faster
+//cat(">>> Female " + individual.index + " chooses Male " + bestMate.index +  " with relatedness " + bestMate.relatedness(individual) + " at generation " + sim.cycle + "\n");		//print out all the matings in each generation
+		
+	writeFile("/storage/homefs/eo20t062/all_stuff/matings/outputs_1000/mateChoices_r_1000_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + individual.index + "\t" + bestMate.index + "\n", append=T); //Write a file with all the matings in each generation
+		//Everything infront of the mateChoices_... is the path to the folder on the server where i want to save the simulated data. 
+
+
+	return bestMate;
+	
+}
+
+100001: 100100 early() {
+//these calculations here are not really necessary, since I am only interested in the number of males and females which get to mate in each generation. 
+
+//First calculate the relatedness over the whole population
+	inds = p1.individuals; 
+   N = size(inds);
+	totalRel = 0.0;
+   count = 0;	
+	
+	for (i in seqLen(N - 1)) {
+        for (j in seq(i + 1, N - 1)) {
+            totalRel = totalRel + inds[i].relatedness(inds[j]); //sum up the relatedness over the whole population -> for every pair, the relatedness value is added and after divided by the number of pairs (count)
+            count = count + 1;
+        }
+    }
+    meanRel = (count > 0) ? (totalRel / count) else 0.0; //If the count is greater than 0, set meanRel to (totalRel/count), otherwise put it to 0
+    het = calcHeterozygosity(p1.genomes); //Calculate the genomewide heterozygosity over the whole population (all genomes of p1)
+
+}

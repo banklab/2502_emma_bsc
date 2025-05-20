@@ -14,11 +14,11 @@ initialize() {
     initializeTreeSeq(); //this command enables me to read in the safed (output from earlier simulation) population
 
 
-	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
+	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R - comment it if running the code only in SLiM, and not over a code block in R
 
 }
 
-//Add a matechoice callback selecting mates at random (r) - Implementing a mateChoice() command would not be necessary, but i do it for consistency because i want to compare the results with the other two models, where a mateChoice() command is implemented. 
+//Add a matechoice callback selecting mates at random (r) - Implementing a mateChoice() command would not be necessary, but i do it for consistency because I want to compare the results with the other two models, where a mateChoice() command is implemented. 
 
 mateChoice() {
 	females = subpop.individuals[subpop.individuals.sex == "F"]; //get all females
@@ -40,13 +40,15 @@ mateChoice() {
 	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
 	
 	log = community.createLogFile("sim_log_random_" + "reps_" + reps + simID  + ".csv", logInterval=5); //This creates my file - the name of the file contains the name of the model, the current repetition and the seed of the current simulation. The output is saved for every fifth generation (logInterval = 5)
+	//If running the file directly in SLiM and not via R - use this command instead
+	//log = community.createLogFile("sim_log_random_"  + simID  + ".csv", logInterval=5);
 	
 	log.addCycle(); //adds the generations to my file
 	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);"); //here i create a column "Heterozygosity" in my file to save the generated values of heterozygosity
 }
 
 100001:101000 early() {
-	newSize = asInteger(p1.individualCount * 1.08); //increas popsize every generation by the factor 1.08 with a carrying capacity of "newSize" (1000 individuals)
+	newSize = asInteger(p1.individualCount * 1.08); //increase popsize every generation by the factor 1.08 with a carrying capacity of "newSize" (1000 individuals)
 	if (newSize >= 1000) 
 	{
 			newSize = 1000;
@@ -61,6 +63,3 @@ mateChoice() {
 
 }
 
-
-
-//I now changed log interval and simulation time (before 2 and 100100) and put the cat commands in comments...

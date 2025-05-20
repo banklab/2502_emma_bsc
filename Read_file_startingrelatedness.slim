@@ -1,3 +1,6 @@
+//With this file, I want to read in the generated population from the bottleneck model, and look at their starting relatedness and their starting heterozygosity.
+//Change the working directory to the place where the .tree file is saved. 
+
 initialize() {
 
 	initializeSLiMOptions(keepPedigrees = T); //Ensables the program to keep track of the ancestry
@@ -9,11 +12,7 @@ initialize() {
 	initializeRecombinationRate(1e-7); // define the recombination rate
 	initializeSex("A"); //creates males and females in the population
 
-    initializeTreeSeq(); //this command enables me to read in the safed (output from earlier simulation) population
-    
-//    defineConstant("K_p1", 140); //carrying capacity for p1
-    
-// 	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
+    initializeTreeSeq(); //this command enables me to read in the saved (output from earlier simulation) population
     
     
 }
@@ -22,13 +21,10 @@ initialize() {
 	//sim.readFromPopulationFile("16_1e-7_output.trees");
 	//sim.readFromPopulationFile("16_1e-6_output.trees");
 	//sim.readFromPopulationFile("16_1e-8_output.trees");
-	sim.readFromPopulationFile("16_1e-9_output.trees");
+	sim.readFromPopulationFile("16_1e-9_output.trees"); //read in the saved population
 
 	// p1 now exists, restored from file
    catn("Restored population size: " + size(p1.individuals));
- 	//p1.setSubpopulationSize(1000);
-	// Randomly select 16 survivors
-	//catn("population size: " + size(p1.individuals));
 	heterozygosity = calcHeterozygosity(p1.genomes);
 	cat("Mean heterozygosity = " + heterozygosity + "\n");
 	

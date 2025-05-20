@@ -1,4 +1,5 @@
 //This is my first model. With this model I want to test if my mateChoice callbacks behave as I wish and also how different mateChoices will influence the heterosygosity of the whole population. 
+//This file is for a recombination rate of 1e-8
 
 //First I have to initialize the simulation and define some parameters. 
 initialize() {
@@ -11,7 +12,7 @@ initialize() {
 	initializeRecombinationRate(1e-8); // define the recombination rate
 	initializeSex("A"); //creates males and females in the population
 
-    initializeTreeSeq(); //this command enables me to read in the safed (output from earlier simulation) population
+    initializeTreeSeq(); //this command enables me to read in the saved (output from earlier simulation) population
 
 
 	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
@@ -39,14 +40,15 @@ mateChoice() {
    catn("Restored population size: " + size(p1.individuals)); //prints out the number of individuals I have...
 	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
 	
-	log = community.createLogFile("/storage/scratch/users/eo20t062/1e-8/model1/output/sim_log_random_" + "reps_" + reps + simID  + ".csv", logInterval=5); //This creates my file - the name of the file contains the name of the model, the current repetition and the seed of the current simulation. The output is saved for every fifth generation (logInterval = 5)
+	log = community.createLogFile("/storage/homefs/eo20t062/all_stuff/1e-8/model1/output/sim_log_random_" + "reps_" + reps + simID  + ".csv", logInterval=5); //This creates my file - the name of the file contains the name of the model, the current repetition and the seed of the current simulation. The output is saved for every fifth generation (logInterval = 5)
+	//Everything infront the sim_log_... is the path to where i want to save the output.
 	
 	log.addCycle(); //adds the generations to my file
 	log.addCustomColumn("Heterozygosity", "calcHeterozygosity(p1.genomes);"); //here i create a column "Heterozygosity" in my file to save the generated values of heterozygosity
 }
 
 100001:101000 early() {
-	newSize = asInteger(p1.individualCount * 1.08); //increas popsize every generation by the factor 1.08 with a carrying capacity of "newSize" (1000 individuals)
+	newSize = asInteger(p1.individualCount * 1.08); //increase popsize every generation by the factor 1.08 with a carrying capacity of "newSize" (1000 individuals)
 	if (newSize >= 1000) 
 	{
 			newSize = 1000;
