@@ -27,7 +27,7 @@ Assumptions of my models:
 --------------------------------------------------------------------------------------------------------------------
 I looked at four different recombination rates (1e-6, 1e-7, 1e-8 and 1e-9). 
 1e-7 is the default recombination rate and is used for most of my simulations.
-- the folders, described with capital letters are the ones which were run for 10-100 repetitions on the computer directly with a recombination rate of 1e-7.
-- the folder cluster_models contains the ones which were run on the cluster with 1000 repetitions for a recombination rate of 1e-7.
-- three folders (1e-6, 1e-8 and 1e-9) contain the models which were run on the cluster with a different recombination rate as comparison.
+- The folders, described with capital letters are the ones which were run for 10-100 repetitions on the computer directly with a recombination rate of 1e-7.
+- The folder cluster_models contains the ones which were run on the cluster with 1000 repetitions for a recombination rate of 1e-7.
+- Three folders (1e-6, 1e-8 and 1e-9) contain the models which were run on the cluster with a different recombination rate as comparison (1000 repetitions each).
 
