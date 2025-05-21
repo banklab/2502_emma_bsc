@@ -1,3 +1,5 @@
+//This model is based on model 1 (same code) but calculates the relatedness in the whole population as well as the heteroyzgosity in each generation (100 generations in total)
+
 initialize() {
 	initializeSLiMModelType("WF"); // means that population size can not change dynamically -> WF model
 	//turning on pedigree tracking, as relatedness
@@ -5,14 +7,15 @@ initialize() {
 	initializeMutationRate(1e-7); //defining mutation rate
 	initializeMutationType("m1", 0.5, "f", 0.0); //mutation type m1 has dominance coefficient 0.5 and is neutral (fitness 0.0)
 	initializeGenomicElementType("g1", m1, 1.0); //genomic element type g1 is initialized with mutation type m1 and base mutation rate
-	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases, maybe change -> second genomic element?
-	initializeRecombinationRate(1e-7); // specifies recombination rate --> Try different recombination rates...
+	initializeGenomicElement(g1, 0, 99999); //g1 has length 10'000 bases
+	initializeRecombinationRate(1e-7); // specifies recombination rate
 	
     initializeTreeSeq(); //this command enables me to read in the saved (output from earlier simulation) population
 
 	initializeSex("A"); //creates males and females in the population
 	
-	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R.
+	defineConstant("reps", repetition); //This helps me to run the model multiple times with a code block in R - put it into comments if running the code directly on SLiM
+	
 	defineConstant("simID", "_seed =" + getSeed()); // create a variable that contains the seed of the run, to make it repeatable... This will be visible in the output file!
 
 }
@@ -21,42 +24,31 @@ initialize() {
 mateChoice() {
 	females = subpop.individuals[subpop.individuals.sex == "F"]; // Get all females
 	males = subpop.individuals[subpop.individuals.sex == "M"]; // Get all males
-
-	if (individual.sex == "F" & size(males) > 0) {
 		
-		relatedness = males.relatedness(individual); // Compute relatedness to all males
+		relatedness = males.relatedness(individual); // Compute relatedness of all males to previously selected female (individual)
 		bestIndex = which(relatedness == min(relatedness)); // gives out all males which have lowest relatedness value for the specific female
 
 	// Randomly shuffle individuals (sample command) to prevent bias - this line creates a new list where every male with the lowest index gets picked only once
     	shuffledInds = sample(males[bestIndex], size(males[bestIndex]), replace = F);
     
+   //pick first male of that list as mate
 		bestMate = shuffledInds[0];
-		males = males[males != bestMate]; // Remove selected male from pool --> Test this maybe?
 		return bestMate;
-	}
 
-	return NULL;
 }
 
 
 100001 early() {
 
-	//This command uploads the saved file from a previous simulation into this model and sets those individuals as my p1
-	//sim.readFromPopulationFile("final_output.trees"); // p1 now exists, restored from file - those are my 16 saved individuals
+	//This command uploads the saved file from a previous simulation into this model and sets those individuals as my p1 -  choose if you want 16 or 1000 as starting population
+	//sim.readFromPopulationFile("16_1e-7_output.trees"); // p1 now exists, restored from file - those are my 16 saved individuals
 	sim.readFromPopulationFile("1000_1e-7_output.trees"); // p1 now exists, restored from file - those are my 1000 saved individuals
 
 }
 
 100001: 100100 early() {
 
-////Just uncomment this part to let pop size chage
-//	newSize = asInteger(p1.individualCount * 1.1); //increase popsize every generation by the factor 1.1 with a carrying capacity of "newSize"
-//	if (newSize >= 1000) 
-//	{
-//			newSize = 1000;
-//	}	
-//	p1.setSubpopulationSize(newSize);
-//	
+//Calculate the relatedness across the whole population
 	inds = p1.individuals;
    N = size(inds);
 	totalRel = 0.0;
@@ -71,6 +63,10 @@ mateChoice() {
     meanRel = (count > 0) ? (totalRel / count) else 0.0; //If the count is greater than 0, set meanRel to (totalRel/count), otherwise put it to 0
     het = calcHeterozygosity(p1.genomes); //Calculate the genomewide heterozygosity over the whole population (all genomes of p1)
 
-	//Now i want the meanRel and the het printed out in a file for every generation. In the name of the file there should be the model name (relatedness_heterozygosity_nrnr_), the current repetition (1-10) as well as the seed for the current simulation. 
+	//Now i want the meanRel and the het printed out in a file for every generation. In the name of the file there should be the model name (relatedness_heterozygosity_r_), the current repetition (1-10 or more) as well as the seed for the current simulation (simID). 
    writeFile("relatedness_heterozygosity_nrnr_" + "reps_" + reps + simID + ".txt", sim.cycle + "\t" + meanRel + "\t" + het + "\n", append=T);
+   
+   //If running the code diretcly on SLiM, use this insetad: 
+   // writeFile("relatedness_heterozygosity_nrnr_" + simID + ".txt", sim.cycle + "\t" + meanRel + "\t" + het + "\n", append=T);
+
 }
