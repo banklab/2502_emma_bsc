@@ -10,6 +10,7 @@ Purpose: This Repository is for the Bachelor Thesis of Emma Ochsner
 My biological Question is the following: 
 
 *Simulating different management strategies of an extinct-in-the-wild species - The sihek*
+
 How do different management strategies influence the small ex-situ population of the Sihek (Todiramphus cinnamominus)? 
 Is there an optimal strategy to manage these birds in captivity? 
 How should a reintroduction scenario look like?
