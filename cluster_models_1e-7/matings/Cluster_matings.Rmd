@@ -1,44 +1,48 @@
 ---
-title: "R Notebook"
+title: "Mating model"
+author: "Emma Ochsner"
 output: html_notebook
 ---
 
-This file is for analyzing the outputs of the Mating model, run on the server. 
 
+This file is for analyzing the outputs of the Mating model, run on the server. I want to check with this code, how many individuals get to mate per generation in the different mate choice scenarios (R and Nrnr)
+
+First step:
 Sort the 1000 files (nrnr) to analyze the data
 
 ```{r}
 
 rm(list=ls(all=TRUE)) #clear R environment
 
-#This command is setting the working directory
-#outputs of the mating model with 16 individuals
+# This command is setting the working directory - the data is only saved on the server and I have a folder on my computer which is mounted with the corresponding folder on the server. 
+# outputs of the mating model with 16 individuals
 #setwd("/tmp/server_data_matings")
-#outputs of the mating model with 16 individuals
+# outputs of the mating model with 16 individuals
 setwd("/tmp/server_data_matings_1000ind")
 
 library(dplyr)
 
-# Vector of file names (adjust as needed for your naming/paths)
+# Vector of file names - list all files which show this pattern
 files_nrnr <- list.files(pattern = "mateChoices_nrnr_")
 
-# For each file, read it in, compute df_counts, and return it
+# For each file, read it in, compute df_counts, and return it - lapply is a command which applies the following function on all the files, stored in the vector files_nrnr
 all_reps_nrnr <- lapply(files_nrnr, function(f) {
   
   # 1. Read the data
   df_nrnr <- read.table(f, header = FALSE)
-  colnames(df_nrnr) <- c("Generation", "FemaleIndex", "MaleIndex")
+  colnames(df_nrnr) <- c("Generation", "FemaleIndex", "MaleIndex") #create a table with these columns
   
   # 2. Summarize by generation
-  #take care - either make 8 or 500 here, depending if we have 16 or 1000 individuals!!
+  
+  #take care - either make 8 or 500 here, depending if we have 16 or 1000 individuals!!!!
+  
   df_counts_nrnr <- df_nrnr %>%
     group_by(Generation) %>%
     summarise(
-      distinctFemales_nrnr = n_distinct(FemaleIndex),
+      distinctFemales_nrnr = n_distinct(FemaleIndex), #get all the distinct indexes per generation
       distinctMales_nrnr   = n_distinct(MaleIndex),
-      missingFemales_nrnr  = 500 - n_distinct(FemaleIndex),
-      missingMales_nrnr    = 500 - n_distinct(MaleIndex),
-      #.groups = "drop"
+      missingFemales_nrnr  = 500 - n_distinct(FemaleIndex), 
+      missingMales_nrnr    = 500 - n_distinct(MaleIndex), #per generation we have 8 or 500 males/females - by substracting the number of distinct indexes (so all individuals which mated per generation) I get the number of individuals which did not mate in a given generation.
     )
   
   # Return the summarized table
@@ -72,7 +76,7 @@ setwd("/tmp/server_data_matings_1000ind")
 
 library(dplyr)
 
-# Vector of file names (adjust as needed for your naming/paths)
+# Vector of file names
 files_r <- list.files(pattern = "mateChoices_r_")
 
 # For each file, read it in, compute df_counts, and return it
@@ -83,7 +87,9 @@ all_reps_r <- lapply(files_r, function(f) {
   colnames(df_r) <- c("Generation", "FemaleIndex", "MaleIndex")
   
   # 2. Summarize by generation
-  #take care - either make 8 or 500 here, depending if we have 16 or 1000 individuals!!
+  
+  #take care - either make 8 or 500 here, depending if we have 16 or 1000 individuals!!!!!
+  
   df_counts_r <- df_r %>%
     group_by(Generation) %>%
     summarise(
@@ -91,7 +97,6 @@ all_reps_r <- lapply(files_r, function(f) {
       distinctMales_r   = n_distinct(MaleIndex),
       missingFemales_r  = 500 - n_distinct(FemaleIndex),
       missingMales_r    = 500 - n_distinct(MaleIndex),
-      #.groups = "drop"
     )
   
   # Return the summarized table
@@ -114,41 +119,46 @@ df_means_r <- df_all_r %>%
 ```
 
 
-
-
-And then make the plot
+And then make the plot of the sorted data
 
 ```{r}
 
-par(mfrow = c(1,2))
+par(mfrow = c(1,2)) #to have two plots in one window
 
+#First the plot with the Nrnr data
+#get the max and min values 
 max_nrnr <- max(df_means_nrnr$meanMissingFemales_nrnr, df_means_nrnr$meanMissingMales_nrnr)
 min_nrnr <- min(df_means_nrnr$meanMissingFemales_nrnr, df_means_nrnr$meanMissingMales_nrnr)
-  
-x_vals_nrnr <- 1:100
-y_vals_nrnr <- df_means_nrnr$meanMissingFemales_nrnr
 
+x_vals_nrnr <- 1:100 #this will be the x axis / x values
+y_vals_nrnr <- df_means_nrnr$meanMissingFemales_nrnr #y values - female data
+
+#make the plot
 matplot(
   x = x_vals_nrnr,
   y = y_vals_nrnr,
-  type = "l",           # "b" means points connected by lines
-  xlab = "Generation",
+  type = "l",           # "b" means points connected by lines, l just lines
+  xlab = "Generation", #Names of x and y axis
   ylab = "Number Missing", 
-  ylim = c(min_nrnr, max_nrnr),
-  #ylim = c(0, 3.5),
-  #ylim = c(60, 75),
+  #ylim = c(min_nrnr, max_nrnr),    #change the scale, depending on what data you are running
+  #ylim = c(0, 3.5), #corresponds to the values of 16 individuals
+  ylim = c(60, 75), #for 1000 individuals
   col = "#54BFB7FF", 
-  main = "Nrnr Mating")
+  main = "Nrnr Mating") #title of the graph
 
 
-
+#make another line for the male values
 lines(x_vals_nrnr, df_means_nrnr$meanMissingMales_nrnr, type = "l", col = "tan1")
 
+#add a legend
 legend("topright",legend = c("Females", "Males"),
-  lty = 1, col = c("#54BFB7FF", "tan1"), cex = 0.6)
+  lty = 1, col = c("#54BFB7FF", "tan1"), cex = 0.6) #cex makes it smaller
 
-#And the second plot
+#Now add an "A" to this plot
+text(x = par("usr")[1], y = par("usr")[4], labels = "A", font = 2, cex = 1.1, adj = c(-0.5, 1.5))  
+#par("usr") gives the plot coordinates (so top left corner of the graph - 1 & 4), then labels = ... gives the plot a label, and then make it bold and larger, and adj places the label correctly
 
+#And the second plot for the R data - exactly the same as for the Nrnr data
 max_r <- max(df_means_r$meanMissingFemales_r, df_means_r$meanMissingMales_r)
 min_r <- min(df_means_r$meanMissingFemales_r, df_means_r$meanMissingMales_r)
   
@@ -158,15 +168,14 @@ y_vals_r <- df_means_r$meanMissingFemales_r
 matplot(
   x = x_vals_r,
   y = y_vals_r,
-  type = "l",           # "b" means points connected by lines
+  type = "l",           
   xlab = "Generation",
   ylab = "Number Missing", 
-  ylim = c(min_r, max_r),
-  #ylim = c(0, 3.5),
-  #ylim = c(60, 75),
+  #ylim = c(min_r, max_r),        #change the scale, depending on what data you are running
+  #ylim = c(0, 3.5), #for 16 individuals
+  ylim = c(60, 75), #for 1000 individuals
   col = "#54BFB7FF", 
   main = "Random Mating")
-
 
 
 lines(x_vals_r, df_means_r$meanMissingMales_r, type = "l", col = "tan1")
@@ -174,9 +183,8 @@ lines(x_vals_r, df_means_r$meanMissingMales_r, type = "l", col = "tan1")
 legend("topright",legend = c("Females", "Males"),
   lty = 1, col = c("#54BFB7FF", "tan1"), cex = 0.6)
 
-
+text(x = par("usr")[1], y = par("usr")[4], labels = "B", font = 2, cex = 1.1, adj = c(-0.5, 1.5)) 
 
 
 
 ```
-

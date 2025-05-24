@@ -1,0 +1,880 @@
+---
+title: "Seeds"
+author: "Emma Ochsner"
+output: html_notebook
+---
+
+This Notebook is for getting all the seeds of all the data i did.
+With this, it is possible to generate the exact same data as I did with my simulations
+
+
+For the cluster models:
+
+First for the recombination rate 1e-7 (default rate and used in most of the simulations)
+
+Model 1 - Nrnr
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_model1") #set the working directory
+
+options(scipen = 999) #to have regular decimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_nonrandom_notrelated") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_model1_nrnr_cluster.csv", row.names = FALSE)
+
+```
+
+Model 1 - Nrr
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_model1")
+
+options(scipen = 999) #to have regular decimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_nonrandom_related") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_model1_nrr_cluster.csv", row.names = FALSE)
+
+
+```
+
+Model 1 - R
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_model1")
+
+options(scipen = 999) #to have regular decimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_random_") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_model1_r_cluster.csv", row.names = FALSE)
+
+
+```
+
+
+
+Matings - 16 individuals, Nrnr
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_matings")
+
+options(scipen = 999) #to have regular decimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "mateChoices_nrnr") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_matings_16_nrnr_cluster.csv", row.names = FALSE)
+
+```
+
+Matings - 16 individuals, R
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_matings")
+
+options(scipen = 999) #to have regular decimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "mateChoices_r") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_matings_16_r_cluster.csv", row.names = FALSE)
+
+```
+
+Matings - 1000 individuals, Nrnr
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_matings_1000ind")
+
+options(scipen = 999) #to have regular decimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "mateChoices_nrnr") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_matings_1000_nrnr_cluster.csv", row.names = FALSE)
+
+```
+
+
+Matings - 1000 individuals, R
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_matings_1000ind")
+
+options(scipen = 999) #to have regular decimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "mateChoices_r") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_matings_1000_r_cluster.csv", row.names = FALSE)
+
+```
+
+
+
+Rel - het model, 16 individuals - Nrnr
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_rel_het_16")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "relatedness_heterozygosity_nrnr") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_rel_het_16_nrnr_cluster.csv", row.names = FALSE)
+
+
+
+```
+
+Rel - het model, 16 individuals - Nrr
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_rel_het_16")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "relatedness_heterozygosity_nrr") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_rel_het_16_nrr_cluster.csv", row.names = FALSE)
+
+
+
+```
+
+Rel - het model, 16 individuals - R
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_rel_het_16")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "relatedness_heterozygosity_r") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_rel_het_16_r_cluster.csv", row.names = FALSE)
+
+
+
+```
+
+Rel - het model, 1000 individuals - Nrnr
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_rel_het_1000")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "relatedness_heterozygosity_nrnr") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_rel_het_1000_nrnr_cluster.csv", row.names = FALSE)
+
+
+
+```
+
+
+
+Rel - het model, 1000 individuals - Nrr
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_rel_het_1000")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "relatedness_heterozygosity_nrr") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_rel_het_1000_nrr_cluster.csv", row.names = FALSE)
+
+
+
+```
+
+Rel - het model, 1000 individuals - R
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_rel_het_1000")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "relatedness_heterozygosity_r") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_rel_het_1000_r_cluster.csv", row.names = FALSE)
+
+
+```
+
+
+
+Model 2
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_model2_62_100_r")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "model2_") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_model2.csv", row.names = FALSE)
+
+
+```
+
+Model 2.1
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_model2.1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "model2.1_reps_") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_model2.1_cluster.csv", row.names = FALSE)
+
+
+
+```
+
+
+
+
+Recombination rate of 1e-6
+
+Model 1 - Nrnr (1e-6)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-6_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_nonrandom_notrelated") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-6_model1_nrnr.csv", row.names = FALSE)
+
+
+```
+
+Model 1 - Nrr (1e-6)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-6_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_nonrandom_related") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-6_model1_nrr.csv", row.names = FALSE)
+
+
+```
+
+Model 1 - R (1e-6)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-6_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_random") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-6_model1_r.csv", row.names = FALSE)
+
+
+```
+
+
+Model 2 (1e-6)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-6_model2")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "model2_") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-6_model2.csv", row.names = FALSE)
+
+
+```
+
+Recombination rate of 1e-8
+
+Model 1 - Nrnr (1e-8)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-8_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_nonrandom_notrelated") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-8_model1_nrnr.csv", row.names = FALSE)
+
+
+```
+
+
+Model 1 - Nrr (1e-8)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-8_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_nonrandom_related") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-8_model1_nrr.csv", row.names = FALSE)
+
+
+```
+
+
+Model 1 - R (1e-8)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-8_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_random_") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-8_model1_r.csv", row.names = FALSE)
+
+
+```
+
+
+
+Model 2 (1e-8)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-8_model2")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "model2_") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-8_model2.csv", row.names = FALSE)
+
+```
+
+
+Recombination rate of 1e-9
+
+Model 1 - Nrnr (1e-9)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-9_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_nonrandom_notrelated") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-9_model1_nrnr.csv", row.names = FALSE)
+
+
+```
+
+
+Model 1 - Nrr (1e-9)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-9_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_nonrandom_related") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-9_model1_nrr.csv", row.names = FALSE)
+
+
+```
+
+Model 1 - R (1e-9)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-9_model1")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "sim_log_random") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-9_model1_r.csv", row.names = FALSE)
+
+
+```
+
+
+
+Model 2 (1e-9)
+```{r}
+rm(list=ls(all=TRUE)) #clear R environment
+
+setwd("/tmp/server_data_1e-9_model2")
+
+options(scipen = 999) #to have regular ddecimal formatting of the numbers
+
+#list all files with this specific pattern
+files <- list.files(pattern = "model2_") 
+
+#add rows for each file, only 1 columns which contains the seed
+results_df <- matrix(NA ,nrow = length(files), ncol = (1))
+colnames(results_df) <- "seeds"
+
+#then apply these things to all the files stored in the vector
+for(i in 1:length(files)){ 
+  
+  single_file <- files[i] # this is the name of a single SLiM result file
+  get_the_seed <- as.numeric(gsub(".*_seed =|\\.txt","",single_file)) #use gsub() to get the value of 'seed' that was saved in the name of the results file
+  
+  results_df[i,"seeds"] <- get_the_seed # record the seed for this particular results file
+
+}
+
+#Now save the values in a table on the desktop
+write.csv(results_df, file = "~/Desktop/seeds_1e-9_model2.csv", row.names = FALSE)
+
+```
+
+
+
+

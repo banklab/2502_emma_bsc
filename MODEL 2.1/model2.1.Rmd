@@ -1,12 +1,12 @@
 ---
-title: "Inbreeding management model"
+title: "Model 2.1"
 author: "Emma Ochsner"
 output: html_notebook
 ---
 
-This notebook is building on the other notebook (R_notebook_bsc_model1) - here i want to focus on the firs 100 generations.
-To generate the data, i changed some parameters in SLiM: The generations and especially also the amount of outputs generated. Now I want every second cycle to print out the heterozygosity.
+This notebook is for analyzing the data generated with model 2.1
 
+This command block is for running 50 repetitions of the model in SLiM 
 If the model was run on the server - do not use this command
 ```{r eval=FALSE, include=FALSE}
 
@@ -30,7 +30,7 @@ for(r in 1:reps){
 
 
 
-now i want to analyze the data and make one single plot.
+Now i want to analyze the data and make a plot.
 
 ```{r}
 
@@ -39,27 +39,30 @@ rm(list=ls(all=TRUE)) #clear R environment
 #if the model was run on the cluster - use this command
 setwd("/tmp/server_data_model2.1")
 
-slim_out_files <- list.files(pattern = "model2.1_reps_")
+#list all files with this specific pattern
+slim_out_files <- list.files(pattern = "model2.1_reps_") 
 
+#check if it got all files
 length(slim_out_files)
 #install.packages("hierfstat")
 library("hierfstat")
 
-## make a dataframe to collect results
-## each row in the dataframe corresponds to the results from a single SLiM simulation run
+# make a dataframe to collect results (matrix)
+# each row in the dataframe corresponds to the results from a single repetition of the SLiM simulation 
 
-row_numbers <- seq(100001, 100139, by = 1)
+row_numbers <- seq(100001, 100139, by = 1) #the values corrspond to the generations in the files
 
+#add columns for each file, with additional ones for repetition and the seed of the simulation
 results_df <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
 colnames(results_df) <- c(row_numbers,"reps","seed")
 length(c(row_numbers,"reps","seed"))
-dim(results_df)
+dim(results_df) #check if it has the dimensions it should have
 
-
+#then apply these things to all the files stored in the vector
 for(i in 1:length(slim_out_files)){ 
   
-  single_file <- slim_out_files[i] ## this is the name of a single SLiM result file
-  get_the_reps <- as.numeric(gsub(".*_reps_([0-9]+)_.*", "\\1", single_file))  ## use gsub() to get the value of 'reps' that we saved in the name of the results file
+  single_file <- slim_out_files[i] # this is the name of a single SLiM result file
+  get_the_reps <- as.numeric(gsub(".*_reps_([0-9]+)_.*", "\\1", single_file))  #use gsub() to get the value of 'reps' that we saved in the name of the results file
   get_the_seed <- as.numeric(gsub(".*_seed =|\\.csv","",single_file)) ## and for the seed....
   
   results_df[i,"reps"] <- get_the_reps ## record the value of 'r' for this particular results file
@@ -68,7 +71,7 @@ for(i in 1:length(slim_out_files)){
   #_.* → Matches everything after the number (so it gets removed)
   #"\\1" → Extracts only the number inside ().
   
-  results_df[i,"seed"] <- get_the_seed ## record the seed for this particular results file
+  results_df[i,"seed"] <- get_the_seed # record the seed for this particular results file
   
   # Read the CSV file, ensure that it recognizes the header
   df <- read.csv(single_file, header = TRUE) 
@@ -76,7 +79,7 @@ for(i in 1:length(slim_out_files)){
   # Ensure the column names are correct
   colnames(df) <- c("cycle", "Heterozygosity")  
 
-  # Match cycle numbers to the matrix column names
+  # Match cycle numbers (generations) to the matrix column names
   matched_indices <- match(as.character(df$cycle), colnames(results_df))
 
   # Assign heterozygosity values to the correct positions in results_df_nrnr
@@ -106,7 +109,6 @@ print(results_df)
 
 Now do the plot:
 
-
 ```{r}
 #install.packages("paletteer")
 library(paletteer)
@@ -126,21 +128,19 @@ heterozygosity_only <- heterozygosity_values[, 1:length(x_values)]
 #I did this to cut off the last two columns (seed and rep) --> Due to this, i can then apply the filter (next lines) to the matrix. Otherwise it would not match the dimension of cycle_numbers...
 
 
-
 #find the highest and lowest heterozygosity values across all three matrices. This will help me with the y axis of the plot i want to generate. 
 max_het <- max(heterozygosity_only)
 min_het <- min(heterozygosity_only)
 
 
-
-#Here i don't have to transpose the data, since each column is a separate data series - this is what matplot expects. 
-matplot( x_values, t(heterozygosity_only), # Transpose to align data correctly --> I want to cut the columns not the rows, thats why there is this notation with the 
+#Here i have to transpose the data, since each row is a separate data series - matplot expects the columns to be seperate data series. 
+matplot( x_values, t(heterozygosity_only), # Transpose to align data correctly
          type = "p", pch = 16, cex = 0.4,
-        col = adjustcolor("#54BFB7FF", alpha.f = 0.02), # Model nrnr: light blue points, rgb(red, green, blue, alpha) enables me to modify the colors a bit better, alpha is the transparacy
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.02), # Model nrnr: light blue points, alpha is the transparacy
         xlab = "Generation", ylab = "Heterozygosity", #name the axis
         ylim = c(0,0.004), main = "Heterozygosity over Generations")  #define the y axis and give the plot a title 
       
-
+#This would be create a line for the mean value
 #lines( x_values, mean_values, col = "#54BFB7FF", lwd = 2.5)
 
 #Compute median & quartiles (25 and 75 %)
@@ -150,14 +150,15 @@ med <- apply(t(heterozygosity_only), 1, median, na.rm = TRUE)
 p25 <- apply(t(heterozygosity_only), 1, function(x) quantile(x, 0.25, na.rm = TRUE))
 p75 <- apply(t(heterozygosity_only), 1, function(x) quantile(x, 0.75, na.rm = TRUE))
 
+#draw the lines
 lines(x_values, med, col = "tan1", lwd = 2.5, lty = 1)
-lines(x_values, p25, col = "#894B33FF", lwd = 2, lty = 3)
+lines(x_values, p25, col = "#894B33FF", lwd = 2, lty = 3) #dashed, smaller lines for quartiles
 lines(x_values, p75, col = "#894B33FF", lwd = 2, lty = 3)
 
-#Add a line to show the bottleneck at ggeneration 35
-abline(v = 35,        # x = 36
+#Add a line to show the bottleneck at generation 35
+abline(v = 35,        # at generation 35
        lty = 3,       # dashed line 
-       col = "red",   #line color
+       col = "red",   #color
        lwd = 1)       # line width
 
 
@@ -174,11 +175,88 @@ legend("topright",
 ```
 
 
+Now i want to do a plot with lines representing the single data series, instead of points
+```{r}
+library(paletteer)
+
+
+# Extract the heterozygosity values (excluding the last row "Mean" and last two columns "reps" & "seed")
+heterozygosity_values <- results_df[1:(nrow(results_df)-1), 1:(ncol(results_df)-2)]
+# Extract the mean heterozygosity values from the last row --> Last row, so we can use nrow
+mean_values <- results_df[nrow(results_df), 1:(ncol(results_df)-2)]
+
+# Create a vector for the x-values (generations) - this will be used for the x axis of the plot. 
+x_values <- 1:139
+
+
+heterozygosity_only <- heterozygosity_values[, 1:length(x_values)]
+
+#I did this to cut off the last two columns (seed and rep) --> Due to this, i can then apply the filter (next lines) to the matrix. Otherwise it would not match the dimension of cycle_numbers...
+
+
+#find the highest and lowest heterozygosity values across all three matrices. This will help me with the y axis of the plot i want to generate. 
+max_het <- max(heterozygosity_only)
+min_het <- min(heterozygosity_only)
+
+
+#Here i have to transpose the data, since each row is a separate data series - matplot expects the columns to be seperate data series. 
+matplot( x_values, t(heterozygosity_only), # Transpose to align data correctly
+         type = "l", lwd = 1, cex = 0.4,
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.1), # Model nrnr: light blue points, alpha is the transparacy
+        xlab = "Generation", ylab = "Heterozygosity", #name the axis
+        ylim = c(0,0.004), main = "Heterozygosity over Generations")  #define the y axis and give the plot a title 
+      
+#This would be create a line for the mean value
+#lines( x_values, mean_values, col = "#54BFB7FF", lwd = 2.5)
+
+#Compute median & quartiles (25 and 75 %)
+#the 1 means i want to apply the functions over the rows of my table and ignoring NA values (na.rm = TRUE)
+
+med <- apply(t(heterozygosity_only), 1, median, na.rm = TRUE)
+p25 <- apply(t(heterozygosity_only), 1, function(x) quantile(x, 0.25, na.rm = TRUE))
+p75 <- apply(t(heterozygosity_only), 1, function(x) quantile(x, 0.75, na.rm = TRUE))
+
+#draw the lines
+lines(x_values, med, col = "tan1", lwd = 2.5, lty = 1)
+lines(x_values, p25, col = "#894B33FF", lwd = 2, lty = 3) #dashed, smaller lines for quartiles
+lines(x_values, p75, col = "#894B33FF", lwd = 2, lty = 3)
+
+# visualize the data series with the best outcome
+# Find the index of the series with the highest final value (at generation 139)
+idx_max_end <- which.max(heterozygosity_only[, 139])
+#make best outcome visible in the plot
+lines(x_values, heterozygosity_only[idx_max_end, ], col = adjustcolor("black", alpha.f = 0.6), lwd = 1)
+
+# visualize the data series with the highest het in generation 35 (after bottleneck)
+idx_max_bn <- which.max(heterozygosity_only[, 35])
+#make best outcome visible in the plot
+lines(x_values, heterozygosity_only[idx_max_bn, ], col = adjustcolor("blue", alpha.f = 0.6), lwd = 1)
+
+# visualize the data series with the highest het in generation 35 (after bottleneck)
+idx_min_start <- which.min(heterozygosity_only[, 1])
+#make best outcome visible in the plot
+lines(x_values, heterozygosity_only[idx_min_start, ], col = adjustcolor("purple", alpha.f = 0.6), lwd = 1)
+
+# visualize the data series with the highest het in generation 35 (after bottleneck)
+idx_min_bn <- which.min(heterozygosity_only[, 35])
+#make best outcome visible in the plot
+lines(x_values, heterozygosity_only[idx_min_bn, ], col = adjustcolor("pink", alpha.f = 0.9), lwd = 1)
+
+
+#Add a line to show the bottleneck at generation 35
+abline(v = 35,        # at generation 35
+       lty = 3,       # dashed line 
+       col = "red",   #color
+       lwd = 1)       # line width
+
+
+legend("topright",
+       legend = c("all data", "median", "25% & 75% quartile", "best outcome", "highest het in gen 35", "lowest het gen 1", "lowest het gen 35"),
+       col    = c("#54BFB7FF",    "tan1",  "#894B33FF", "black", "blue", "purple", "pink"),
+       lty    = c(1, 1, 3, 1, 1, 1, 1),    # no line for first, solid and dashed for rest
+       lwd    = c(1, 2.5, 2, 1, 1, 1, 1),    # no line‐width for first
+       cex    = 0.4)
 
 
 
-
-
-
-
-
+```
