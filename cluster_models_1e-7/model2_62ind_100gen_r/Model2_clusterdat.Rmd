@@ -1,11 +1,13 @@
 ---
-title: "Model 2"
+title: "Model 2 (cluster)"
 author: "Emma Ochsner"
 output: html_notebook
 ---
 
 This notebook is for analyzing the outputs from the model 2 in SLiM. 
-The working directory is set to a folder on the server, where i saved my outputs of this simulation. 
+The working directory is set to a folder on the server, where i saved my outputs of this simulation.
+
+Change the working directory depending on what data series is analyzed.
 
 ```{r}
 rm(list=ls(all=TRUE)) #clear R environment
@@ -40,7 +42,7 @@ files <- list.files(pattern = "model2_reps")
 
 
 # loop through and extract metrics -> I want to extract relatedness at the beginning and heterozygosity at the end
-#lapply applies following function to all the files
+#lapply applies following function to all the files - i want to define the different values in the files
 res_list <- lapply(files, function(f){
   dat <- read.table(f, header = FALSE)  #no header in the files
   data.frame(
@@ -61,7 +63,7 @@ And now make the plot
 ```{r}
 
 par(mfrow = c(1,2)) #to have two plots next to each other
-# quick base‐R scatterplot
+# quick base‐R scatterplot (plot)
 #First for starting relatedness to end heterozygosity
 plot(
   df$relatedness_start,
@@ -70,7 +72,7 @@ plot(
   ylab = "End heterozygosity",
   main = "Rel start vs Het end",
   pch = 19,
-  cex = 0.4
+  cex = 0.4 #make it smaller
 )
 
 # add a linear fit (regression line)
@@ -79,7 +81,7 @@ abline(lm(heterozygosity_end ~ relatedness_start, data = df), col = "#54BFB7FF",
 text(x = par("usr")[1], y = par("usr")[4], labels = "A", font = 2, cex = 1.1, adj = c(-0.5, 1.5)) 
 #par("usr") gives the plot coordinates (so top left corner of the graph - 1 & 4), then labels = ... gives the plot a label, and then make it bold and larger, and adj places the label correctly
 
-# Pearson’s correlation -> test for significant correlation
+# Pearson’s correlation -> test for significant correlation between data points
 pearson_res <- cor.test(
   df$relatedness_start,
   df$heterozygosity_end,

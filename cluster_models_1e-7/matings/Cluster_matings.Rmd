@@ -1,11 +1,11 @@
 ---
-title: "Mating model"
+title: "Mating model (cluster)"
 author: "Emma Ochsner"
 output: html_notebook
 ---
 
 
-This file is for analyzing the outputs of the Mating model, run on the server. I want to check with this code, how many individuals get to mate per generation in the different mate choice scenarios (R and Nrnr)
+This file is for analyzing the outputs of the Mating model, run on the server. I want to check with this code, how many individuals get to mate per generation in the different mate choice scenarios (R and Nrnr) of the first model.
 
 First step:
 Sort the 1000 files (nrnr) to analyze the data

@@ -6,7 +6,7 @@ output: html_notebook
 
 This notebook is for analyzing the data generated with model 2.1
 
-This command block is for running 50 repetitions of the model in SLiM 
+This first command block is for running 50 repetitions of the model in SLiM, directly on the computer.
 If the model was run on the server - do not use this command
 ```{r eval=FALSE, include=FALSE}
 
@@ -50,7 +50,7 @@ library("hierfstat")
 # make a dataframe to collect results (matrix)
 # each row in the dataframe corresponds to the results from a single repetition of the SLiM simulation 
 
-row_numbers <- seq(100001, 100139, by = 1) #the values corrspond to the generations in the files
+row_numbers <- seq(100001, 100139, by = 1) #the values correspond to the generations in the files
 
 #add columns for each file, with additional ones for repetition and the seed of the simulation
 results_df <- matrix(NA ,nrow = length(slim_out_files), ncol = (length(row_numbers) + 2))
@@ -224,22 +224,22 @@ lines(x_values, p75, col = "#894B33FF", lwd = 2, lty = 3)
 # visualize the data series with the best outcome
 # Find the index of the series with the highest final value (at generation 139)
 idx_max_end <- which.max(heterozygosity_only[, 139])
-#make best outcome visible in the plot
+#make best outcome visible in the plot - black line
 lines(x_values, heterozygosity_only[idx_max_end, ], col = adjustcolor("black", alpha.f = 0.6), lwd = 1)
 
 # visualize the data series with the highest het in generation 35 (after bottleneck)
 idx_max_bn <- which.max(heterozygosity_only[, 35])
-#make best outcome visible in the plot
+#make it visible in the plot - blue line
 lines(x_values, heterozygosity_only[idx_max_bn, ], col = adjustcolor("blue", alpha.f = 0.6), lwd = 1)
 
-# visualize the data series with the highest het in generation 35 (after bottleneck)
+# visualize the data series with the lowest het in generation 1 (start of the simulation)
 idx_min_start <- which.min(heterozygosity_only[, 1])
-#make best outcome visible in the plot
+#make the outcome visible in the plot - purple line
 lines(x_values, heterozygosity_only[idx_min_start, ], col = adjustcolor("purple", alpha.f = 0.6), lwd = 1)
 
-# visualize the data series with the highest het in generation 35 (after bottleneck)
+# visualize the data series with the lowest het in generation 35 (after bottleneck)
 idx_min_bn <- which.min(heterozygosity_only[, 35])
-#make best outcome visible in the plot
+#make the outcome visible in the plot - pink line
 lines(x_values, heterozygosity_only[idx_min_bn, ], col = adjustcolor("pink", alpha.f = 0.9), lwd = 1)
 
 

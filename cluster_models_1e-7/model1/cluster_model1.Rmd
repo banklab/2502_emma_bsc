@@ -1,41 +1,45 @@
 ---
-title: "R Notebook"
+title: "Model 1 (cluster)"
+author: "Emma Ochsner"
 output: html_notebook
 ---
 
 
-Now i have generated my data and want to analyze them. First I have to order the data to have all the repetitions in one shared matrix. This will make it easier to visualize it in a plot.  
+The data has been generated with SLiM on the server of the university. This file is for analyzing the 1000 repetitions for each mateChoice() callback of model 1.
+
+First I have to order the data to have all the repetitions in one shared matrix. This will make it easier to visualize it in a plot.  
 
 ```{r}
 
-#Set the working directory - I connect it directly with the output file on the server. 
+#Set the working directory - I connect it directly with the output file on the server. - the commands below are for the different recombination rates used in my simulations. 
+
+#Recombination rate of 1e-7
 #setwd("/tmp/server_data_model1")
 
 #Now for model 1 but with recombination rate of 1e-6
 #setwd("/tmp/server_data_1e-6_model1")
 
 #And again for another recombination rate: 1e-8
-setwd("/tmp/server_data_1e-8_model1")
+#setwd("/tmp/server_data_1e-8_model1")
 
 #And again for another recombination rate: 1e-9
-#setwd("/tmp/server_data_1e-9_model1")
+setwd("/tmp/server_data_1e-9_model1")
 
 rm(list=ls(all=TRUE)) #clear R environment
 
 #First order the data for the not-random mating, selecting for not-related mates (nrnr)
 files_nrnr <- list.files(pattern = "_nonrandom_notrelated_") #list all the files which show this specific pattern in their name. 
 
-length(files_nrnr) #check if it worked, the length should be the same amount as repetitions i defined in the first chunks. 
+length(files_nrnr) #check if it worked, the length should be the same amount as repetitions (1000)
 
 #install.packages("hierfstat")
 library("hierfstat") #This package helps to analyze the data. 
 
-## make a dataframe to collect results
-## each row in the dataframe corresponds to the results from a single SLiM simulation run
+#make a dataframe to collect results
+#each row in the dataframe corresponds to the results from a single SLiM simulation run
 
-row_numbers <- seq(100001, 101000, by = 5) #This command will help me name/define the rows. These are the generations from my SLiM output - I had 1000 generations and wrote down the heterozygosity for every fifth generation. 
+row_numbers <- seq(100001, 101000, by = 5) #This command will help me name/define the rows. These are the generations from my SLiM output - I had 1000 generations and wrote down the heterozygosity for every fifth generation - the slim simulation starts at generation 100001 and was run for 1000 generations. 
 
-#row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_nrnr <- matrix(NA ,nrow = (length(row_numbers)), ncol = length(files_nrnr)) #create a matrix with NA, to later store my results. The rows are the different generations and the different columns are the repetitions  I did. 
 
@@ -62,13 +66,13 @@ for(i in 1:length(files_nrnr)){
 mean_nrnr <- rowMeans(results_df_nrnr, na.rm = TRUE)
 
 
-#now the same for nonrandom mating selecting for relatedness (nrr) 
+#now the same for nonrandom mating selecting for highest relatedness (nrr) 
 
 files_nrr <- list.files(pattern = "_nonrandom_related_")
 length(files_nrr)
 
-## make a dataframe to collect results
-## each row in the dataframe corresponds to the results from a single SLiM simulation run
+#make a dataframe to collect results
+#each row in the dataframe corresponds to the results from a single SLiM simulation run
 
 row_numbers <- seq(100001, 101000, by = 5)
 
@@ -99,11 +103,10 @@ mean_nrr <- rowMeans(results_df_nrr, na.rm = TRUE)
 files_r <- list.files(pattern = "_random_")
 length(files_r)
 
-## make a dataframe to collect results
-## each row in the dataframe corresponds to the results from a single SLiM simulation run
+#make a dataframe to collect results
+#each row in the dataframe corresponds to the results from a single SLiM simulation run
 
 row_numbers <- seq(100001, 101000, by = 5)
-#row_names <- paste(row_numbers, "reps", "seed", sep = ";")
 
 results_df_r <- matrix(NA ,nrow = (length(row_numbers)), ncol = length(files_r))
 rownames(results_df_r) <- c(row_numbers)
@@ -111,7 +114,7 @@ rownames(results_df_r) <- c(row_numbers)
 dim(results_df_r)
 
 for(i in 1:length(files_r)){ 
-  single_file <- files_r[i] ## this is the name of a single SLiM result file
+  single_file <- files_r[i] # this is the name of a single SLiM result file
   # Read the CSV file, ensure that it recognizes the header
   df <- read.csv(single_file, header = TRUE) 
    # Ensure the column names are correct
@@ -129,9 +132,9 @@ mean_r <- rowMeans(results_df_r, na.rm = TRUE)
 
 ```
 
-```{r}
-#setwd("/tmp/server_data_model1")
 
+Now make a plot of the sorted data
+```{r}
 
 #install.packages("paletteer")
 library(paletteer)
@@ -142,22 +145,23 @@ max_het <- max(results_df_nrnr, results_df_nrr, results_df_r)
 min_het <- min(results_df_nrnr, results_df_nrr, results_df_r)
 
 # Create a vector for the x-values (generations) - this will be used for the x axis of the plot. 
-x_values <- seq(2, 1000, by = 5)
+x_values <- seq(1, 1000, by = 5)
 
 #Here i don't have to transpose the data, since each column is a separate data series - this is what matplot expects. 
 matplot( x_values, results_df_nrnr, type = "p", pch = 16, cex = 0.4,
-        col = adjustcolor("#54BFB7FF", alpha.f = 0.03), # Model nrnr: light blue points, rgb(red, green, blue, alpha) enables me to modify the colors a bit better, alpha is the transparacy
+        col = adjustcolor("#54BFB7FF", alpha.f = 0.03), # Model nrnr: light blue points for single data points, alpha.f is the transparacy
         xlab = "Generation", ylab = "Heterozygosity", #name the axis
-        ylim = c(0,0.004), main = "Heterozygosity over Generations")  #define the y axis and give the plot a title 
+        ylim = c(0,0.005), main = "Heterozygosity over Generations")  #define the y axis and give the plot a title 
+#ylim is set to c(0, 0.004) for recombination rates 1e-6, 1e-7 and 1e-8, for 1e-9 use c(0,0.005)
 
 #Now I generated the plot and can just add the data of the other models (nrr and r)
-# Model nrr: light green points
+# Model nrr: light brown points
 matpoints(x_values, results_df_nrr, pch = 16, cex = 0.4,  col = adjustcolor("#894B33FF", alpha.f = 0.015)) #adding points to the existing plot from above
 
-# Model r: light purple points
+# Model r: light orange points
 matpoints( x_values, results_df_r, pch = 16, cex = 0.4, col = adjustcolor("tan1", alpha.f = 0.015)) #again
 
-# adding Mean relatedness lines to the plot
+# adding Mean relatedness lines to the plot for the different matechoice callbacks
 lines( x_values, mean_nrnr, col = "#54BFB7FF", lwd = 2.5)
 lines( x_values, mean_nrr, col = "#894B33FF", lwd = 2.5)
 lines( x_values, mean_r, col = "tan1", lwd = 2.5)
@@ -173,42 +177,43 @@ legend("topright", legend=c("non-random non-related", "non-random related", "ran
 
 And now another plot which shows only the first 100 generations
 ```{r}
-#––– Plot only the first 100 generations –––#
+#Plot only the first 100 generations
 
-# find the indices of x_values ≤ 100
+# find the indices of x_values ≤ 100 (generations)
 idx <- which(x_values <= 80)
 
 # set up the empty plot for non-random non-related (nrnr)
 matplot(x_values[idx], results_df_nrnr[idx, ], type = "p", pch = 16, cex = 0.6,
         col = adjustcolor("#54BFB7FF", alpha.f = 0.3),
         xlab = "Generation", ylab = "Heterozygosity",
-        ylim = c(0, 0.004),                              # same y-axis as before
+        ylim = c(0, 0.005),                              # same y-axis as before
         main = "Heterozygosity: First 80 Generations")
+#ylim is set to c(0, 0.004) for recombination rates 1e-6, 1e-7 and 1e-8, for 1e-9 use c(0,0.005)
 
-# add the other two models
+# add the other two data series
 matpoints(x_values[idx], results_df_nrr[idx, ], pch = 16, cex = 0.6,
           col = adjustcolor("#894B33FF", alpha.f = 0.05))
 matpoints(x_values[idx], results_df_r[idx, ], pch = 16, cex = 0.6,
-          col = adjustcolor("tan1",       alpha.f = 0.03))
+          col = adjustcolor("tan1", alpha.f = 0.03))
 
 # overlay the mean‐lines for each model
 lines(x_values[idx], mean_nrnr[idx], col = "#54BFB7FF", lwd = 2.5)
 lines(x_values[idx], mean_nrr[idx], col = "#894B33FF", lwd = 2.5)
-lines(x_values[idx], mean_r[idx],   col = "tan1",       lwd = 2.5)
+lines(x_values[idx], mean_r[idx], col = "tan1", lwd = 2.5)
 
 # legend
 legend("topright",
        legend = c("non-random non-related", "non-random related", "random"),
-       col    = c("#54BFB7FF",             "#894B33FF",             "tan1"),
-       lty    = 1, cex = 0.7)
+       col = c("#54BFB7FF", "#894B33FF", "tan1"), lty = 1, cex = 0.7)
+
 ```
 
 
-And now a plot showing the median of the different simulations:
+And now a plot showing the median as well as 25/75 % quartiles of the different simulations:
 
 ```{r}
 
-#Compute median & quartiles (25 and 75 %)
+#Compute median & quartiles (25 and 75 %) - for all three mateChoice models
 #the 1 means i want to apply the functions over the rows of my table and ignoring NA values (na.rm = TRUE)
 
 med_nrnr <- apply(results_df_nrnr, 1, median, na.rm = TRUE)
@@ -224,7 +229,7 @@ p25_r    <- apply(results_df_r,    1, function(x) quantile(x, 0.25, na.rm = TRUE
 p75_r    <- apply(results_df_r,    1, function(x) quantile(x, 0.75, na.rm = TRUE))
 
 # Create a vector for the x-values (generations) - this will be used for the x axis of the plot. 
-x_values <- seq(2, 1000, by = 5)
+x_values <- seq(1, 1000, by = 5)
 
 #Make a plot with the median and the 25/75% as dashed lines
 
@@ -258,14 +263,14 @@ legend("topright", #where
                   "r median",    "r 25/75%"),
        col    = c("#54BFB7FF", "#54BFB7FF",
                   "#894B33FF", "#894B33FF",
-                  "tan1",       "tan1"),
+                  "tan1", "tan1"),
        lty    = c(1, 2, 1, 2, 1, 2),
        lwd    = c(2.5, 1.5, 2.5, 1.5, 2.5, 1.5),
        cex    = 0.7) #size
 ```
 
 
-Now generate a plot without the points
+Now generate a plot without the points but showing the mean values
 
 ```{r}
 #install.packages("paletteer")
@@ -277,13 +282,13 @@ max_het <- max(results_df_nrnr, results_df_nrr, results_df_r)
 min_het <- min(results_df_nrnr, results_df_nrr, results_df_r)
 
 # Create a vector for the x-values (generations) - this will be used for the x axis of the plot. 
-x_values <- seq(2, 1000, by = 5)
+x_values <- seq(1, 1000, by = 5)
 
 #Here i don't have to transpose the data, since each column is a separate data series - this is what matplot expects. 
 #change here the main if looking at another recombination rate
 matplot( x_values, mean_nrnr, col = "#54BFB7FF", lwd = 2.5, lty = 1, type = "n",
         xlab = "Generation", ylab = "Heterozygosity", #name the axis
-        ylim = c(0,0.005), main = "Heterozygosity over Generations (1e-8)")  #define the y axis and give the plot a title 
+        ylim = c(0,0.005), main = "Heterozygosity over Generations (1e-9)")  #define the y axis and give the plot a title 
 
 
 # adding Mean relatedness lines to the plot

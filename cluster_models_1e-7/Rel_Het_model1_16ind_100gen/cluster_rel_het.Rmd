@@ -1,5 +1,6 @@
 ---
-title: "Relatedness & Heterozygosity - Model 1"
+title: "Relatedness & Heterozygosity - Model 1 (cluster)"
+author: "Emma Ochsner"
 output: html_notebook
 ---
 
@@ -7,7 +8,7 @@ This notebook helps looking at the rates of decline in heterozygosity and increa
 
 I have simulated the data on the server and want to analyze it now. For this I've created a folder, which is connected to the output folder on the server of this model. In this way, i don't have to load all the data on my computer.
 
-The size of the starting population is 1000 individuals or 16 individuals, which have different genomes and they mate for 100 generations.  
+The size of the starting population is 1000 individuals or 16 individuals, which have different genomes and they mate for 100 generations - some modifications in the code have to be done depending on the population size 
 
 ```{r}
 
@@ -234,7 +235,7 @@ text(x = par("usr")[1], y = par("usr")[4], labels = "B", font = 2, cex = 1.1, ad
 
 ```
 
-And a last plot where one can see the median and 25/75% quartiles
+And a last plot where one can see the median and 25/75% quartiles of the data
 
 ```{r}
 

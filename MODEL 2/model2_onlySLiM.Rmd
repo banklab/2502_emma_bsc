@@ -1,10 +1,12 @@
 ---
-title: "R Notebook"
+title: "Model 2"
+author: "Emma Ochsner"
 output: html_notebook
 ---
 
 This file is to analyze the data i generated with my model 2 in SLiM. 
-To be able to simulate 10 runs automatically, I make a slim code bash.
+
+To be able to simulate 10 runs automatically, I make a slim code bash (first chunk)
 ```{r eval=FALSE, include=FALSE}
 
 rm(list=ls(all=TRUE)) #clear R environment
@@ -29,27 +31,28 @@ for(r in 1:reps){
 Now i want to analyze the files/data i just generated
 
 ```{r}
-#first set the working directory
+#first set the working directory - change this to where the output files are saved...
 setwd("~/Documents/GitHub/2502_emma_bsc") 
+
 rm(list=ls(all=TRUE)) #clear R environment
 
-# find all the SLiM output files
+# find all the SLiM output files and list them in a vector
 files <- list.files(pattern = "model2_reps")
 
 
 # loop through and extract metrics -> I want relatedness at the beginning and heterozygosity at the end
 res_list <- lapply(files, function(f){
-  dat <- read.table(f, header = FALSE)  
+  dat <- read.table(f, header = FALSE)  #no header implemented in the output files
   data.frame(
-    relatedness_start   = dat[1, 2],
+    relatedness_start   = dat[1, 2], #define the values in the output files
     heterozygosity_end  = dat[2, 3]
   )
 })
 
-# 4) bind into one data.frame
+# bind all data into one data.frame
 df <- do.call(rbind, res_list)
 
-# 5) quick base‐R scatterplot
+# quick base‐R scatterplot
 plot(
   df$relatedness_start,
   df$heterozygosity_end,
@@ -59,11 +62,11 @@ plot(
   pch = 19
 )
 
-# (optional) add a linear fit
+# add a linear fit
 abline(lm(heterozygosity_end ~ relatedness_start, data = df), col = "#54BFB7FF")
 
 
-# Pearson’s correlation
+# Pearson’s correlation (to test if there is a correlation between the data)
 pearson_res <- cor.test(
   df$relatedness_start,
   df$heterozygosity_end,
@@ -74,7 +77,7 @@ print(pearson_res)
 
 ```
 
-
+This command is for creating another plot, this time with ggplot. This graph is not used in the thesis and was just done as comparison...
 
 ```{r}
 library(ggplot2)
@@ -92,15 +95,16 @@ ggplot(df, aes(x = relatedness_start, y = heterozygosity_end)) +
 ```
 
 
-In this chunk i plot starting heterozygosity vs end heterozygosity
+In this chunk i plot starting heterozygosity vs end heterozygosity, to see if they show a correlation. 
 ```{r}
+
 #first set the working directory
 setwd("~/Documents/GitHub/2502_emma_bsc") 
+
 rm(list=ls(all=TRUE)) #clear R environment
 
-# find all the SLiM output files
+# find all the SLiM output files, which have this specific pattern
 files <- list.files(pattern = "model2_reps")
-
 
 # loop through and extract metrics -> I want relatedness at the beginning and heterozygosity at the end
 res_list <- lapply(files, function(f){
@@ -111,10 +115,10 @@ res_list <- lapply(files, function(f){
   )
 })
 
-# 4) bind into one data.frame
+# bind into one data.frame
 df <- do.call(rbind, res_list)
 
-# 5) quick base‐R scatterplot
+# quick base‐R scatterplot
 plot(
   df$heterozygosity_start,
   df$heterozygosity_end,
@@ -124,7 +128,7 @@ plot(
   pch = 19
 )
 
-# (optional) add a linear fit
+# add a linear fit
 abline(lm(heterozygosity_end ~ heterozygosity_start, data = df), col = "#54BFB7FF")
 
 # Pearson’s correlation
@@ -139,17 +143,18 @@ print(pearson_res)
 
 
 
+In this chunk i plot starting heterozygosity vs starting heterozygosity, to see if they show a correlation. 
 
 ```{r}
 #first set the working directory
 setwd("~/Documents/GitHub/2502_emma_bsc") 
 rm(list=ls(all=TRUE)) #clear R environment
 
-# find all the SLiM output files
+# find all the SLiM output files with this specific pattern
 files <- list.files(pattern = "model2_reps")
 
 
-# loop through and extract metrics -> I want relatedness at the beginning and heterozygosity at the end
+# loop through and extract metrics -> I want relatedness at the beginning and heterozygosity at the beginning
 res_list <- lapply(files, function(f){
   dat <- read.table(f, header = FALSE)  
   data.frame(
@@ -158,10 +163,10 @@ res_list <- lapply(files, function(f){
   )
 })
 
-# 4) bind into one data.frame
+# bind into one data.frame
 df <- do.call(rbind, res_list)
 
-# 5) quick base‐R scatterplot
+# quick base‐R scatterplot
 plot(
   df$relatedness_start,
   df$heterozygosity_start,
@@ -171,7 +176,7 @@ plot(
   pch = 19
 )
 
-# (optional) add a linear fit
+# add a linear fit
 abline(lm(heterozygosity_start ~ relatedness_start, data = df), col = "#54BFB7FF")
 
 
