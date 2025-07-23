@@ -37,7 +37,8 @@ Now i want to analyze the data and make a plot.
 rm(list=ls(all=TRUE)) #clear R environment
 
 #if the model was run on the cluster - use this command
-setwd("/tmp/server_data_model2.1")
+#setwd("/tmp/server_data_model2.1")
+setwd("~/Documents/GitHub/2502_emma_bsc/MODEL 2.1/model2.1_50reps")
 
 #list all files with this specific pattern
 slim_out_files <- list.files(pattern = "model2.1_reps_") 

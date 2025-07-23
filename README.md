@@ -64,7 +64,7 @@ The only R file which was used for simulations on the computer directly as well 
 
 
 To run the simulations, it is important to change the working directories inside the R Notebooks. For most simulations, the .tree file (starting population) is used, meaning it should be saved at the same place as the SLiM model. 
-Thus, if aiming to run the models, it is important to make sure that the SLiM file, as well as the .tree file (e.g. 16_1e-7_output.trees) are saved at the same place and that the working directory in R is pointing there. 
+At the moment this file can be found in the folder "bottleneck". Thus, if aiming to run the models, it is important to make sure that the SLiM file, as well as the .tree file (e.g. 16_1e-7_output.trees) are saved at the same place and that the working directory in R is pointing there. 
 In some files some additional adaptations have to be done, depending on the population size one would like to analyze (this is indicated in the comments of these files). 
 
 In each folder, one can also find a file which contains the seeds of the specific models, run on the cluster. The corresponding R notebook is named Getseeds and was used to collect all seeds of all simulations.

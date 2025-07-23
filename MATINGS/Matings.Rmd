@@ -7,6 +7,8 @@ output: html_notebook
 First I have 2 chunks, which will send information to my slim model - With this callback I can make 20 repetitions of my simulation in SLiM and save the output files.
 I do this for the random mating and for the non-random mating selecting for non-relatedness. 
 
+First for non-random not-related
+
 ```{r eval=FALSE, include=FALSE}
 
 rm(list=ls(all=TRUE)) #clear R environment
@@ -27,6 +29,8 @@ for(r in 1:reps){
 
 ```
 
+
+And now for the random mating
 
 ```{r eval=FALSE, include=FALSE}
 
@@ -54,8 +58,9 @@ Sort the 20 files (nrnr) to analyze the data
 
 ```{r}
 
+setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 #setwd("~/Documents/GitHub/2502_emma_bsc/MATE CHOICES/mateChoices_16-16ind_100gen_20reps")
-setwd("~/Documents/GitHub/2502_emma_bsc/MATE_CHOICES/mateChoices_1000-1000ind_100gen_20reps")
+#setwd("~/Documents/GitHub/2502_emma_bsc/MATE_CHOICES/mateChoices_1000-1000ind_100gen_20reps")
 #Here the working directory has to be pointed to where the output files are saved. 
 
 library(dplyr)
@@ -72,7 +77,7 @@ all_reps <- lapply(files_nrnr, function(f) {
   colnames(df) <- c("Generation", "FemaleIndex", "MaleIndex") #name the columns in the table
   
   # 2. Summarize by generation
-  #take care - either make 8 or 500 here, depending if we have 16 or 1000 individuals!!
+  #take care - either make 8 or 500 here, depending if we have 16 or 1000 individuals   !!!!!!
   df_counts <- df %>%
     group_by(Generation) %>%
     summarise(
@@ -107,8 +112,9 @@ df_means <- df_all %>%
 And make the plot
 ```{r}
 
+setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 #setwd("~/Documents/GitHub/2502_emma_bsc/MATE CHOICES/mateChoices_16-16ind_100gen_20reps")
-setwd("~/Documents/GitHub/2502_emma_bsc/MATE_CHOICES/mateChoices_1000-1000ind_100gen_20reps")
+#setwd("~/Documents/GitHub/2502_emma_bsc/MATE_CHOICES/mateChoices_1000-1000ind_100gen_20reps")
 
 #compute max and min values over the whole data
 max_nrnr <- max(df_means$meanMissingFemales, df_means$meanMissingMales)
@@ -144,8 +150,9 @@ Sort the 20 files (r) to analyze the data - exactly the same procedure as before
 
 ```{r}
 
+setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 #setwd("~/Documents/GitHub/2502_emma_bsc/MATE CHOICES/mateChoices_16-16ind_100gen_20reps")
-setwd("~/Documents/GitHub/2502_emma_bsc/MATE_CHOICES/mateChoices_1000-1000ind_100gen_20reps")
+#setwd("~/Documents/GitHub/2502_emma_bsc/MATE_CHOICES/mateChoices_1000-1000ind_100gen_20reps")
 
 library(dplyr)
 
@@ -196,8 +203,9 @@ df_means <- df_all %>%
 And make the plot
 ```{r}
 
+setwd("~/Documents/GitHub/2502_emma_bsc") #setting the working directory
 #setwd("~/Documents/GitHub/2502_emma_bsc/MATE CHOICES/mateChoices_16-16ind_100gen_20reps")
-setwd("~/Documents/GitHub/2502_emma_bsc/MATE_CHOICES/mateChoices_1000-1000ind_100gen_20reps")
+#setwd("~/Documents/GitHub/2502_emma_bsc/MATE_CHOICES/mateChoices_1000-1000ind_100gen_20reps")
 
 max_r <- max(df_means$meanMissingFemales, df_means$meanMissingMales)
 min_r <- min(df_means$meanMissingFemales, df_means$meanMissingMales)
@@ -224,13 +232,4 @@ legend("bottomleft",legend = c("Missing Females", "Missing Males"),
 ```
 
 
-
-
-
-
-
-
-
-
-----------
 
