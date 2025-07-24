@@ -13,9 +13,9 @@ The size of the starting population is 1000 individuals or 16 individuals, which
 ```{r}
 
 #This is for the output on the server for the model with 16 individuals
-#setwd("/tmp/server_data_rel_het_16")
+setwd("/tmp/server_data_rel_het_16")
 #This is for the output on the server for the model with 1000 individuals
-setwd("/tmp/server_data_rel_het_1000")
+#setwd("/tmp/server_data_rel_het_1000")
 
 rm(list=ls(all=TRUE)) #clear R environment
 
@@ -139,7 +139,7 @@ lines(x_vals, het_mean_nrnr, col = "#54BFB7FF", lwd = 2)
 lines(x_vals, het_mean_nrr, col = "#894B33FF", lwd = 2)
 lines(x_vals, het_mean_r, col = "tan1", lwd = 2, lty = 1) #when running with 1000 individuals: dashed orange line to visualize the blue one behind (lty = 4), otherwise lty = 1
 
-mtext("Relatedness and Heterozygosity Over Time \n(16 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title
+mtext("Relatedness and Heterozygosity over Time \n(16 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title
 #mtext("(1000 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #for 1000 individuals
 #change title to 16/1000 indivuals depending on the data - Or take the second line for 1000 individuals
 #font = 2 makes the main bold
@@ -218,7 +218,7 @@ lines(x_vals, het_mean_r, col = "tan1", lwd = 2)
 #for 1000 individuals - dasehd orange line
 #lines(x_vals, het_mean_r, col = "tan1", lwd = 2, lty = 4)
 
-mtext("Relatedness and Heterozygosity Over Time \n (16 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title
+mtext("Relatedness and Heterozygosity over Time \n (16 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title
 #mtext("(1000 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title
 #font.main = 2 makes the main bold
 #change it to 16 / 1000 individuals depending on what data I'm analyzing...
@@ -227,7 +227,7 @@ par(xpd = NA) #Allows drawing outside of the plot - this is for the legend
 legend("bottom", inset = c(0, -0.6), horiz = FALSE,
        legend = c("not-random not-related", "not-random related", "random"),
        col = c("#54BFB7FF", "#894B33FF", "tan1"),
-       lty    = c(1, 1, 2),
+       lty    = c(1, 1, 1),
        lwd = 2, bty = "n", cex = 0.6)
 #inset: Pushes it down below the plot
 #when running it with 1000 individuals change to lty    = c(1, 1, 2)
@@ -303,11 +303,11 @@ lines(x_vals, rel_p25_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
 lines(x_vals, rel_p75_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
 
 # Model: random
-lines(x_vals, rel_med_r, col = "tan1", lwd = 2.5, lty = 4) #change lty to 4 when running it with 1000 individuals
+lines(x_vals, rel_med_r, col = "tan1", lwd = 2.5, lty = 1) #change lty to 4 when running it with 1000 individuals
 lines(x_vals, rel_p25_r, col = "tan1", lwd = 1.5, lty = 3)
 lines(x_vals, rel_p75_r, col = "tan1", lwd = 1.5, lty = 3)
 
-text(x = par("usr")[1], y = par("usr")[4], labels = "C", font = 2, cex = 1.1, adj = c(-0.5, 1.5)) 
+text(x = par("usr")[1], y = par("usr")[4], labels = "A", font = 2, cex = 1.1, adj = c(-0.5, 1.5)) 
 #par("usr") gives the plot coordinates (so top left corner of the graph - 1 & 4), then labels = ... gives the plot a label, and then make it bold and larger, and adj places the label correctly
 
 #ANd exactly the same for the het values
@@ -337,13 +337,13 @@ lines(x_vals, het_p75_nrr, col = "#894B33FF", lwd = 1.5, lty = 3)
 
 # Model: random 
 #When running the code with 1000 individuals, change lty to 4 (not 1), to visualize the blue line behind it. 
-lines(x_vals, het_med_r, col = "tan1", lwd = 2, lty = 4)
+lines(x_vals, het_med_r, col = "tan1", lwd = 2, lty = 1)
 lines(x_vals, het_p25_r, col = "tan1", lwd = 1.5, lty = 3)
 lines(x_vals, het_p75_r, col = "tan1", lwd = 1.5, lty = 3)
 
 #Add a shared main
-#mtext("Relatedness and Heterozygosity Over Time \n (median & 25/75% - 16 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title - change number of individuals!
-mtext("(median & 25/75% - 1000 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title - change number of individuals!
+mtext("Relatedness and Heterozygosity over Time \n (median & 25/75% - 16 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title - change number of individuals!
+#mtext("(median & 25/75% - 1000 individuals)", side = 3, line = -2, outer = TRUE, cex = 1.2, font = 2) #creates a shared title - change number of individuals!
 #font.main = 2 makes the main bold
 
 #Add the legend
@@ -353,12 +353,12 @@ legend("bottom", inset = c(0, -0.6), horiz = FALSE, ncol     = 3,
        col    = c("#54BFB7FF", "#54BFB7FF",
                   "#894B33FF", "#894B33FF",
                   "tan1",       "tan1"),
-       lty    = c(1, 2, 1, 2, 4, 2), #change fifth digit to 4 (not 1) when running with 1000 individuals
+       lty    = c(1, 2, 1, 2, 1, 2), #change fifth digit to 4 (not 1) when running with 1000 individuals
        lwd    = c(2.5, 1.5, 2.5, 1.5, 2.5, 1.5),
       bty = "n", cex = 0.6)
 #inset: Pushes it down below the plot
 
-text(x = par("usr")[1], y = par("usr")[4], labels = "D", font = 2, cex = 1.1, adj = c(-0.5, 1.5)) 
+text(x = par("usr")[1], y = par("usr")[4], labels = "B", font = 2, cex = 1.1, adj = c(-0.5, 1.5)) 
 #par("usr") gives the plot coordinates (so top left corner of the graph - 1 & 4), then labels = ... gives the plot a label, and then make it bold and larger, and adj places the label correctly
 
 
