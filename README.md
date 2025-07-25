@@ -37,13 +37,13 @@ For my thesis, I created multiple models:
 
 - Model 1: Examines the change in heterozygosity over generations, depending on different mate choice scenarios
 
-- Matings: Looks at the number of females and males that do not mate per generation in model 1
+- Matings: Looks at the number of females and males that do not mate per generation in Model 1
 
-- Relatedness & Heterozygosity: Compares the decline in heterozygosity and the increase in relatedness over generations, depending on population size and mate choice scenario (based on model 1).
+- Relatedness & Heterozygosity: Compares the decline in heterozygosity and the increase in relatedness over generations, depending on population size and mate choice scenario (based on Model 1).
 
 - Model 2: Compares different reintroduction scenarios with the implementation of the history of the sihek.
 
-- Model 2.1: Examines the dynamics of heterozygosity across the whole simulation (based on model 2). 
+- Model 2.1: Examines the dynamics of heterozygosity across the whole simulation (based on Model 2). 
 
 Each model was first created and run on my computer directly, with only 10-100 repetitions implemented. After, each model was duplicated and adapted to let it run on the server of the university with 1000 repetitions. 
 
@@ -59,8 +59,8 @@ I looked at four different recombination rates (1e-6, 1e-7, 1e-8 and 1e-9).
 
 In each folder, the corresponding SLiM files are saved. In addition, the R codes (to analyze the data) are saved at the same place for the recombination rates of 1e-7. 
 To analyze different recombination rates, the same R files were used with a changed working directory, thus they can only be found in the folder cluster_models_1e-7.
-For the simulations run on the computer directly (capital lettes), I have different R Notebooks for analyzing and generating the data, which can be found in the corresponding folders. 
-The only R file which was used for simulations on the computer directly as well as for analyzing the cluster data was the one for model2.1. Thus this file is saved in the folder MODEL 2.1.
+For the simulations run on the computer directly (capital lettes), I have different R Notebooks for analyzing the data and generating the plots, which can be found in the corresponding folders. 
+The only R file which was used for simulations on the computer directly as well as for analyzing the cluster data was the one for Model 2.1. Thus this file is saved in the folder MODEL 2.1.
 
 
 To run the simulations, it is important to change the working directories inside the R Notebooks. For most simulations, the .tree file (starting population) is used, meaning it should be saved at the same place as the SLiM model. 
